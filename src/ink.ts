@@ -30,6 +30,16 @@ const md = new MarkdownIt({
   },
 })
 
+// Links to the web open in a new tab, and stay plain followed links.
+const linkOpen = md.renderer.rules.link_open ?? ((tokens, i, options, _env, self) => self.renderToken(tokens, i, options))
+md.renderer.rules.link_open = (tokens, i, options, env, self) => {
+  if (/^https?:/i.test(String(tokens[i].attrGet('href') ?? ''))) {
+    tokens[i].attrSet('target', '_blank')
+    tokens[i].attrSet('rel', 'noopener')
+  }
+  return linkOpen(tokens, i, options, env, self)
+}
+
 // Every block remembers which source line it came from. That is how the
 // proof, the sheet and the lookout agree on where the reader is.
 const blocks = new Set(['paragraph_open', 'heading_open', 'blockquote_open', 'bullet_list_open', 'ordered_list_open', 'table_open', 'hr', 'fence', 'code_block', 'html_block'])

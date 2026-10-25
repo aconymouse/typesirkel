@@ -93,19 +93,30 @@
   color: var(--accent);
 }
 
-.shelf-add.is-nudged {
-  color: var(--ink);
-  animation: nudge 1.4s ease-out infinite;
+/* Once the tour has said its piece, the button gives a small nudge. */
+.shelf-add.is-nudged,
+.top-bar-menu.is-nudged {
+  color: var(--accent);
+  animation: nudge 2.2s ease-in-out 3;
 }
 
 @keyframes nudge {
-  0% {
-    box-shadow: 0 0 0 0 color-mix(in srgb, #e5ff11 80%, transparent);
-    background: color-mix(in srgb, #e5ff11 55%, transparent);
-  }
+  0%,
+  60%,
   100% {
-    box-shadow: 0 0 0 10px transparent;
-    background: color-mix(in srgb, #e5ff11 20%, transparent);
+    transform: none;
+  }
+  10% {
+    transform: translateY(-3px) rotate(-10deg) scale(1.12);
+  }
+  20% {
+    transform: translateY(0) rotate(8deg) scale(1.12);
+  }
+  30% {
+    transform: translateY(-2px) rotate(-6deg) scale(1.08);
+  }
+  40% {
+    transform: rotate(3deg);
   }
 }
 
@@ -308,10 +319,6 @@
     stroke-linecap: round;
   }
 
-  .top-bar-menu.is-nudged {
-    animation: nudge 1.4s ease-out infinite;
-  }
-
   .bar-files {
     display: none !important;
   }
@@ -327,10 +334,27 @@
   }
 }
 
+/* Phones read closer to the face, so the writing gets a size down. */
+@media (max-width: 760px) {
+  :root {
+    --sheet-size: 13.5px;
+  }
+
+  .pane-sheet .cm-editor .cm-scroller {
+    padding-top: 24px;
+    line-height: 1.65;
+  }
+
+  .proof-page {
+    padding-top: 24px;
+    font-size: 15px;
+    line-height: 1.7;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .shelf-add.is-nudged,
   .top-bar-menu.is-nudged {
     animation: none;
-    background: color-mix(in srgb, #e5ff11 45%, transparent);
   }
 }
