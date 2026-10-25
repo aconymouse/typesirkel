@@ -5,9 +5,14 @@ import { SiteFooter, SiteHeader, useHead } from './Chrome'
 import { contentFor } from './content'
 import { FaqSection } from './Faq'
 import { prose } from './prose'
-import { signature } from './signature'
 
 const profiles = [
+  {
+    name: 'aconymous.com',
+    href: 'https://aconymous.com',
+    icon: 'M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20M2 12h20',
+    line: true,
+  },
   {
     name: 'Threads',
     href: 'https://www.threads.com/@aconymous_',
@@ -105,29 +110,21 @@ export function About({ lang }: { lang: Lang }) {
           <FaqSection lang={lang} />
         </div>
         <aside className="about-maker">
-          <figure className="signed">
+          <figure className="maker-card">
             <img src="/hafidznc-portrait.webp" alt="Hafidz Nc" width={540} height={576} decoding="async" />
             <figcaption>
-              <svg className="signature" viewBox={signature.viewBox} role="img" aria-label="Hafidz Nc">
-                <path className="signature-halo" d={signature.path} />
-                <path d={signature.path} />
-              </svg>
-              <span>
-                <a href="https://aconymous.com" target="_blank" rel="author noopener">
-                  Hafidz Nc
-                </a>
-                , {copies[lang].nav.maker}
-              </span>
-              <nav className="maker-links" aria-label="Hafidz Nc">
-                {profiles.map((profile) => (
-                  <a key={profile.name} href={profile.href} target="_blank" rel="me noopener" aria-label={profile.name} title={profile.name}>
-                    <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
-                      <path d={profile.icon} />
-                    </svg>
-                  </a>
-                ))}
-              </nav>
+              <strong>Hafidz Nc</strong>
+              <span>{copies[lang].nav.maker}</span>
             </figcaption>
+            <nav className="maker-links" aria-label="Hafidz Nc">
+              {profiles.map((profile) => (
+                <a key={profile.name} href={profile.href} target="_blank" rel={profile.line ? 'author noopener' : 'me noopener'} aria-label={profile.name} title={profile.name}>
+                  <svg viewBox="0 0 24 24" width="16" height="16" className={profile.line ? 'is-line' : undefined} aria-hidden="true">
+                    <path d={profile.icon} />
+                  </svg>
+                </a>
+              ))}
+            </nav>
           </figure>
         </aside>
       </main>

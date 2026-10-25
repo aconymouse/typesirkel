@@ -10,7 +10,7 @@
 
 .site-main.about {
   display: grid;
-  grid-template-columns: minmax(0, 720px) 240px;
+  grid-template-columns: minmax(0, 720px) 260px;
   justify-content: space-between;
   gap: 64px;
 }
@@ -163,51 +163,47 @@
   font-weight: 500;
 }
 
-.signed {
+.maker-card {
   display: flex;
   flex-direction: column;
+  align-items: center;
+  width: 100%;
   margin: 0;
+  padding: 28px 22px 22px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--rail);
+  text-align: center;
 }
 
-.signed img {
-  width: 200px;
+.maker-card img {
+  width: 188px;
   height: auto;
 }
 
-.signed figcaption {
+.maker-card figcaption {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  gap: 8px;
-  min-width: 0;
+  gap: 4px;
+  margin-top: 18px;
+}
+
+.maker-card strong {
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+
+.maker-card span {
   font-size: 13px;
   color: var(--muted);
-}
-
-.signature {
-  position: relative;
-  width: 220px;
-  max-width: 100%;
-  height: auto;
-  margin: -58px 0 6px -6px;
-  overflow: visible;
-  fill: var(--ink);
-  stroke: var(--ink);
-  stroke-width: 40;
-  stroke-linejoin: round;
-  rotate: -5deg;
-}
-
-.signature-halo {
-  fill: var(--paper);
-  stroke: var(--paper);
-  stroke-width: 260;
 }
 
 .maker-links {
   display: flex;
   gap: 8px;
-  margin-top: 10px;
+  margin-top: 18px;
 }
 
 .maker-links a {
@@ -217,6 +213,7 @@
   height: 36px;
   border: 1px solid var(--line);
   border-radius: 10px;
+  background: var(--paper);
   color: var(--ink);
   transition:
     background-color 0.15s,
@@ -228,15 +225,19 @@
   fill: currentColor;
 }
 
-.signed .maker-links a:hover,
+.maker-links svg.is-line {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.maker-links a:hover,
 .maker-links a:focus-visible {
   background: var(--accent);
   border-color: var(--accent);
   color: var(--accent-ink);
-}
-
-.signed a:hover {
-  color: var(--accent);
 }
 
 .about-rule {
@@ -403,13 +404,32 @@
     margin-top: 0;
   }
 
-  .signed img {
-    width: 136px;
+  .maker-card {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-template-areas: 'photo name' 'photo links';
+    align-items: center;
+    gap: 0 18px;
+    padding: 16px 18px;
+    text-align: left;
   }
 
-  .signature {
-    width: 168px;
-    margin-top: -40px;
+  .maker-card img {
+    grid-area: photo;
+    width: 92px;
+  }
+
+  .maker-card figcaption {
+    grid-area: name;
+    align-self: end;
+    margin: 0;
+  }
+
+  .maker-links {
+    grid-area: links;
+    align-self: start;
+    flex-wrap: wrap;
+    margin-top: 12px;
   }
 
   .site-main.docs {
