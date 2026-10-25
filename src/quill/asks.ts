@@ -71,4 +71,7 @@ export const question = (p: Passage, words: string): Turn[] => [
   { role: 'user', content: `${words}${p.whole.trim() ? `\n\n<draft>\n${tail(p.whole, 16000)}\n</draft>` : ''}${p.text ? `\n\n<passage>\n${p.text}\n</passage>` : ''}` },
 ]
 
+// A chosen prompt from the shelf rides along with every request until it is cleared.
+export const withStyle = (body: string | undefined) => (body ? `${system}\n\nThe writer chose this guide for how to write. Follow it:\n\n${body}` : system)
+
 export const nothing: Passage = { from: 0, to: 0, text: '', before: '', whole: '' }

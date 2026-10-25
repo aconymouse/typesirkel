@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from 'react'
-import { system } from './asks'
 import { type Piece, pieceTurns, planTurns, readPlan } from './plan'
 import { speak, type Tuning } from './voices'
 
 type Props = {
   tuning: Tuning
+  system: string
   canFile: boolean
   onFile: (name: string, text: string) => Promise<string>
   onOpenFolder: () => void
@@ -15,7 +15,7 @@ type Props = {
 type Step = 'brief' | 'planning' | 'plan' | 'writing' | 'done'
 type Mark = 'waiting' | 'writing' | 'done' | 'failed'
 
-const listen = async (tuning: Tuning, turns: Parameters<typeof speak>[2], signal: AbortSignal, onPiece?: (text: string) => void) => {
+const listen = async (tuning: Tuning, system: string, turns: Parameters<typeof speak>[2], signal: AbortSignal, onPiece?: (text: string) => void) => {
   let text = ''
   for await (const piece of speak(tuning, system, turns, signal)) {
     text += piece
@@ -27,7 +27,7 @@ const listen = async (tuning: Tuning, turns: Parameters<typeof speak>[2], signal
 // A brief becomes a plan, and a plan becomes files. The writer approves the plan
 // before anything is written, and every file lands in the open folder as it is
 // finished, so stopping halfway still leaves the finished ones behind.
-export function Brief({ tuning, canFile, onFile, onOpenFolder, onBusy, onBack }: Props) {
+export function Brief({ tuning, system, canFile, onFile, onOpenFolder, onBusy, onBack }: Props) {
   const [step, setStep] = useState<Step>('brief')
   const [brief, setBrief] = useState('')
   const [pieces, setPieces] = useState<Piece[]>([])
@@ -47,7 +47,7 @@ export function Brief({ tuning, canFile, onFile, onOpenFolder, onBusy, onBack }:
     setStep('planning')
     onBusy('planning')
     try {
-      setPieces(readPlan(await listen(tuning, planTurns(brief.trim()), control.signal)))
+      setPieces(readPlan(await listen(tuning, system, planTurns(brief.trim()), control.signal)))
       setStep('plan')
     } catch (e) {
       if (!control.signal.aborted) setError(e instanceof Error ? e.message : String(e))
@@ -71,7 +71,7 @@ export function Brief({ tuning, canFile, onFile, onOpenFolder, onBusy, onBack }:
       setLive(0)
       onBusy(`${i + 1}/${todo.length}`)
       try {
-        const text = await listen(tuning, pieceTurns(brief.trim(), todo, todo[i]), control.signal, (t) => setLive(t.length))
+        const text = await listen(tuning, system, pieceTurns(brief.trim(), todo, todo[i]), control.signal, (t) => setLive(t.length))
         const path = await onFile(todo[i].name, `${text.trim()}\n`)
         setWritten((w) => Object.assign([...w], { [i]: path }))
         setMarks((m) => m.map((x, j) => (j === i ? 'done' : x)))

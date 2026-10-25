@@ -88,6 +88,80 @@ button {
   border-bottom: 1px solid var(--line);
 }
 
+.shelf-head {
+  position: relative;
+}
+
+.shelf-fold {
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 100%;
+  flex: none;
+}
+
+.shelf-fold:hover .fold path {
+  stroke: var(--accent);
+}
+
+.shelf-switch {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  height: 100%;
+  text-align: left;
+}
+
+.shelf-caret path {
+  fill: none;
+  stroke: var(--faint);
+  stroke-width: 1.5;
+}
+
+.shelf-switch:hover .shelf-caret path,
+.shelf-switch[aria-expanded='true'] .shelf-caret path {
+  stroke: var(--accent);
+}
+
+.shelf-menu {
+  position: absolute;
+  top: calc(100% - 4px);
+  left: 10px;
+  right: 10px;
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  padding: 4px 0;
+  background: var(--paper);
+  border: 1px solid var(--line);
+}
+
+.shelf-menu button {
+  padding: 7px 12px;
+  text-align: left;
+  color: var(--muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.shelf-menu button:hover {
+  color: var(--ink);
+  background: var(--hover);
+}
+
+.shelf-menu button.here {
+  color: var(--accent);
+}
+
+.shelf-menu hr {
+  margin: 4px 0;
+  border: 0;
+  border-top: 1px solid var(--line);
+}
+
 .shelf-toggle {
   display: flex;
   flex: 1;
@@ -138,13 +212,38 @@ button {
   border-top: 1px solid var(--line);
 }
 
-.shelf.outline-open .shelf-outline {
-  flex: 1 1 auto;
+.shelf-outline.is-open {
+  flex: 1 1 0;
 }
 
-.shelf.outline-open .shelf-list {
+.shelf.lower-open .shelf-list {
   flex: 0 1 auto;
-  max-height: 45%;
+  max-height: 40%;
+}
+
+.shelf-prompts ul {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 8px;
+}
+
+.shelf-prompts .shelf-dir {
+  margin-top: 4px;
+}
+
+.shelf-prompts li button {
+  display: block;
+  width: 100%;
+  padding: 4px 16px;
+  text-align: left;
+  color: var(--muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.shelf-prompts li button:hover {
+  color: var(--accent);
 }
 
 .shelf-rule {
@@ -583,4 +682,76 @@ button {
     padding: 0;
     max-width: none;
   }
+}
+
+/* prompt card */
+
+.card-scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgb(0 0 0 / 0.45);
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  width: min(620px, 100%);
+  max-height: min(720px, 100%);
+  background: var(--paper);
+  border: 1px solid var(--line);
+}
+
+.card-head {
+  position: relative;
+  padding: 20px 52px 16px 22px;
+  border-bottom: 1px solid var(--line);
+}
+
+.card-kind {
+  margin: 0 0 6px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+
+.card-head h2 {
+  margin: 0;
+  font-size: 20px;
+  letter-spacing: -0.01em;
+}
+
+.card-about {
+  margin: 6px 0 0;
+  color: var(--muted);
+}
+
+.card-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+}
+
+.card-body {
+  flex: 1;
+  min-height: 0;
+  margin: 0;
+  padding: 18px 22px;
+  overflow: auto;
+  white-space: pre-wrap;
+  font: 13px/1.7 var(--mono);
+  color: var(--ink);
+}
+
+.card-foot {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 22px;
+  border-top: 1px solid var(--line);
 }

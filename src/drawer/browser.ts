@@ -15,12 +15,14 @@ export const canPickFolder = () => typeof window !== 'undefined' && typeof windo
 // Chromium lets us hold a real folder. Everyone else gets the loose drawer below.
 export const pickBrowserFolder = async (): Promise<Drawer | null> => {
   if (!window.showDirectoryPicker) return null
-  let root: FileSystemDirectoryHandle
   try {
-    root = await window.showDirectoryPicker({ mode: 'readwrite', id: 'typesirkel' })
+    return browserDrawer(await window.showDirectoryPicker({ mode: 'readwrite', id: 'typesirkel' }))
   } catch {
     return null
   }
+}
+
+export const browserDrawer = (root: FileSystemDirectoryHandle): Drawer => {
   const files = new Map<string, FileSystemFileHandle>()
 
   const walk = async (dir: Handle, prefix: string, out: Leaf[]) => {
@@ -44,6 +46,7 @@ export const pickBrowserFolder = async (): Promise<Drawer | null> => {
   return {
     kind: 'browser',
     label: root.name,
+    source: { handle: root },
     async list() {
       files.clear()
       const out: Leaf[] = []

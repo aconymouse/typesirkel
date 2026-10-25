@@ -49,6 +49,12 @@ Open Share and start sharing. Anyone with the link can edit the draft with you a
 
 The link carries a key after the `#`, which browsers never send to a server. Every change is sealed with that key before it leaves your machine, and the relay in [`sync/`](sync/) only stores and forwards bytes it cannot read. Rooms nobody has touched for 30 days are deleted.
 
+## Prompts
+
+The sidebar carries a shelf of writing prompts: horror, fantasy, straight news, a safe rewrite that never touches quotes, names, dates or places, SEO articles, tutorials and storyboards. Open one to copy it, or hand it to Quill so every request follows it.
+
+Each prompt is a markdown file in [`prompts/`](prompts/) with a title, a category and a one line description in its front matter. Adding a good one is a welcome first pull request.
+
 ## MCP
 
 [`mcp/`](mcp/) is a small MCP server that gives an AI client your typeSirkel folder: list, read, search, outline, write and append, all limited to that folder. Point your client at it, for example in Claude Desktop's config:
@@ -98,6 +104,7 @@ The code is small and named after things on a writing desk.
 | `src/press.ts` | Exports |
 | `src/drawer/` | Where files live: browser folders, single files, the desktop filesystem, or scratch |
 | `src/quill/` | The AI panel and the providers it can talk to |
+| `prompts/` | The prompt shelf, one markdown file per prompt |
 | `src/circle/` | Shared drafts: Yjs, sealing, and the share panel |
 | `src-tauri/` | The thin desktop shell |
 | `sync/` | The relay for shared drafts, a Cloudflare Worker with a Durable Object per room |

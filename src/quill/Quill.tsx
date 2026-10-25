@@ -2,7 +2,8 @@ import './quill.css'
 import { useEffect, useRef, useState } from 'react'
 import { onDesktop } from '../drawer/tauri'
 import { recallShape, rememberShape } from '../keep'
-import { type AskId, asks, type Landing, nothing, type Passage, question, system } from './asks'
+import { type AskId, asks, type Landing, nothing, type Passage, question, withStyle } from './asks'
+import type { Prompt } from '../prompts'
 import { Brief } from './Brief'
 import { keepKey, readKey, remembers, takeOldKeys } from './vault'
 import { converse, listModels, speak, type Tool, type Tuning, type Turn, type VoiceId, voiceOf, voices } from './voices'
@@ -16,6 +17,8 @@ type Props = {
   onOpenFolder: () => void
   onBusy: (label: string | null) => void
   tools: Tool[]
+  style: Prompt | null
+  onClearStyle: () => void
   away: { label: string; open: () => void } | null
   hidden?: boolean
 }
@@ -54,7 +57,8 @@ const recallSettings = (): Settings => {
   return { voice: stored.voice, base: stored.base, model: stored.model }
 }
 
-export function Quill({ take, onLand, onClose, canFile, onFile, onOpenFolder, onBusy, tools, away, hidden }: Props) {
+export function Quill({ take, onLand, onClose, canFile, onFile, onOpenFolder, onBusy, tools, style, onClearStyle, away, hidden }: Props) {
+  const system = withStyle(style?.body)
   const [settings, setSettings] = useState<Settings>(recallSettings)
   const [key, setKey] = useState('')
   const [keyFor, setKeyFor] = useState<VoiceId | null>(null)
@@ -206,6 +210,19 @@ export function Quill({ take, onLand, onClose, canFile, onFile, onOpenFolder, on
         </button>
       </div>
 
+      {style && !tuning ? (
+        <div className="quill-style">
+          <span>
+            Style <b>{style.title}</b>
+          </span>
+          <button type="button" className="quiet-button" onClick={onClearStyle} aria-label="Clear style">
+            <svg width="12" height="12" viewBox="0 0 14 14" aria-hidden="true">
+              <path d="M3 3l8 8M11 3l-8 8" />
+            </svg>
+          </button>
+        </div>
+      ) : null}
+
       {tuning ? (
         <form
           className="quill-tune"
@@ -281,7 +298,7 @@ export function Quill({ take, onLand, onClose, canFile, onFile, onOpenFolder, on
           </div>
 
           <div className="quill-pane" hidden={view !== 'brief'}>
-            <Brief tuning={kept} canFile={canFile} onFile={onFile} onOpenFolder={onOpenFolder} onBusy={onBusy} onBack={() => setView('ask')} />
+            <Brief tuning={kept} system={system} canFile={canFile} onFile={onFile} onOpenFolder={onOpenFolder} onBusy={onBusy} onBack={() => setView('ask')} />
           </div>
 
           <div className="quill-pane" hidden={view !== 'ask'}>

@@ -32,6 +32,7 @@ export const desktopDrawer = async (root: string): Promise<Drawer> => {
   return {
     kind: 'tauri',
     label: lastPart(root),
+    source: { path: root },
     async list() {
       const out: Leaf[] = []
       await walk('', out)

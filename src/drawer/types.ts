@@ -6,10 +6,14 @@ export type Leaf = {
 
 export type DrawerKind = 'scratch' | 'browser' | 'loose' | 'tauri' | 'circle'
 
+// Enough to find a folder again next time: a path on the desktop, a handle in the browser.
+export type Source = { path: string } | { handle: FileSystemDirectoryHandle }
+
 // A drawer is wherever the words live. The desk never cares which one it is.
 export interface Drawer {
   kind: DrawerKind
   label: string
+  source?: Source
   list(): Promise<Leaf[]>
   read(path: string): Promise<string>
   write(path: string, text: string): Promise<void>

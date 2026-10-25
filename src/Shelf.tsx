@@ -1,6 +1,8 @@
-import { type ReactNode, useState } from 'react'
+import { type ReactNode, useEffect, useRef, useState } from 'react'
 import type { Drawer, Leaf } from './drawer'
+import type { Recent } from './drawer/recent'
 import { recall, remember } from './keep'
+import { byCategory, type Prompt } from './prompts'
 
 type Props = {
   drawer: Drawer
@@ -8,6 +10,9 @@ type Props = {
   current: string | null
   canFolder: boolean
   outline: ReactNode
+  recents: Recent[]
+  onReopen: (recent: Recent) => void
+  onPrompt: (prompt: Prompt) => void
   onOpen: () => void
   onPick: (leaf: Leaf) => void
   onCreate: (name: string) => void
@@ -43,12 +48,30 @@ function Fold({ open }: { open: boolean }) {
   )
 }
 
-export function Shelf({ drawer, leaves, current, canFolder, outline, onOpen, onPick, onCreate, onScratch }: Props) {
+export function Shelf({ drawer, leaves, current, canFolder, outline, recents, onReopen, onPrompt, onOpen, onPick, onCreate, onScratch }: Props) {
   const [naming, setNaming] = useState(false)
   const [name, setName] = useState('')
   const [filesOpen, toggleFiles] = useFold('shelf-files')
   const [outlineOpen, toggleOutline] = useFold('shelf-outline')
-  const writable = drawer.kind === 'browser' || drawer.kind === 'tauri'
+  const [promptsOpen, togglePrompts] = useFold('shelf-prompts')
+  const [menu, setMenu] = useState(false)
+  const head = useRef<HTMLDivElement>(null)
+  const writable = drawer.kind === 'browser' || drawer.kind === 'tauri' || drawer.kind === 'scratch'
+  const groups = byCategory()
+
+  useEffect(() => {
+    if (!menu) return
+    const away = (event: PointerEvent) => !head.current?.contains(event.target as Node) && setMenu(false)
+    const escape = (event: KeyboardEvent) => event.key === 'Escape' && setMenu(false)
+    window.addEventListener('pointerdown', away)
+    window.addEventListener('keydown', escape)
+    return () => {
+      window.removeEventListener('pointerdown', away)
+      window.removeEventListener('keydown', escape)
+    }
+  }, [menu])
+
+  const here = (recent: Recent) => drawer.source && 'path' in drawer.source && 'path' in recent.source && drawer.source.path === recent.source.path
 
   const submit = (event: React.FormEvent) => {
     event.preventDefault()
@@ -58,12 +81,58 @@ export function Shelf({ drawer, leaves, current, canFolder, outline, onOpen, onP
   }
 
   return (
-    <nav className={`shelf${filesOpen ? '' : ' files-shut'}${outline && outlineOpen ? ' outline-open' : ''}`} aria-label="Files">
-      <div className="shelf-head">
-        <button type="button" className="shelf-toggle" onClick={toggleFiles} aria-expanded={filesOpen} title={drawer.label}>
+    <nav className={`shelf${filesOpen ? '' : ' files-shut'}${(outline && outlineOpen) || promptsOpen ? ' lower-open' : ''}`} aria-label="Files">
+      <div className="shelf-head" ref={head}>
+        <button type="button" className="shelf-fold" onClick={toggleFiles} aria-expanded={filesOpen} aria-label={filesOpen ? 'Fold files' : 'Unfold files'}>
           <Fold open={filesOpen} />
-          <span className="shelf-label">{drawer.label}</span>
         </button>
+        <button type="button" className="shelf-switch" onClick={() => setMenu((m) => !m)} aria-expanded={menu} aria-haspopup="menu" title={drawer.label}>
+          <span className="shelf-label">{drawer.label}</span>
+          <svg className="shelf-caret" width="10" height="10" viewBox="0 0 10 10" aria-hidden="true">
+            <path d="M2.5 4l2.5 2.5L7.5 4" />
+          </svg>
+        </button>
+        {menu ? (
+          <div className="shelf-menu" role="menu">
+            {recents.map((r) => (
+              <button
+                key={r.id}
+                type="button"
+                role="menuitem"
+                className={here(r) || (drawer.kind === 'browser' && drawer.label === r.label) ? 'here' : undefined}
+                title={'path' in r.source ? r.source.path : r.label}
+                onClick={() => {
+                  setMenu(false)
+                  onReopen(r)
+                }}
+              >
+                {r.label}
+              </button>
+            ))}
+            {recents.length ? <hr /> : null}
+            <button
+              type="button"
+              role="menuitem"
+              className={drawer.kind === 'scratch' ? 'here' : undefined}
+              onClick={() => {
+                setMenu(false)
+                onScratch()
+              }}
+            >
+              Scratch
+            </button>
+            <button
+              type="button"
+              role="menuitem"
+              onClick={() => {
+                setMenu(false)
+                onOpen()
+              }}
+            >
+              {canFolder ? 'Open folder…' : 'Open file…'}
+            </button>
+          </div>
+        ) : null}
         {writable ? (
           <button
             type="button"
@@ -108,7 +177,7 @@ export function Shelf({ drawer, leaves, current, canFolder, outline, onOpen, onP
       ) : null}
 
       {outline ? (
-        <section className="shelf-outline">
+        <section className={`shelf-outline${outlineOpen ? ' is-open' : ''}`}>
           <button type="button" className="shelf-toggle shelf-rule" onClick={toggleOutline} aria-expanded={outlineOpen}>
             <Fold open={outlineOpen} />
             <span>On this page</span>
@@ -117,15 +186,35 @@ export function Shelf({ drawer, leaves, current, canFolder, outline, onOpen, onP
         </section>
       ) : null}
 
+      <section className={`shelf-outline shelf-prompts${promptsOpen ? ' is-open' : ''}`}>
+        <button type="button" className="shelf-toggle shelf-rule" onClick={togglePrompts} aria-expanded={promptsOpen}>
+          <Fold open={promptsOpen} />
+          <span>Prompts</span>
+        </button>
+        {promptsOpen ? (
+          <div className="shelf-outline-body">
+            {groups.map(([category, list]) => (
+              <section key={category}>
+                <p className="shelf-dir">{category}</p>
+                <ul>
+                  {list.map((p) => (
+                    <li key={p.id}>
+                      <button type="button" onClick={() => onPrompt(p)} title={p.description}>
+                        {p.title}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            ))}
+          </div>
+        ) : null}
+      </section>
+
       <div className="shelf-foot">
         <button type="button" className="line-button" onClick={onOpen}>
           {canFolder ? 'Open folder' : 'Open file'}
         </button>
-        {drawer.kind !== 'scratch' ? (
-          <button type="button" className="quiet-button text" onClick={onScratch}>
-            Scratch
-          </button>
-        ) : null}
       </div>
     </nav>
   )

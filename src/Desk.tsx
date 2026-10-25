@@ -6,6 +6,9 @@ import { type Drawer, folderSupport, type Leaf, openDrawer, scratchDrawer } from
 import { counts, ink, titleOf } from './ink'
 import { recall, recallShape, remember, rememberShape } from './keep'
 import { Lookout } from './Lookout'
+import { forgetFolder, type Recent, recentFolders, rememberFolder, reopenFolder } from './drawer/recent'
+import { PromptCard } from './PromptCard'
+import type { Prompt } from './prompts'
 import { Quill } from './quill/Quill'
 import type { Tool } from './quill/voices'
 import { desktopDrawer, onDesktop } from './drawer/tauri'
@@ -43,6 +46,9 @@ export function Desk() {
   const [pressing, setPressing] = useState(false)
   const [shelfOpen, setShelfOpen] = useState(false)
   const [quillOpened, setQuillOpened] = useState(false)
+  const [recents, setRecents] = useState<Recent[]>([])
+  const [card, setCard] = useState<Prompt | null>(null)
+  const [style, setStyle] = useState<Prompt | null>(null)
   const [quillBusy, setQuillBusy] = useState<string | null>(null)
   const [circle, setCircle] = useState<Circle | null>(null)
   const [hosting, setHosting] = useState(false)
@@ -125,6 +131,7 @@ export function Desk() {
       const found = await target.list()
       setDrawer(target)
       setLeaves(found)
+      if (target.source) void rememberFolder(target).then(() => recentFolders().then(setRecents))
       const first = found.find((l) => l.path === preferred) ?? found.find((l) => /^readme\.md$/i.test(l.name)) ?? found[0] ?? null
       await load(target, first)
     },
@@ -260,6 +267,22 @@ export function Desk() {
     await flush()
     const next = await openDrawer()
     if (next) await shelve(next)
+  }
+
+  useEffect(() => {
+    void recentFolders().then(setRecents)
+  }, [])
+
+  // A remembered folder may have been moved or deleted since. Then it leaves the list.
+  const reopen = async (recent: Recent) => {
+    await flush()
+    try {
+      const next = await reopenFolder(recent)
+      if (next) await shelve(next)
+    } catch {
+      await forgetFolder(recent.id)
+      setRecents(await recentFolders())
+    }
   }
 
   const create = async (name: string) => {
@@ -498,6 +521,8 @@ export function Desk() {
         onOpenFolder={() => void openFolder()}
         onBusy={setQuillBusy}
         tools={tools}
+        style={style}
+        onClearStyle={() => setStyle(null)}
         away={away && away !== drawer ? { label: away.label, open: () => void shelve(away) } : null}
       />
     ) : null
@@ -537,6 +562,12 @@ export function Desk() {
             if (drawer.kind !== 'circle') void load(drawer, leaf)
           }}
           onCreate={(name) => void create(name)}
+          recents={recents}
+          onReopen={(recent) => {
+            setShelfOpen(false)
+            void reopen(recent)
+          }}
+          onPrompt={setCard}
           onScratch={() => {
             setShelfOpen(false)
             void shelve(scratchDrawer())
@@ -621,6 +652,18 @@ export function Desk() {
 
       {quillView}
       {sideView}
+      {card ? (
+        <PromptCard
+          prompt={card}
+          onClose={() => setCard(null)}
+          onUse={(chosen) => {
+            setStyle(chosen)
+            setCard(null)
+            setQuillOpened(true)
+            setSide('quill')
+          }}
+        />
+      ) : null}
     </div>
   )
 }
