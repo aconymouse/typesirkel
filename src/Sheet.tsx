@@ -1,6 +1,6 @@
 import { EditorView } from '@codemirror/view'
 import { forwardRef, useEffect, useImperativeHandle, useRef } from 'react'
-import { freshState, jumpTo, topLine } from './sheet'
+import { freshState, jumpTo, topLine } from './nib'
 
 export type SheetHandle = {
   jump: (line: number) => void
