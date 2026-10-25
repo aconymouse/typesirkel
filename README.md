@@ -55,7 +55,7 @@ The link carries a key after the `#`, which browsers never send to a server. Eve
 
 ## Prompts
 
-The sidebar carries a shelf of writing prompts: horror, fantasy, straight news, a safe rewrite that never touches quotes, names, dates or places, SEO articles, tutorials and storyboards. Open one to copy it, or hand it to Quill so every request follows it.
+The sidebar carries a shelf of writing prompts: horror, fantasy, straight news, an article rewrite that never touches quotes, names, dates or places, SEO articles, tutorials and storyboards. Open one to copy it, or hand it to Quill so every request follows it.
 
 Each prompt is a markdown file in [`prompts/`](prompts/) with a title, a category and a one line description in its front matter. Translations sit next to the original as `horror.id.md`, `horror.pt-BR.md`, `horror.ko.md`, `horror.th.md` and `horror.zh-Hans.md`, and the shelf shows the one matching your language, falling back to English. Adding a good prompt, or a translation, is a welcome first pull request.
 
@@ -105,14 +105,14 @@ The code is small and named after things on a writing desk.
 | `src/Sheet.tsx`, `src/nib.ts` | The editor, built on CodeMirror 6 |
 | `src/Proof.tsx` | The rendered preview, like a printer's proof |
 | `src/Shelf.tsx` | The file list on the left |
-| `src/Lookout.tsx` | The outline in the sidebar and the marker on its trail |
+| `src/Lookout.tsx`, `src/LookoutRow.tsx`, `src/walker.ts` | The outline, upright in the sidebar or flat on small screens, and the marker that walks its trail |
 | `src/ink.ts` | Markdown to HTML, headings and word counts |
 | `src/press.ts` | Exports |
 | `src/drawer/` | Where files live: browser folders, single files, the desktop filesystem, or scratch |
 | `src/quill/` | The AI panel and the providers it can talk to |
 | `prompts/` | The prompt shelf, one markdown file per prompt |
-| `src/landing/`, `src/site/` | The website: home, about, FAQ and docs, prerendered in every language |
-| `content/` | The words of the about, FAQ and docs pages, one markdown file per language |
+| `src/landing/`, `src/site/` | The website: home, about with the FAQ, docs and support, prerendered in every language |
+| `content/` | The words of the about, FAQ, docs and support pages, one markdown file per language |
 | `src/circle/` | Shared drafts: Yjs, sealing, and the share panel |
 | `src-tauri/` | The thin desktop shell |
 | `sync/` | The relay for shared drafts, a Cloudflare Worker with a Durable Object per room |
