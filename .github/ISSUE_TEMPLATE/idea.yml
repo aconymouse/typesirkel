@@ -1,0 +1,19 @@
+name: Idea
+description: Suggest something that would make writing better.
+labels: [idea]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: The problem
+      description: What gets in your way today? Start here rather than with the solution.
+    validations:
+      required: true
+  - type: textarea
+    id: idea
+    attributes:
+      label: What you have in mind
+  - type: textarea
+    id: extra
+    attributes:
+      label: Anything else

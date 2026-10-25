@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Ask a question
+    url: https://sirkel.asia/faq/
+    about: Many answers are already in the FAQ.
+  - name: Report a security problem
+    url: https://github.com/aconymouse/typesirkel/security/advisories/new
+    about: Please report security issues privately.

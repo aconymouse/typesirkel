@@ -59,14 +59,14 @@ Each prompt is a markdown file in [`prompts/`](prompts/) with a title, a categor
 
 ## MCP
 
-[`mcp/`](mcp/) is a small MCP server that gives an AI client your typeSirkel folder: list, read, search, outline, write and append, all limited to that folder. Point your client at it, for example in Claude Desktop's config:
+[`mcp/`](mcp/) is a small MCP server that gives an AI client your typeSirkel folder: list, read, search, outline, write and append, all limited to that folder. Until it's published to npm, build it from this repository with `cd mcp && pnpm install && pnpm build`, then point your client at it, for example in Claude Desktop's config:
 
 ```json
 {
   "mcpServers": {
     "typesirkel": {
-      "command": "npx",
-      "args": ["-y", "typesirkel-mcp", "/Users/you/Notes"]
+      "command": "node",
+      "args": ["/path/to/typesirkel/mcp/dist/index.js", "/Users/you/Notes"]
     }
   }
 }
@@ -98,6 +98,8 @@ The code is small and named after things on a writing desk.
 | File | What lives there |
 | --- | --- |
 | `src/Desk.tsx` | The room everything sits in: open files, saving, modes, shortcuts |
+| `src/slash.ts` | The `/` format menu |
+| `src/guides.ts`, `src/tour.ts` | The welcome tour and the guides that type themselves |
 | `src/Sheet.tsx`, `src/nib.ts` | The editor, built on CodeMirror 6 |
 | `src/Proof.tsx` | The rendered preview, like a printer's proof |
 | `src/Shelf.tsx` | The file list on the left |
@@ -107,6 +109,8 @@ The code is small and named after things on a writing desk.
 | `src/drawer/` | Where files live: browser folders, single files, the desktop filesystem, or scratch |
 | `src/quill/` | The AI panel and the providers it can talk to |
 | `prompts/` | The prompt shelf, one markdown file per prompt |
+| `src/landing/`, `src/site/` | The website: home, about, FAQ and docs, prerendered in every language |
+| `content/` | The words of the about, FAQ and docs pages, one markdown file per language |
 | `src/circle/` | Shared drafts: Yjs, sealing, and the share panel |
 | `src-tauri/` | The thin desktop shell |
 | `sync/` | The relay for shared drafts, a Cloudflare Worker with a Durable Object per room |
@@ -114,7 +118,9 @@ The code is small and named after things on a writing desk.
 
 ## Contributing
 
-Issues and pull requests are welcome. Keep changes small and the interface calm; if a feature needs a settings page to explain it, it probably wants to be simpler first.
+Issues, prompts, translations and pull requests are all welcome. Keep changes small and the interface calm; if a feature needs a settings page to explain it, it probably wants to be simpler first. [CONTRIBUTING.md](CONTRIBUTING.md) explains how to set up, what a good pull request looks like and how to translate. Please read the [code of conduct](CODE_OF_CONDUCT.md), and report security problems privately as described in [SECURITY.md](SECURITY.md).
+
+The full guide for writers lives at [sirkel.asia/docs](https://sirkel.asia/docs/).
 
 ## License
 

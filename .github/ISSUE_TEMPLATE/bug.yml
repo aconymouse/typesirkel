@@ -1,0 +1,39 @@
+name: Bug report
+description: Something doesn't work the way it should.
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What you did, what you expected, and what happened instead.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Open a folder
+        2. Type / at the start of a line
+        3. ...
+    validations:
+      required: true
+  - type: dropdown
+    id: where
+    attributes:
+      label: Where
+      options:
+        - Browser (sirkel.asia/write)
+        - Desktop app on macOS
+        - Desktop app on Windows
+    validations:
+      required: true
+  - type: input
+    id: browser
+    attributes:
+      label: Browser and version, or app version
+  - type: textarea
+    id: extra
+    attributes:
+      label: Screenshots or anything else
