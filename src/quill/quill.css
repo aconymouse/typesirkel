@@ -393,3 +393,11 @@
 .quill-away {
   margin-top: 14px;
 }
+
+.quill-drafting {
+  margin: -6px 0 12px;
+  padding-left: 14px;
+  font-size: 12px;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}

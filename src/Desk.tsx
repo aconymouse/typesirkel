@@ -55,6 +55,8 @@ export function Desk() {
   const pending = useRef<{ timer: number; drawer: Drawer; path: string; text: string } | null>(null)
   const circleRef = useRef<Circle | null>(null)
   circleRef.current = circle
+  const drawerRef = useRef(drawer)
+  drawerRef.current = drawer
   const currentRef = useRef(current)
   currentRef.current = current
   const textRef = useRef(text)
@@ -300,7 +302,14 @@ export function Desk() {
   // another one by name, without pulling the shelf away from the writer.
   const workspace = useRef<Drawer>(drawer)
   const [away, setAway] = useState<Drawer | null>(null)
+  const quillBusyRef = useRef<string | null>(null)
+  quillBusyRef.current = quillBusy
+  // Opening another folder while Quill works must not redirect what it is writing.
   useEffect(() => {
+    if (quillBusyRef.current) {
+      if (workspace.current !== drawer) setAway(workspace.current)
+      return
+    }
     workspace.current = drawer
     setAway(null)
   }, [drawer])
@@ -318,7 +327,11 @@ export function Desk() {
     for (let n = 2; taken.has(candidate.toLowerCase()); n++) candidate = `${stem}-${n}${ext}`
     const leaf = await target.create(candidate)
     await target.write(leaf.path, body)
-    if (target === drawer) setLeaves(await target.list())
+    if (target === drawerRef.current) {
+      setLeaves(await target.list())
+      // Follow the work as it lands, unless the writer has unsaved typing open.
+      if (!pending.current) await load(target, leaf)
+    }
     return leaf.path
   }
 
@@ -346,7 +359,12 @@ export function Desk() {
       name: 'create_file',
       description: 'Create a new markdown file in the folder. Existing files are never overwritten; a taken name gets a number. Returns the path written.',
       schema: { type: 'object', properties: { name: { type: 'string', description: 'File name, for example 01-intro-html.md' }, content: { type: 'string' } }, required: ['name', 'content'] },
-      run: (input) => fileInto(text_(input, 'name'), `${text_(input, 'content').trim()}\n`),
+      run: (input) => {
+        const name = text_(input, 'name').trim()
+        const content = text_(input, 'content').trim()
+        if (!name || !content) throw new Error('create_file needs both a name and the full content.')
+        return fileInto(name, `${content}\n`)
+      },
     },
     {
       name: 'edit_draft',

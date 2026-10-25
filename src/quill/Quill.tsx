@@ -28,6 +28,7 @@ type Reply = {
   done: boolean
   error?: string
   log: { line: string; failed: boolean }[]
+  drafting?: { name: string; chars: number } | null
 }
 
 // What a tool call did, in a few words, for the activity list under an answer.
@@ -166,7 +167,8 @@ export function Quill({ take, onLand, onClose, canFile, onFile, onOpenFolder, on
       const answer = await converse(kept, system, [...thread, ...question(from, said)], tools, control.signal, (e) => {
         if (control.signal.aborted) return
         if (e.kind === 'text') setReply((r) => (r ? { ...r, text: r.text + e.text } : r))
-        else setReply((r) => (r ? { ...r, text: r.text ? `${r.text.trimEnd()}\n\n` : '', log: [...r.log, { line: describe(e.name, e.input, e.result, e.failed), failed: e.failed }] } : r))
+        else if (e.kind === 'drafting') setReply((r) => (r ? { ...r, drafting: { name: e.name, chars: e.chars } } : r))
+        else setReply((r) => (r ? { ...r, text: r.text ? `${r.text.trimEnd()}\n\n` : '', drafting: null, log: [...r.log, { line: describe(e.name, e.input, e.result, e.failed), failed: e.failed }] } : r))
       })
       setReply((r) => (r ? { ...r, done: true } : r))
       setThread((t) => [...t, { role: 'user' as const, content: said }, { role: 'assistant' as const, content: answer || 'Done.' }].slice(-16))
@@ -296,6 +298,11 @@ export function Quill({ take, onLand, onClose, canFile, onFile, onOpenFolder, on
                       </li>
                     ))}
                   </ul>
+                ) : null}
+                {reply.drafting && !reply.done ? (
+                  <p className="quill-drafting">
+                    Writing {reply.drafting.name} · {reply.drafting.chars.toLocaleString()} chars
+                  </p>
                 ) : null}
                 {reply.text ? <div className="quill-text">{reply.text.trim()}</div> : null}
                 {reply.done && away ? (

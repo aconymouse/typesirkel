@@ -79,7 +79,8 @@ async function* lines(response: Response) {
   if (tail.startsWith('data:')) yield tail.slice(5).trim()
 }
 
-// Long articles need room. Every current model accepts at least this much output.
+// Long articles need room. Models that allow less say so, and we step down.
+const roomy = 32000
 const longest = 8192
 
 export async function* speak(t: Tuning, system: string, turns: Turn[], signal: AbortSignal): AsyncGenerator<string> {
@@ -118,7 +119,10 @@ export type Tool = {
   run: (input: Record<string, unknown>) => Promise<string>
 }
 
-export type Happening = { kind: 'text'; text: string } | { kind: 'tool'; name: string; input: Record<string, unknown>; result: string; failed: boolean }
+export type Happening =
+  | { kind: 'text'; text: string }
+  | { kind: 'drafting'; name: string; chars: number }
+  | { kind: 'tool'; name: string; input: Record<string, unknown>; result: string; failed: boolean }
 
 type Call = { id: string; name: string; json: string }
 
@@ -130,6 +134,21 @@ const parseInput = (json: string) => {
   }
 }
 
+// A tool call cut off by the output limit arrives as half a JSON object. Running
+// it would write an empty file, so it goes back to the model as an error instead.
+const whole = (json: string) => {
+  if (!json.trim()) return true
+  try {
+    JSON.parse(json)
+    return true
+  } catch {
+    return false
+  }
+}
+
+// The file a tool call is about, read out of its unfinished arguments.
+const namedIn = (json: string) => json.match(/"(?:name|path)"\s*:\s*"([^"]*)"/)?.[1] ?? ''
+
 const runCalls = async (calls: Call[], tools: Tool[], onEvent: (e: Happening) => void) => {
   const out: { id: string; result: string; failed: boolean }[] = []
   for (const call of calls) {
@@ -139,6 +158,7 @@ const runCalls = async (calls: Call[], tools: Tool[], onEvent: (e: Happening) =>
     let failed = false
     try {
       if (!tool) throw new Error(`No tool called ${call.name}`)
+      if (!whole(call.json)) throw new Error('This call was cut off before it finished, so nothing was written. Write one file per call and keep going.')
       result = await tool.run(input)
     } catch (error) {
       failed = true
@@ -157,15 +177,25 @@ export const converse = async (t: Tuning, system: string, turns: Turn[], tools: 
   const url = `${trimBase(t.base)}/${anthropic ? 'messages' : 'chat/completions'}`
   const messages: unknown[] = anthropic ? [...turns] : [{ role: 'system', content: system }, ...turns]
   let offered = tools
+  let room = anthropic ? roomy : 0
   let said = ''
 
   for (let round = 0; round < 16; round++) {
     const body = anthropic
-      ? { model: t.model, max_tokens: longest, system, messages, stream: true, ...(offered.length ? { tools: offered.map((x) => ({ name: x.name, description: x.description, input_schema: x.schema })) } : {}) }
+      ? { model: t.model, max_tokens: room, system, messages, stream: true, ...(offered.length ? { tools: offered.map((x) => ({ name: x.name, description: x.description, input_schema: x.schema })) } : {}) }
       : { model: t.model, messages, stream: true, ...(offered.length ? { tools: offered.map((x) => ({ type: 'function', function: { name: x.name, description: x.description, parameters: x.schema } })) } : {}) }
 
     const response = await reach(url, { method: 'POST', headers: { ...headersFor(t), 'content-type': 'application/json' }, body: JSON.stringify(body), signal })
     if (!response.ok) {
+      if (anthropic && response.status === 400 && room > longest) {
+        const reason = await response.text()
+        if (/max_tokens/i.test(reason)) {
+          room = longest
+          round--
+          continue
+        }
+        throw await complain(new Response(reason, { status: 400 }))
+      }
       // Some local models refuse tools outright. They still get to answer, just without them.
       if (offered.length && response.status === 400 && round === 0) {
         offered = []
@@ -200,7 +230,10 @@ export const converse = async (t: Tuning, system: string, turns: Turn[], tools: 
           onEvent({ kind: 'text', text: event.delta.text })
         } else if (event.type === 'content_block_delta' && event.delta?.type === 'input_json_delta') {
           const call = byIndex.get(event.index ?? 0)
-          if (call) call.json += event.delta.partial_json ?? ''
+          if (call) {
+            call.json += event.delta.partial_json ?? ''
+            onEvent({ kind: 'drafting', name: namedIn(call.json) || call.name, chars: call.json.length })
+          }
         }
       } else {
         const delta = event.choices?.[0]?.delta
@@ -217,7 +250,10 @@ export const converse = async (t: Tuning, system: string, turns: Turn[], tools: 
           }
           if (piece.id) call.id = piece.id
           if (piece.function?.name) call.name += piece.function.name
-          if (piece.function?.arguments) call.json += piece.function.arguments
+          if (piece.function?.arguments) {
+            call.json += piece.function.arguments
+            onEvent({ kind: 'drafting', name: namedIn(call.json) || call.name, chars: call.json.length })
+          }
         }
       }
     }
