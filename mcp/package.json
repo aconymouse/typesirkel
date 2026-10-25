@@ -1,0 +1,36 @@
+{
+  "name": "typesirkel-mcp",
+  "version": "0.1.0",
+  "description": "Let Claude, Cursor or any MCP client read and write the markdown folder you keep in typeSirkel.",
+  "type": "module",
+  "license": "MIT",
+  "author": "Hafidz Nc",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aconymouse/typesirkel.git",
+    "directory": "mcp"
+  },
+  "bin": {
+    "typesirkel-mcp": "dist/index.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "tsc",
+    "check": "tsc --noEmit",
+    "prepublishOnly": "tsc"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.32.2",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@types/node": "^24.19.2",
+    "typescript": "^7.0.2"
+  },
+  "packageManager": "pnpm@10.28.0"
+}

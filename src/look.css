@@ -40,8 +40,12 @@ button {
   grid-template-columns: minmax(0, 1fr);
 }
 
-.desk:not(.quiet):has(> .shelf):not(:has(> .lookout)) {
+.desk:not(.quiet):has(> .shelf):not(:has(> .lookout, > .muse, > .circle)) {
   grid-template-columns: 232px minmax(0, 1fr);
+}
+
+.desk:not(.quiet):has(> .muse, > .circle) {
+  grid-template-columns: 232px minmax(0, 1fr) 320px;
 }
 
 /* window */
@@ -58,7 +62,9 @@ button {
   z-index: 10;
 }
 
-:root[data-shell='mac'] .shelf {
+:root[data-shell='mac'] .shelf,
+:root[data-shell='mac'] .muse,
+:root[data-shell='mac'] .circle {
   padding-top: 28px;
 }
 
@@ -204,8 +210,14 @@ button {
   color: var(--ink);
 }
 
-.quiet-button[aria-pressed='true'] {
+.quiet-button[aria-pressed='true'],
+.quiet-button.is-sharing {
   color: var(--accent);
+}
+
+.quiet-button:disabled {
+  opacity: 0.4;
+  cursor: default;
 }
 
 .quiet-button svg path {
@@ -502,6 +514,17 @@ button {
   .lookout {
     display: none;
   }
+
+  .muse,
+  .circle {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 34px;
+    z-index: 20;
+    width: min(360px, 100%);
+    box-shadow: -1px 0 0 var(--line);
+  }
 }
 
 @media (max-width: 760px) {
@@ -534,6 +557,8 @@ button {
 
   .shelf,
   .lookout,
+  .muse,
+  .circle,
   .bar,
   .pane-sheet {
     display: none !important;

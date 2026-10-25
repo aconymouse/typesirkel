@@ -19,10 +19,10 @@ const trip: Heading[] = [
 const notes = [
   { title: 'Plain files', body: 'Point it at a folder. Every note stays a .md file you can open in anything, back up anywhere, and keep forever.' },
   { title: 'Write and read at once', body: 'The editor and the preview sit side by side and keep their place together. Or hide either one when you need the room.' },
-  { title: 'Saves itself', body: 'A moment after you stop typing, the file is written. No save dialogs, no unsaved dots to worry about.' },
-  { title: 'Quiet by default', body: 'One typeface, thin lines, no toolbars shouting at you. Quiet mode hides everything but the page.' },
+  { title: 'Bring your own AI', body: 'Plug in a key from Anthropic, OpenAI or OpenRouter, or a local Ollama. Continue, tighten, fix or translate a passage without leaving the page.' },
+  { title: 'Write together', body: 'Share a link and edit the same draft live, cursors and all. Everything is sealed in your browser before it travels, so the relay never reads a word.' },
+  { title: 'Works with your agents', body: 'A small MCP server lets Claude, Cursor or any MCP client read and write your folder. The desktop app picks up their edits as they land.' },
   { title: 'Export when ready', body: 'Hand off a clean standalone HTML page, or print to PDF with the same typography you read in the app.' },
-  { title: 'Same everywhere', body: 'The Mac app, the Windows app and the browser edition are one codebase. Learn it once.' },
 ]
 
 type System = 'mac' | 'windows' | 'other'

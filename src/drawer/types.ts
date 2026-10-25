@@ -4,7 +4,7 @@ export type Leaf = {
   dir: string
 }
 
-export type DrawerKind = 'scratch' | 'browser' | 'loose' | 'tauri'
+export type DrawerKind = 'scratch' | 'browser' | 'loose' | 'tauri' | 'circle'
 
 // A drawer is wherever the words live. The desk never cares which one it is.
 export interface Drawer {
@@ -14,6 +14,8 @@ export interface Drawer {
   read(path: string): Promise<string>
   write(path: string, text: string): Promise<void>
   create(name: string): Promise<Leaf>
+  // Only drawers that can see the disk change underneath them offer this.
+  watch?(fn: (paths: string[]) => void): Promise<() => void>
 }
 
 export const isMarkdown = (name: string) => /\.(md|markdown|mdx|txt)$/i.test(name)

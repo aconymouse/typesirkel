@@ -45,6 +45,23 @@ export const desktopDrawer = async (root: string): Promise<Drawer> => {
       if (!(await fs.exists(target))) await fs.writeTextFile(target, '')
       return { path: fileName, name: fileName, dir: '' }
     },
+    // Another app, a sync client or an AI agent may edit the folder while we have
+    // it open. Reads are ignored; anything else is reported as relative paths.
+    async watch(fn) {
+      const base = root.replace(/\\/g, '/').replace(/\/+$/, '')
+      return fs.watch(
+        root,
+        (event) => {
+          if (typeof event.type === 'object' && 'access' in event.type) return
+          const touched = event.paths
+            .map((p) => p.replace(/\\/g, '/'))
+            .filter((p) => p.startsWith(`${base}/`) && isMarkdown(p))
+            .map((p) => p.slice(base.length + 1))
+          if (touched.length) fn(touched)
+        },
+        { recursive: true, delayMs: 400 },
+      )
+    },
   }
 }
 

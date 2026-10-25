@@ -1,15 +1,21 @@
+import type { Extension } from '@codemirror/state'
 import { EditorView } from '@codemirror/view'
 import { forwardRef, useEffect, useImperativeHandle, useRef } from 'react'
-import { freshState, jumpTo, topLine } from './nib'
+import type { Passage } from './muse/asks'
+import { freshState, jumpTo, land, passage, refill, topLine } from './nib'
 
 export type SheetHandle = {
   jump: (line: number) => void
   focus: () => void
+  passage: () => Passage | null
+  land: (from: Passage, answer: string, how: 'replace' | 'after') => void
+  refill: (text: string) => void
 }
 
 type Props = {
   docKey: string
   text: string
+  shared?: Extension
   onChange: (text: string) => void
   onCursor: (line: number) => void
   onScrollLine: (line: number) => void
@@ -17,7 +23,7 @@ type Props = {
 
 const hint = 'Start with a heading, or just start.'
 
-export const Sheet = forwardRef<SheetHandle, Props>(function Sheet({ docKey, text, onChange, onCursor, onScrollLine }, ref) {
+export const Sheet = forwardRef<SheetHandle, Props>(function Sheet({ docKey, text, shared, onChange, onCursor, onScrollLine }, ref) {
   const host = useRef<HTMLDivElement>(null)
   const view = useRef<EditorView | null>(null)
   const events = useRef({ onChange, onCursor, onScrollLine })
@@ -31,9 +37,10 @@ export const Sheet = forwardRef<SheetHandle, Props>(function Sheet({ docKey, tex
   })
 
   // A new document gets a new editor. Undo history belongs to the file it was made in.
+  // Joining or leaving a circle also changes the key, since the sheet is wired differently.
   useEffect(() => {
     if (!host.current) return
-    const editor = new EditorView({ state: freshState(text, relay.current, hint), parent: host.current })
+    const editor = new EditorView({ state: freshState(text, relay.current, hint, shared), parent: host.current })
     view.current = editor
     let frame = 0
     const scrolled = () => {
@@ -52,6 +59,9 @@ export const Sheet = forwardRef<SheetHandle, Props>(function Sheet({ docKey, tex
   useImperativeHandle(ref, () => ({
     jump: (line) => view.current && jumpTo(view.current, line),
     focus: () => view.current?.focus(),
+    passage: () => (view.current ? passage(view.current) : null),
+    land: (from, answer, how) => view.current && land(view.current, from, answer, how),
+    refill: (next) => view.current && refill(view.current, next),
   }))
 
   return <div className="sheet" ref={host} />

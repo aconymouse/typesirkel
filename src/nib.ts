@@ -6,6 +6,8 @@ import { highlightSelectionMatches, search, searchKeymap } from '@codemirror/sea
 import { EditorSelection, EditorState, type Extension } from '@codemirror/state'
 import { drawSelection, EditorView, keymap, placeholder, type ViewUpdate } from '@codemirror/view'
 import { tags } from '@lezer/highlight'
+import { yUndoManagerKeymap } from 'y-codemirror.next'
+import type { Passage } from './muse/asks'
 
 export type SheetEvents = {
   onChange: (text: string) => void
@@ -86,8 +88,10 @@ const link = (view: EditorView) => {
 
 const cursorLine = (update: ViewUpdate) => update.state.doc.lineAt(update.state.selection.main.head).number - 1
 
-export const sheetExtensions = (events: SheetEvents, hint: string): Extension[] => [
-  history(),
+// A shared sheet hands undo to Yjs, so you only ever undo your own typing,
+// never a sentence someone else just wrote.
+export const sheetExtensions = (events: SheetEvents, hint: string, shared?: Extension): Extension[] => [
+  shared ?? history(),
   drawSelection(),
   search({ top: true }),
   highlightSelectionMatches(),
@@ -103,7 +107,7 @@ export const sheetExtensions = (events: SheetEvents, hint: string): Extension[] 
     { key: 'Mod-e', run: wrap('`') },
     { key: 'Mod-k', run: link },
     ...searchKeymap,
-    ...historyKeymap,
+    ...(shared ? yUndoManagerKeymap : historyKeymap),
     ...defaultKeymap,
     indentWithTab,
   ]),
@@ -113,7 +117,7 @@ export const sheetExtensions = (events: SheetEvents, hint: string): Extension[] 
   }),
 ]
 
-export const freshState = (doc: string, events: SheetEvents, hint: string) => EditorState.create({ doc, extensions: sheetExtensions(events, hint) })
+export const freshState = (doc: string, events: SheetEvents, hint: string, shared?: Extension) => EditorState.create({ doc, extensions: sheetExtensions(events, hint, shared) })
 
 export const jumpTo = (view: EditorView, line: number) => {
   const target = view.state.doc.line(Math.min(Math.max(line + 1, 1), view.state.doc.lines))
@@ -126,4 +130,56 @@ export const topLine = (view: EditorView) => {
   const rect = view.scrollDOM.getBoundingClientRect()
   const block = view.lineBlockAtHeight(rect.top + 56 - view.documentTop)
   return view.state.doc.lineAt(block.from).number - 1
+}
+
+// What the muse works on: the selection, or else the paragraph under the cursor.
+export const passage = (view: EditorView): Passage => {
+  const { state } = view
+  const range = state.selection.main
+  const whole = state.doc.toString()
+  if (!range.empty) return { from: range.from, to: range.to, text: state.sliceDoc(range.from, range.to), before: state.sliceDoc(0, range.to), whole }
+  let start = state.doc.lineAt(range.head)
+  if (!start.text.trim()) return { from: range.head, to: range.head, text: '', before: state.sliceDoc(0, range.head), whole }
+  let end = start
+  while (start.number > 1 && state.doc.line(start.number - 1).text.trim()) start = state.doc.line(start.number - 1)
+  while (end.number < state.doc.lines && state.doc.line(end.number + 1).text.trim()) end = state.doc.line(end.number + 1)
+  return { from: start.from, to: end.to, text: state.sliceDoc(start.from, end.to), before: state.sliceDoc(0, end.to), whole }
+}
+
+// The draft may have moved while the model was talking, especially on a shared
+// sheet. If the passage is no longer where we left it, the answer goes to the
+// cursor instead of overwriting someone else's words.
+export const land = (view: EditorView, from: Passage, answer: string, how: 'replace' | 'after') => {
+  const text = answer.trim()
+  const intact = view.state.sliceDoc(from.from, from.to) === from.text
+  const head = view.state.selection.main.head
+  const change =
+    how === 'replace' && intact && from.text
+      ? { from: from.from, to: from.to, insert: text }
+      : intact && from.text
+        ? { from: from.to, insert: `\n\n${text}` }
+        : { from: head, insert: text }
+  const start = change.from + (change.insert.length - text.length)
+  view.dispatch({
+    changes: change,
+    selection: EditorSelection.range(start, start + text.length),
+    effects: EditorView.scrollIntoView(start, { y: 'center' }),
+  })
+  view.focus()
+}
+
+// Brings the sheet in line with a newer copy from disk by touching only the
+// part that differs, so the cursor and undo history mostly survive.
+export const refill = (view: EditorView, next: string) => {
+  const prev = view.state.doc.toString()
+  if (prev === next) return
+  let start = 0
+  while (start < prev.length && start < next.length && prev[start] === next[start]) start++
+  let endPrev = prev.length
+  let endNext = next.length
+  while (endPrev > start && endNext > start && prev[endPrev - 1] === next[endNext - 1]) {
+    endPrev--
+    endNext--
+  }
+  view.dispatch({ changes: { from: start, to: endPrev, insert: next.slice(start, endNext) } })
 }

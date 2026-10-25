@@ -6,7 +6,7 @@
 
 ---
 
-typeSirkel opens a folder of `.md` files and gets out of the way. You write on the left, read on the right, and a small eye walks down the outline as you move through your headings. Files stay plain markdown on your own disk. There are no accounts, no sync service and nothing to migrate away from later.
+typeSirkel opens a folder of `.md` files and gets out of the way. You write on the left, read on the right, and a small eye walks down the outline as you move through your headings. Files stay plain markdown on your own disk. There are no accounts and nothing to migrate away from later.
 
 It runs in the browser and as a desktop app for macOS and Windows. Both are the same code; only the way files are opened and saved changes.
 
@@ -17,6 +17,9 @@ It runs in the browser and as a desktop app for macOS and Windows. Both are the 
 - Shows a live preview side by side, or either one on its own
 - Saves on its own a moment after you stop typing
 - Follows you through the document with the lookout, an outline with an eye that travels to the heading you are in
+- Helps you write with the AI you already pay for, through your own key
+- Lets you share a link and edit the same draft with other people, live and end-to-end encrypted
+- Lets Claude, Cursor or any MCP client work in your folder, and shows their edits as they land
 - Exports a clean standalone HTML page, or prints to PDF
 - Light and dark, following the system unless you say otherwise
 
@@ -30,12 +33,42 @@ It runs in the browser and as a desktop app for macOS and Windows. Both are the 
 | Cmd/Ctrl + K | Link |
 | Cmd/Ctrl + F | Find |
 | Cmd/Ctrl + 1 / 2 / 3 | Write, split, read |
+| Cmd/Ctrl + J | Muse, the AI panel |
 | Cmd/Ctrl + . | Quiet mode |
 | Cmd/Ctrl + P | Print or save as PDF |
 
+## Muse
+
+Muse is the AI panel. Open it with Cmd/Ctrl + J, pick a provider and paste your key: Anthropic, OpenAI, OpenRouter, a local Ollama, or any endpoint that speaks the OpenAI chat format. Select a passage, or leave the cursor in a paragraph, and ask it to continue, tighten, fix, summarize or translate. You see the answer first and decide whether it goes in.
+
+Your key is stored on your device and requests go straight from typeSirkel to the provider. There is no typeSirkel server in between. In the browser this depends on the provider allowing browser requests; the desktop app sends them from Rust and doesn't have that limit.
+
+## Writing together
+
+Open Share and start sharing. Anyone with the link can edit the draft with you and see where everyone's cursor is. If you shared a file from your folder, their changes land in your file as they type.
+
+The link carries a key after the `#`, which browsers never send to a server. Every change is sealed with that key before it leaves your machine, and the relay in [`sync/`](sync/) only stores and forwards bytes it cannot read. Rooms nobody has touched for 30 days are deleted.
+
+## MCP
+
+[`mcp/`](mcp/) is a small MCP server that gives an AI client your typeSirkel folder: list, read, search, outline, write and append, all limited to that folder. Point your client at it, for example in Claude Desktop's config:
+
+```json
+{
+  "mcpServers": {
+    "typesirkel": {
+      "command": "npx",
+      "args": ["-y", "typesirkel-mcp", "/Users/you/Notes"]
+    }
+  }
+}
+```
+
+The desktop app watches the folder, so an agent's edits show up in the open document without a reload.
+
 ## Download
 
-Builds for macOS and Windows show up on the [releases page](https://github.com/aconymouse/typesirkel/releases). The browser edition runs at [aconymouse.github.io/typesirkel](https://aconymouse.github.io/typesirkel/). Opening whole folders in the browser needs a Chromium based browser; elsewhere it opens one file at a time.
+Builds for macOS and Windows show up on the [releases page](https://github.com/aconymouse/typesirkel/releases). The browser edition runs at [sirkel.asia/write](https://sirkel.asia/write/). Opening whole folders in the browser needs a Chromium based browser; elsewhere it opens one file at a time.
 
 The macOS build is not notarized yet. The first time, right-click the app and choose Open.
 
@@ -57,14 +90,18 @@ The code is small and named after things on a writing desk.
 | File | What lives there |
 | --- | --- |
 | `src/Desk.tsx` | The room everything sits in: open files, saving, modes, shortcuts |
-| `src/Sheet.tsx`, `src/sheet.ts` | The editor, built on CodeMirror 6 |
+| `src/Sheet.tsx`, `src/nib.ts` | The editor, built on CodeMirror 6 |
 | `src/Proof.tsx` | The rendered preview, like a printer's proof |
 | `src/Shelf.tsx` | The file list on the left |
 | `src/Lookout.tsx` | The outline on the right and the eye on its trail |
 | `src/ink.ts` | Markdown to HTML, headings and word counts |
 | `src/press.ts` | Exports |
 | `src/drawer/` | Where files live: browser folders, single files, the desktop filesystem, or scratch |
+| `src/muse/` | The AI panel and the providers it can talk to |
+| `src/circle/` | Shared drafts: Yjs, sealing, and the share panel |
 | `src-tauri/` | The thin desktop shell |
+| `sync/` | The relay for shared drafts, a Cloudflare Worker with a Durable Object per room |
+| `mcp/` | The MCP server for AI clients |
 
 ## Contributing
 
