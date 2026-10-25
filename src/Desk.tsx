@@ -39,6 +39,7 @@ export function Desk() {
   const [side, setSide] = useState<Side>('lookout')
   const [focusLine, setFocusLine] = useState(0)
   const [pressing, setPressing] = useState(false)
+  const [shelfOpen, setShelfOpen] = useState(false)
   const [circle, setCircle] = useState<Circle | null>(null)
   const [hosting, setHosting] = useState(false)
   const [shareBusy, setShareBusy] = useState(false)
@@ -392,9 +393,30 @@ export function Desk() {
   ) : null
 
   return (
-    <div className={`desk mode-${mode}${quiet ? ' quiet' : ''}`}>
+    <div className={`desk mode-${mode}${quiet ? ' quiet' : ''}${shelfOpen ? ' shelf-open' : ''}`}>
       <div className="grip" data-tauri-drag-region aria-hidden="true" />
-      {!quiet ? <Shelf drawer={drawer} leaves={leaves} current={current?.path ?? null} canFolder={folderSupport() === 'folder'} onOpen={openFolder} onPick={(leaf) => drawer.kind !== 'circle' && void load(drawer, leaf)} onCreate={(name) => void create(name)} onScratch={() => void shelve(scratchDrawer())} /> : null}
+      {!quiet ? (
+        <Shelf
+          drawer={drawer}
+          leaves={leaves}
+          current={current?.path ?? null}
+          canFolder={folderSupport() === 'folder'}
+          onOpen={() => {
+            setShelfOpen(false)
+            void openFolder()
+          }}
+          onPick={(leaf) => {
+            setShelfOpen(false)
+            if (drawer.kind !== 'circle') void load(drawer, leaf)
+          }}
+          onCreate={(name) => void create(name)}
+          onScratch={() => {
+            setShelfOpen(false)
+            void shelve(scratchDrawer())
+          }}
+        />
+      ) : null}
+      {shelfOpen ? <button type="button" className="scrim" aria-label="Close files" onClick={() => setShelfOpen(false)} /> : null}
 
       <main className="work">
         <div className="panes">
@@ -418,6 +440,9 @@ export function Desk() {
         </div>
 
         <footer className="bar">
+          <button type="button" className="quiet-button text bar-files" aria-pressed={shelfOpen} onClick={() => setShelfOpen((o) => !o)}>
+            files
+          </button>
           <span className={`bar-state state-${saveState}`}>{stateLabel[saveState]}</span>
           <span className="bar-path" title={current?.path}>
             {current?.path}
@@ -460,7 +485,7 @@ export function Desk() {
             <button type="button" className="quiet-button text" onClick={flipTheme} title={`Switch to ${flip} theme`}>
               {flip}
             </button>
-            <button type="button" className="quiet-button text" aria-pressed={quiet} onClick={() => setQuiet((q) => !q)} title="Quiet mode (Mod+.)">
+            <button type="button" className="quiet-button text bar-quiet" aria-pressed={quiet} onClick={() => setQuiet((q) => !q)} title="Quiet mode (Mod+.)">
               quiet
             </button>
           </div>

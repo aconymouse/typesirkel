@@ -266,141 +266,6 @@ button {
   color: var(--muted);
 }
 
-/* proof */
-
-.proof {
-  position: relative;
-  height: 100%;
-  overflow: auto;
-}
-
-.proof-page {
-  max-width: var(--measure);
-  margin: 0 auto;
-  padding: 48px 32px 30vh;
-  font-size: 16px;
-  line-height: 1.75;
-  overflow-wrap: break-word;
-}
-
-.proof-page > :first-child {
-  margin-top: 0;
-}
-
-.proof-page h1,
-.proof-page h2,
-.proof-page h3,
-.proof-page h4 {
-  line-height: 1.25;
-  margin: 1.9em 0 0.6em;
-  scroll-margin-top: 32px;
-}
-
-.proof-page h1 {
-  font-size: 1.9em;
-  letter-spacing: -0.02em;
-}
-
-.proof-page h2 {
-  font-size: 1.4em;
-  letter-spacing: -0.01em;
-}
-
-.proof-page h3 {
-  font-size: 1.15em;
-}
-
-.proof-page a {
-  color: inherit;
-  text-decoration-color: var(--faint);
-  text-underline-offset: 3px;
-}
-
-.proof-page a:hover {
-  text-decoration-color: var(--accent);
-}
-
-.proof-page blockquote {
-  margin: 1.4em 0;
-  padding-left: 1em;
-  border-left: 2px solid var(--line);
-  color: var(--muted);
-}
-
-.proof-page code {
-  font: 0.88em var(--mono);
-  background: var(--code-bg);
-  padding: 0.12em 0.35em;
-  border-radius: 3px;
-}
-
-.proof-page pre {
-  margin: 1.4em 0;
-  padding: 16px 18px;
-  background: var(--code-bg);
-  overflow: auto;
-  line-height: 1.6;
-}
-
-.proof-page pre code {
-  background: none;
-  padding: 0;
-  border-radius: 0;
-  font-size: 13px;
-}
-
-.proof-page table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 0.94em;
-}
-
-.proof-page th,
-.proof-page td {
-  padding: 6px 8px;
-  border-bottom: 1px solid var(--line);
-  text-align: left;
-}
-
-.proof-page img {
-  max-width: 100%;
-}
-
-.proof-page hr {
-  border: 0;
-  border-top: 1px solid var(--line);
-  margin: 2.4em 0;
-}
-
-.hljs-keyword,
-.hljs-selector-tag,
-.hljs-built_in {
-  color: var(--code-keyword);
-}
-
-.hljs-string,
-.hljs-attr,
-.hljs-template-tag {
-  color: var(--code-string);
-}
-
-.hljs-number,
-.hljs-literal {
-  color: var(--code-number);
-}
-
-.hljs-title,
-.hljs-function .hljs-title,
-.hljs-title.function_ {
-  color: var(--code-function);
-}
-
-.hljs-comment,
-.hljs-quote {
-  color: var(--faint);
-  font-style: italic;
-}
-
 /* bar */
 
 .bar {
@@ -474,6 +339,11 @@ button {
   color: var(--accent);
 }
 
+.bar-files,
+.scrim {
+  display: none;
+}
+
 .bar-tools {
   display: flex;
   align-items: center;
@@ -507,7 +377,8 @@ button {
 }
 
 @media (max-width: 1100px) {
-  .desk:not(.quiet) {
+  .desk:not(.quiet),
+  .desk:not(.quiet):has(> .quill, > .circle) {
     grid-template-columns: 220px minmax(0, 1fr);
   }
 
@@ -528,22 +399,85 @@ button {
 }
 
 @media (max-width: 760px) {
-  .desk:not(.quiet) {
+  :root {
+    --gutter: 18px;
+  }
+
+  .desk:not(.quiet),
+  .desk:not(.quiet):has(> .quill, > .circle) {
     grid-template-columns: minmax(0, 1fr);
   }
 
   .shelf,
   .bar-path,
-  .bar-count {
+  .bar-count,
+  .bar-quiet,
+  .bar-modes button:nth-child(2) {
     display: none;
   }
 
-  .mode-split .pane-sheet {
-    display: none;
+  .bar-state {
+    font-size: 0;
   }
 
+  .bar-state::before {
+    margin-right: 0;
+  }
+
+  /* On a phone the two panes can't sit side by side, so split means the editor. */
   .mode-split .pane-proof {
-    border-left: 0;
+    display: none;
+  }
+
+  .bar-files {
+    display: inline-flex;
+  }
+
+  .shelf-open .shelf {
+    display: flex;
+    position: fixed;
+    top: 0;
+    bottom: 34px;
+    left: 0;
+    z-index: 30;
+    width: min(300px, 85vw);
+  }
+
+  .scrim {
+    display: block;
+    position: fixed;
+    inset: 0 0 34px;
+    z-index: 25;
+    background: rgb(0 0 0 / 0.35);
+  }
+
+  .work {
+    overflow: hidden;
+  }
+
+  .bar {
+    gap: 12px;
+    padding: 0 8px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .bar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .bar > * {
+    flex: none;
+  }
+
+  .bar-tools {
+    margin-left: auto;
+  }
+
+  .press-menu {
+    position: fixed;
+    right: 8px;
+    bottom: 42px;
   }
 }
 

@@ -1,3 +1,4 @@
+import './proof.css'
 import { forwardRef, useEffect, useImperativeHandle, useRef } from 'react'
 import { onDesktop } from './drawer/tauri'
 

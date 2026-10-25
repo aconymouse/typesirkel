@@ -1,6 +1,10 @@
-import { useEffect, useState } from 'react'
+import { lazy, Suspense, useEffect, useState } from 'react'
 import type { Heading } from '../ink'
 import { Lookout } from '../Lookout'
+import { Agents } from './Agents'
+
+// The real editor, loaded after the page has painted so the hero never waits on CodeMirror.
+const LiveDemo = lazy(() => import('./LiveDemo'))
 
 const repo = 'https://github.com/aconymouse/typesirkel'
 const releases = `${repo}/releases/latest`
@@ -71,9 +75,9 @@ export function Landing() {
       </header>
 
       <main>
-        <section className="hero">
+        <section className="hero" aria-labelledby="hero-title">
           <p className="kicker">Free and open source markdown editor</p>
-          <h1>
+          <h1 id="hero-title">
             Write in folders.
             <br />
             Read as you go.
@@ -93,17 +97,17 @@ export function Landing() {
           <p className="fine">macOS 11 or newer, Windows 10 or newer, or any Chromium browser. MIT licensed.</p>
         </section>
 
-        <figure className="shot">
-          <picture>
-            <source srcSet="/shots/editor-dark.webp" media="(prefers-color-scheme: dark)" />
-            <img src="/shots/editor-light.webp" alt="typeSirkel with a folder of notes on the left, the editor and preview side by side, and the outline on the right" width={2400} height={1433} />
-          </picture>
-        </figure>
+        <section className="showcase" aria-label="Try the editor">
+          <Suspense fallback={<div className="demo demo-waiting" />}>
+            <LiveDemo />
+          </Suspense>
+          <p className="fine">This is the real editor. Type in it, switch notes, click a heading.</p>
+        </section>
 
-        <section className="lookout-demo">
+        <section className="lookout-demo" aria-labelledby="lookout-title">
           <div className="lookout-copy">
             <p className="kicker">The lookout</p>
-            <h2>Always know where you are in a long draft.</h2>
+            <h2 id="lookout-title">Always know where you are in a long draft.</h2>
             <p>Your headings become stops on a trail. As you write or scroll, the eye walks to the section you are in. The road behind you is drawn in, the road ahead is still dotted. Click any stop to jump there.</p>
             <p className="fine">Go on, click a heading.</p>
           </div>
@@ -112,19 +116,27 @@ export function Landing() {
           </div>
         </section>
 
-        <section className="notes" aria-label="Features">
-          {notes.map((note) => (
-            <article key={note.title}>
-              <h3>{note.title}</h3>
-              <p>{note.body}</p>
-            </article>
-          ))}
+        <section className="features" aria-labelledby="features-title">
+          <div className="section-head">
+            <p className="kicker">What it does</p>
+            <h2 id="features-title">Small on purpose.</h2>
+          </div>
+          <div className="notes">
+            {notes.map((note) => (
+              <article key={note.title}>
+                <h3>{note.title}</h3>
+                <p>{note.body}</p>
+              </article>
+            ))}
+          </div>
         </section>
 
-        <section className="source">
+        <Agents />
+
+        <section className="source" aria-labelledby="source-title">
           <div>
             <p className="kicker">Open source</p>
-            <h2>Read the code. Change it. Make it yours.</h2>
+            <h2 id="source-title">Read the code. Change it. Make it yours.</h2>
             <p>typeSirkel is MIT licensed and small enough to understand in an afternoon. The editor is CodeMirror, the desktop shell is Tauri, and everything else is a few calm React files named after things on a writing desk.</p>
             <a href={repo} className="button solid">
               View on GitHub

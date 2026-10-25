@@ -38,7 +38,7 @@ const frame = EditorView.theme({
   '&': { height: '100%', fontSize: 'var(--sheet-size)', color: 'var(--ink)', backgroundColor: 'transparent' },
   '&.cm-focused': { outline: 'none' },
   '.cm-scroller': { fontFamily: 'var(--sheet-font)', lineHeight: '1.7', padding: '48px 0 30vh' },
-  '.cm-content': { maxWidth: 'var(--measure)', margin: '0 auto', padding: '0 32px', caretColor: 'var(--caret)' },
+  '.cm-content': { maxWidth: 'var(--measure)', margin: '0 auto', padding: '0 var(--gutter)', caretColor: 'var(--caret)' },
   '.cm-cursor, .cm-dropCursor': { borderLeftColor: 'var(--caret)', borderLeftWidth: '2px' },
   '&.cm-focused .cm-selectionBackground, .cm-selectionBackground, .cm-content ::selection': { backgroundColor: 'var(--selection) !important' },
   '.cm-selectionMatch': { backgroundColor: 'var(--match)' },

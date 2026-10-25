@@ -1,0 +1,143 @@
+.proof {
+  position: relative;
+  height: 100%;
+  overflow: auto;
+}
+
+.proof-page {
+  max-width: var(--measure);
+  margin: 0 auto;
+  padding: 48px var(--gutter) 30vh;
+  font-size: 16px;
+  line-height: 1.75;
+  overflow-wrap: break-word;
+}
+
+.proof-page > :first-child {
+  margin-top: 0;
+}
+
+.proof-page h1,
+.proof-page [data-h='1'],
+.proof-page h2,
+.proof-page [data-h='2'],
+.proof-page h3,
+.proof-page [data-h='3'],
+.proof-page h4,
+.proof-page [data-h='4'] {
+  line-height: 1.25;
+  margin: 1.9em 0 0.6em;
+  scroll-margin-top: 32px;
+}
+
+.proof-page [data-h] {
+  font-weight: 700;
+}
+
+.proof-page h1,
+.proof-page [data-h='1'] {
+  font-size: 1.9em;
+  letter-spacing: -0.02em;
+}
+
+.proof-page h2,
+.proof-page [data-h='2'] {
+  font-size: 1.4em;
+  letter-spacing: -0.01em;
+}
+
+.proof-page h3,
+.proof-page [data-h='3'] {
+  font-size: 1.15em;
+}
+
+.proof-page a {
+  color: inherit;
+  text-decoration-color: var(--faint);
+  text-underline-offset: 3px;
+}
+
+.proof-page a:hover {
+  text-decoration-color: var(--accent);
+}
+
+.proof-page blockquote {
+  margin: 1.4em 0;
+  padding-left: 1em;
+  border-left: 2px solid var(--line);
+  color: var(--muted);
+}
+
+.proof-page code {
+  font: 0.88em var(--mono);
+  background: var(--code-bg);
+  padding: 0.12em 0.35em;
+  border-radius: 3px;
+}
+
+.proof-page pre {
+  margin: 1.4em 0;
+  padding: 16px 18px;
+  background: var(--code-bg);
+  overflow: auto;
+  line-height: 1.6;
+}
+
+.proof-page pre code {
+  background: none;
+  padding: 0;
+  border-radius: 0;
+  font-size: 13px;
+}
+
+.proof-page table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.94em;
+}
+
+.proof-page th,
+.proof-page td {
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+}
+
+.proof-page img {
+  max-width: 100%;
+}
+
+.proof-page hr {
+  border: 0;
+  border-top: 1px solid var(--line);
+  margin: 2.4em 0;
+}
+
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-built_in {
+  color: var(--code-keyword);
+}
+
+.hljs-string,
+.hljs-attr,
+.hljs-template-tag {
+  color: var(--code-string);
+}
+
+.hljs-number,
+.hljs-literal {
+  color: var(--code-number);
+}
+
+.hljs-title,
+.hljs-function .hljs-title,
+.hljs-title.function_ {
+  color: var(--code-function);
+}
+
+.hljs-comment,
+.hljs-quote {
+  color: var(--faint);
+  font-style: italic;
+}

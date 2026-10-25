@@ -26,6 +26,7 @@
   --sheet-font: var(--mono);
   --sheet-size: 15px;
   --measure: 72ch;
+  --gutter: 32px;
 }
 
 @media (prefers-color-scheme: dark) {
