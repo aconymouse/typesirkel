@@ -6,7 +6,7 @@ import { type Drawer, folderSupport, type Leaf, openDrawer, scratchDrawer } from
 import { counts, ink, titleOf } from './ink'
 import { recall, recallShape, remember, rememberShape } from './keep'
 import { Lookout } from './Lookout'
-import { Muse } from './muse/Muse'
+import { Quill } from './quill/Quill'
 import { pressHtml, pressMarkdown, pressPdf } from './press'
 import { Proof, type ProofHandle } from './Proof'
 import { Sheet, type SheetHandle } from './Sheet'
@@ -16,7 +16,7 @@ const modes = ['write', 'split', 'read'] as const
 const themes = ['system', 'light', 'dark'] as const
 type Mode = (typeof modes)[number]
 type Theme = (typeof themes)[number]
-type Side = 'lookout' | 'muse' | 'circle'
+type Side = 'lookout' | 'quill' | 'circle'
 type SaveState = 'saved' | 'dirty' | 'saving' | 'failed' | 'loose' | 'live'
 
 const settle = 700
@@ -345,7 +345,7 @@ export function Desk() {
       if (key === 's') run(() => void save())
       else if (key === 'o') run(() => void openFolder())
       else if (key === 'p') run(pressPdf)
-      else if (key === 'j') run(() => toggleSide('muse'))
+      else if (key === 'j') run(() => toggleSide('quill'))
       else if (key === '.') run(() => setQuiet((q) => !q))
       else if (key === '1') run(() => setMode('write'))
       else if (key === '2') run(() => setMode('split'))
@@ -364,8 +364,8 @@ export function Desk() {
     live: 'Shared live',
   }
 
-  const sideView = quiet ? null : side === 'muse' && current ? (
-    <Muse
+  const sideView = quiet ? null : side === 'quill' && current ? (
+    <Quill
       take={() => sheet.current?.passage() ?? null}
       onLand={(from, answer, how) => {
         if (mode === 'read') setMode('split')
@@ -433,8 +433,8 @@ export function Desk() {
             ))}
           </div>
           <div className="bar-tools">
-            <button type="button" className="quiet-button text" aria-pressed={side === 'muse'} onClick={() => toggleSide('muse')} disabled={!current} title="Muse (Mod+J)">
-              muse
+            <button type="button" className="quiet-button text" aria-pressed={side === 'quill'} onClick={() => toggleSide('quill')} disabled={!current} title="Quill (Mod+J)">
+              quill
             </button>
             <button type="button" className={`quiet-button text${circle ? ' is-sharing' : ''}`} aria-pressed={side === 'circle'} onClick={() => toggleSide('circle')} title="Share">
               share

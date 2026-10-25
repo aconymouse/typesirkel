@@ -33,13 +33,13 @@ It runs in the browser and as a desktop app for macOS and Windows. Both are the 
 | Cmd/Ctrl + K | Link |
 | Cmd/Ctrl + F | Find |
 | Cmd/Ctrl + 1 / 2 / 3 | Write, split, read |
-| Cmd/Ctrl + J | Muse, the AI panel |
+| Cmd/Ctrl + J | Quill, the AI panel |
 | Cmd/Ctrl + . | Quiet mode |
 | Cmd/Ctrl + P | Print or save as PDF |
 
-## Muse
+## Quill
 
-Muse is the AI panel. Open it with Cmd/Ctrl + J, pick a provider and paste your key: Anthropic, OpenAI, OpenRouter, a local Ollama, or any endpoint that speaks the OpenAI chat format. Select a passage, or leave the cursor in a paragraph, and ask it to continue, tighten, fix, summarize or translate. You see the answer first and decide whether it goes in.
+Quill is the AI panel. Open it with Cmd/Ctrl + J, pick a provider and paste your key: Anthropic, OpenAI, OpenRouter, a local Ollama, or any endpoint that speaks the OpenAI chat format. Select a passage, or leave the cursor in a paragraph, and ask it to continue, tighten, fix, summarize or translate. You see the answer first and decide whether it goes in.
 
 Your key is stored on your device and requests go straight from typeSirkel to the provider. There is no typeSirkel server in between. In the browser this depends on the provider allowing browser requests; the desktop app sends them from Rust and doesn't have that limit.
 
@@ -97,7 +97,7 @@ The code is small and named after things on a writing desk.
 | `src/ink.ts` | Markdown to HTML, headings and word counts |
 | `src/press.ts` | Exports |
 | `src/drawer/` | Where files live: browser folders, single files, the desktop filesystem, or scratch |
-| `src/muse/` | The AI panel and the providers it can talk to |
+| `src/quill/` | The AI panel and the providers it can talk to |
 | `src/circle/` | Shared drafts: Yjs, sealing, and the share panel |
 | `src-tauri/` | The thin desktop shell |
 | `sync/` | The relay for shared drafts, a Cloudflare Worker with a Durable Object per room |

@@ -1,7 +1,7 @@
 import type { Extension } from '@codemirror/state'
 import { EditorView } from '@codemirror/view'
 import { forwardRef, useEffect, useImperativeHandle, useRef } from 'react'
-import type { Passage } from './muse/asks'
+import type { Passage } from './quill/asks'
 import { freshState, jumpTo, land, passage, refill, topLine } from './nib'
 
 export type SheetHandle = {

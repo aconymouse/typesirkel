@@ -1,4 +1,4 @@
-import '../muse/muse.css'
+import '../quill/quill.css'
 import './circle.css'
 import { useEffect, useState, useSyncExternalStore } from 'react'
 import { type Circle, type Person, readInvite } from './circle'
@@ -64,7 +64,7 @@ export function CirclePanel({ circle, hosting, me, busy, error, canStart, onStar
           <>
             <div className="circle-field">
               <span>Link</span>
-              <div className="muse-row">
+              <div className="quill-row">
                 <input readOnly value={circle.link} onFocus={(e) => e.currentTarget.select()} aria-label="Share link" />
                 <button type="button" className="line-button" onClick={() => void copy()}>
                   {copied ? 'Copied' : 'Copy'}
@@ -99,7 +99,7 @@ export function CirclePanel({ circle, hosting, me, busy, error, canStart, onStar
               }}
             >
               <span>Join a draft</span>
-              <div className="muse-row">
+              <div className="quill-row">
                 <input value={pasted} onChange={(e) => setPasted(e.target.value)} spellCheck={false} autoComplete="off" aria-label="Share link to join" />
                 <button type="submit" className="line-button" disabled={busy || !invite}>
                   Join
@@ -114,7 +114,7 @@ export function CirclePanel({ circle, hosting, me, busy, error, canStart, onStar
           <input value={name} onChange={(e) => setName(e.target.value)} onBlur={commitName} onKeyDown={(e) => e.key === 'Enter' && e.currentTarget.blur()} maxLength={32} />
         </label>
 
-        {error ? <p className="muse-error">{error}</p> : null}
+        {error ? <p className="quill-error">{error}</p> : null}
 
         {circle ? (
           <button type="button" className="line-button" onClick={onLeave}>

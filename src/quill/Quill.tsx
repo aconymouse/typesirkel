@@ -1,4 +1,4 @@
-import './muse.css'
+import './quill.css'
 import { useEffect, useRef, useState } from 'react'
 import { recallShape, rememberShape } from '../keep'
 import { type AskId, asks, type Passage, question, system } from './asks'
@@ -24,8 +24,8 @@ const untuned: Tuning = { voice: 'anthropic', base: voiceOf('anthropic').base, k
 // Keys are kept per provider, so switching to try another one doesn't wipe the first.
 type Kept = Tuning & { keys: Partial<Record<VoiceId, string>> }
 
-export function Muse({ take, onLand, onClose }: Props) {
-  const [kept, setKept] = useState<Kept>(() => recallShape('muse', { ...untuned, keys: {} }))
+export function Quill({ take, onLand, onClose }: Props) {
+  const [kept, setKept] = useState<Kept>(() => recallShape('quill', { ...untuned, keys: {} }))
   const [tuning, setTuning] = useState(!kept.model)
   const [models, setModels] = useState<string[]>([])
   const [listing, setListing] = useState<'idle' | 'busy' | 'failed'>('idle')
@@ -35,7 +35,7 @@ export function Muse({ take, onLand, onClose }: Props) {
   const stop = useRef<AbortController | null>(null)
   const voice = voiceOf(kept.voice)
 
-  useEffect(() => rememberShape('muse', kept), [kept])
+  useEffect(() => rememberShape('quill', kept), [kept])
   useEffect(() => () => stop.current?.abort(), [])
 
   const ready = Boolean(kept.model && kept.base && (!voice.keyed || kept.key))
@@ -105,15 +105,15 @@ export function Muse({ take, onLand, onClose }: Props) {
   }
 
   return (
-    <aside className="muse" aria-label="Muse">
-      <div className="muse-head">
-        <span className="muse-title">Muse</span>
+    <aside className="quill" aria-label="Quill">
+      <div className="quill-head">
+        <span className="quill-title">Quill</span>
         {ready ? (
           <button type="button" className="quiet-button text" onClick={() => setTuning((t) => !t)} aria-pressed={tuning}>
             {tuning ? 'Done' : kept.model}
           </button>
         ) : null}
-        <button type="button" className="quiet-button" onClick={onClose} aria-label="Close muse" title="Close (Mod+J)">
+        <button type="button" className="quiet-button" onClick={onClose} aria-label="Close Quill" title="Close (Mod+J)">
           <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true">
             <path d="M3 3l8 8M11 3l-8 8" />
           </svg>
@@ -122,7 +122,7 @@ export function Muse({ take, onLand, onClose }: Props) {
 
       {tuning ? (
         <form
-          className="muse-tune"
+          className="quill-tune"
           onSubmit={(e) => {
             e.preventDefault()
             if (ready) setTuning(false)
@@ -153,7 +153,7 @@ export function Muse({ take, onLand, onClose }: Props) {
           ) : null}
           <label>
             <span>Model</span>
-            <div className="muse-row">
+            <div className="quill-row">
               {models.length ? (
                 <select value={kept.model} onChange={(e) => setKept((k) => ({ ...k, model: e.target.value }))}>
                   {models.map((m) => (
@@ -170,15 +170,15 @@ export function Muse({ take, onLand, onClose }: Props) {
               </button>
             </div>
           </label>
-          {listing === 'failed' ? <p className="muse-error">{listError}</p> : null}
+          {listing === 'failed' ? <p className="quill-error">{listError}</p> : null}
           <button type="submit" className="line-button solid" disabled={!ready}>
             Start writing
           </button>
-          <p className="muse-fine">Your key stays on this device and goes straight to {voice.label}. typeSirkel has no server in between.</p>
+          <p className="quill-fine">Your key stays on this device and goes straight to {voice.label}. typeSirkel has no server in between.</p>
         </form>
       ) : (
-        <div className="muse-work">
-          <div className="muse-asks">
+        <div className="quill-work">
+          <div className="quill-asks">
             {asks.map((a) => (
               <button key={a.id} type="button" onClick={() => ask(a.id)} disabled={Boolean(reply && !reply.done)}>
                 {a.label}
@@ -186,21 +186,21 @@ export function Muse({ take, onLand, onClose }: Props) {
             ))}
           </div>
 
-          <div className="muse-reply" aria-live="polite">
+          <div className="quill-reply" aria-live="polite">
             {reply ? (
               <>
-                <p className="muse-label">{reply.label}</p>
-                {reply.text ? <div className="muse-text">{reply.text}</div> : null}
-                {!reply.done ? <span className="muse-pulse" aria-label="Writing" /> : null}
-                {reply.error ? <p className="muse-error">{reply.error}</p> : null}
+                <p className="quill-label">{reply.label}</p>
+                {reply.text ? <div className="quill-text">{reply.text}</div> : null}
+                {!reply.done ? <span className="quill-pulse" aria-label="Writing" /> : null}
+                {reply.error ? <p className="quill-error">{reply.error}</p> : null}
               </>
             ) : (
-              <p className="muse-idle">Select a passage, or put the cursor in a paragraph, then pick what to do with it.</p>
+              <p className="quill-idle">Select a passage, or put the cursor in a paragraph, then pick what to do with it.</p>
             )}
           </div>
 
           {reply ? (
-            <div className="muse-act">
+            <div className="quill-act">
               {reply.done ? (
                 <>
                   <button type="button" className="line-button solid" onClick={settle} disabled={!reply.text.trim()}>
@@ -221,7 +221,7 @@ export function Muse({ take, onLand, onClose }: Props) {
             </div>
           ) : null}
 
-          <form className="muse-ask" onSubmit={send}>
+          <form className="quill-ask" onSubmit={send}>
             <textarea
               value={words}
               onChange={(e) => setWords(e.target.value)}
@@ -230,7 +230,7 @@ export function Muse({ take, onLand, onClose }: Props) {
               }}
               rows={2}
               placeholder="Ask about this draft"
-              aria-label="Ask the muse"
+              aria-label="Ask Quill"
             />
           </form>
         </div>

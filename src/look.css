@@ -40,11 +40,11 @@ button {
   grid-template-columns: minmax(0, 1fr);
 }
 
-.desk:not(.quiet):has(> .shelf):not(:has(> .lookout, > .muse, > .circle)) {
+.desk:not(.quiet):has(> .shelf):not(:has(> .lookout, > .quill, > .circle)) {
   grid-template-columns: 232px minmax(0, 1fr);
 }
 
-.desk:not(.quiet):has(> .muse, > .circle) {
+.desk:not(.quiet):has(> .quill, > .circle) {
   grid-template-columns: 232px minmax(0, 1fr) 320px;
 }
 
@@ -63,7 +63,7 @@ button {
 }
 
 :root[data-shell='mac'] .shelf,
-:root[data-shell='mac'] .muse,
+:root[data-shell='mac'] .quill,
 :root[data-shell='mac'] .circle {
   padding-top: 28px;
 }
@@ -515,7 +515,7 @@ button {
     display: none;
   }
 
-  .muse,
+  .quill,
   .circle {
     position: fixed;
     top: 0;
@@ -557,7 +557,7 @@ button {
 
   .shelf,
   .lookout,
-  .muse,
+  .quill,
   .circle,
   .bar,
   .pane-sheet {

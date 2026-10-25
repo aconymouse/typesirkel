@@ -7,7 +7,7 @@ import { EditorSelection, EditorState, type Extension } from '@codemirror/state'
 import { drawSelection, EditorView, keymap, placeholder, type ViewUpdate } from '@codemirror/view'
 import { tags } from '@lezer/highlight'
 import { yUndoManagerKeymap } from 'y-codemirror.next'
-import type { Passage } from './muse/asks'
+import type { Passage } from './quill/asks'
 
 export type SheetEvents = {
   onChange: (text: string) => void
@@ -132,7 +132,7 @@ export const topLine = (view: EditorView) => {
   return view.state.doc.lineAt(block.from).number - 1
 }
 
-// What the muse works on: the selection, or else the paragraph under the cursor.
+// What the quill works on: the selection, or else the paragraph under the cursor.
 export const passage = (view: EditorView): Passage => {
   const { state } = view
   const range = state.selection.main
