@@ -3,6 +3,7 @@ import { EditorView } from '@codemirror/view'
 import { forwardRef, useEffect, useImperativeHandle, useRef } from 'react'
 import type { Landing, Passage } from './quill/asks'
 import { freshState, jumpTo, land, passage, refill, topLine } from './nib'
+import type { Lang } from './lang'
 import { type Guide, playGuide } from './tour'
 
 export type SheetHandle = {
@@ -11,7 +12,7 @@ export type SheetHandle = {
   passage: () => Passage | null
   land: (from: Passage, answer: string, how: Landing) => void
   refill: (text: string) => void
-  play: (guide: Guide, signal: AbortSignal) => Promise<void>
+  play: (guide: Guide, lang: Lang, signal: AbortSignal) => Promise<void>
 }
 
 type Props = {
@@ -21,7 +22,7 @@ type Props = {
   onChange: (text: string) => void
   onCursor: (line: number) => void
   onScrollLine: (line: number) => void
-  onGuide?: (guide: Guide) => void
+  onGuide?: (guide: Guide, lang: Lang) => void
 }
 
 const hint = 'Start with a heading, or just start.'
@@ -37,7 +38,7 @@ export const Sheet = forwardRef<SheetHandle, Props>(function Sheet({ docKey, tex
   const relay = useRef({
     onChange: (value: string) => events.current.onChange(value),
     onCursor: (line: number) => events.current.onCursor(line),
-    onGuide: (guide: Guide) => events.current.onGuide?.(guide),
+    onGuide: (guide: Guide, lang: Lang) => events.current.onGuide?.(guide, lang),
   })
 
   // A new document gets a new editor. Undo history belongs to the file it was made in.
@@ -66,8 +67,8 @@ export const Sheet = forwardRef<SheetHandle, Props>(function Sheet({ docKey, tex
     passage: () => (view.current ? passage(view.current) : null),
     land: (from, answer, how) => view.current && land(view.current, from, answer, how),
     refill: (next) => view.current && refill(view.current, next),
-    play: async (guide, signal) => {
-      if (view.current) await playGuide(view.current, guide, signal)
+    play: async (guide, lang, signal) => {
+      if (view.current) await playGuide(view.current, guide, lang, signal)
     },
   }))
 

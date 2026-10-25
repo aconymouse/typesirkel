@@ -4,7 +4,8 @@ import { CirclePanel } from './circle/CirclePanel'
 import { circleDrawer } from './circle/drawer'
 import { type Drawer, folderSupport, type Leaf, openDrawer, scratchDrawer } from './drawer'
 import { firstVisit } from './drawer/scratch'
-import { type Guide, guideButtons, guideIn, guides } from './tour'
+import { currentLang, type Lang } from './lang'
+import { type Found, type Guide, guideButtons, guideIn, guideOf } from './tour'
 import { counts, ink, titleOf } from './ink'
 import { recall, recallShape, remember, rememberShape } from './keep'
 import { Lookout } from './Lookout'
@@ -34,15 +35,15 @@ const stamp = (target: Drawer, leaf: Leaf | null) => `${target.label}:${leaf?.pa
 const reason = (error: unknown) => (error instanceof Error ? error.message : String(error))
 
 // The guide buttons are plain DOM so the editor widget and the preview share them.
-function GuideRow({ here, onPick }: { here: Guide; onPick: (guide: Guide) => void }) {
+function GuideRow({ here, onPick }: { here: Found; onPick: (guide: Guide, lang: Lang) => void }) {
   const host = useRef<HTMLDivElement>(null)
   const pick = useRef(onPick)
   pick.current = onPick
   useEffect(() => {
-    const row = guideButtons(here, (guide) => pick.current(guide))
+    const row = guideButtons(here, (guide, lang) => pick.current(guide, lang))
     host.current?.append(row)
     return () => row.remove()
-  }, [here])
+  }, [here.guide, here.lang])
   return <div className="proof-after" ref={host} />
 }
 
@@ -71,7 +72,7 @@ export function Desk() {
   const [shareBusy, setShareBusy] = useState(false)
   const [shareError, setShareError] = useState('')
   const [me, setMe] = useState<Person>(() => recallShape('me', somebody()))
-  const [playing, setPlaying] = useState<{ guide: Guide; path: string } | null>(null)
+  const [playing, setPlaying] = useState<{ guide: Guide; lang: Lang; path: string } | null>(null)
   const [nudge, setNudge] = useState(false)
 
   const sheet = useRef<SheetHandle>(null)
@@ -204,7 +205,7 @@ export function Desk() {
       if (invite && (await join(invite))) return
       if (invite) history.replaceState(null, '', location.pathname + location.search)
       await shelve(scratchDrawer())
-      if (firstVisit() && recall<'yes' | ''>('toured', '', ['yes']) !== 'yes') setPlaying({ guide: 'welcome', path: guides.welcome.file })
+      if (firstVisit() && recall<'yes' | ''>('toured', '', ['yes']) !== 'yes') setPlaying({ guide: 'welcome', lang: currentLang(), path: guideOf('welcome', currentLang()).script.file })
     })()
     // Only the address the app was opened with counts; later hash changes are ours.
   }, [])
@@ -218,7 +219,7 @@ export function Desk() {
     const quit = new AbortController()
     touring.current = true
     if (playing.guide === 'welcome') remember('toured', 'yes')
-    void handle.play(playing.guide, quit.signal).then(() => {
+    void handle.play(playing.guide, playing.lang, quit.signal).then(() => {
       if (quit.signal.aborted) return
       touring.current = false
       setPlaying(null)
@@ -238,10 +239,11 @@ export function Desk() {
     beforeGuide.current = null
   }, [current?.path])
 
-  const openGuide = async (guide: Guide) => {
+  const openGuide = async (guide: Guide, lang: Lang) => {
     await flush()
     const target = drawerRef.current.kind === 'scratch' ? drawerRef.current : scratchDrawer()
-    const { file, text: body } = guides[guide]
+    const { script, text: body } = guideOf(guide, lang)
+    const file = script.file
     const notes = await target.list()
     const existing = notes.find((leaf) => leaf.path === file)
     const kept = existing ? await target.read(existing.path) : null
@@ -253,7 +255,7 @@ export function Desk() {
       setMode('read')
     }
     await shelve(target, leaf.path)
-    setPlaying({ guide, path: leaf.path })
+    setPlaying({ guide, lang, path: leaf.path })
   }
 
   const guideHere = useMemo(() => guideIn(deferred), [deferred])
@@ -674,10 +676,10 @@ export function Desk() {
           {current ? (
             <>
               <section className="pane pane-sheet" aria-label="Editor" hidden={mode === 'read'}>
-                <Sheet ref={sheet} docKey={docKey} text={text} shared={shared} onChange={change} onCursor={followCursor} onScrollLine={followSheetScroll} onGuide={(guide) => void openGuide(guide)} />
+                <Sheet ref={sheet} docKey={docKey} text={text} shared={shared} onChange={change} onCursor={followCursor} onScrollLine={followSheetScroll} onGuide={(guide, lang) => void openGuide(guide, lang)} />
               </section>
               <section className="pane pane-proof" aria-label="Preview" hidden={mode === 'write'}>
-                <Proof ref={proof} html={inked.html} onScrollLine={followProof} after={guideHere ? <GuideRow here={guideHere} onPick={(guide) => void openGuide(guide)} /> : null} />
+                <Proof ref={proof} html={inked.html} onScrollLine={followProof} after={guideHere ? <GuideRow here={guideHere} onPick={(guide, lang) => void openGuide(guide, lang)} /> : null} />
               </section>
             </>
           ) : (

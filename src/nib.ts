@@ -9,13 +9,14 @@ import { tags } from '@lezer/highlight'
 import { yUndoManagerKeymap } from 'y-codemirror.next'
 import { slide } from './glide'
 import { slash } from './slash'
+import type { Lang } from './lang'
 import { type Guide, guideWidget } from './tour'
 import type { Landing, Passage } from './quill/asks'
 
 export type SheetEvents = {
   onChange: (text: string) => void
   onCursor: (line: number) => void
-  onGuide: (guide: Guide) => void
+  onGuide: (guide: Guide, lang: Lang) => void
 }
 
 // Colors come from CSS variables, so switching themes never rebuilds the editor.
@@ -103,7 +104,7 @@ export const sheetExtensions = (events: SheetEvents, hint: string, shared?: Exte
   EditorState.allowMultipleSelections.of(true),
   markdown({ base: markdownLanguage, codeLanguages: languages, addKeymap: true }),
   slash,
-  guideWidget((guide) => events.onGuide(guide)),
+  guideWidget((guide, lang) => events.onGuide(guide, lang)),
   syntaxHighlighting(paint),
   frame,
   placeholder(hint),

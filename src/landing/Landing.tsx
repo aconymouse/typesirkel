@@ -130,7 +130,7 @@ export function Landing({ lang }: { lang: Lang }) {
             )}
           </button>
           <Star label={t.nav.star} />
-          <a href="/write/" className="top-cta">
+          <a href={`/write/?lang=${lang}`} className="top-cta">
             {t.nav.openEditor}
           </a>
         </nav>
@@ -152,7 +152,7 @@ export function Landing({ lang }: { lang: Lang }) {
             <a href={releases} className={system === 'windows' ? 'button solid' : 'button'}>
               {t.hero.windows}
             </a>
-            <a href="/write/" className="button bare">
+            <a href={`/write/?lang=${lang}`} className="button bare">
               {t.hero.browser}
             </a>
           </div>

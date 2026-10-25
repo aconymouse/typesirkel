@@ -1,4 +1,5 @@
-import { welcome } from '../tour'
+import { currentLang } from '../lang'
+import { welcomeIn } from '../tour'
 import { type Drawer, type Leaf, plainName } from './types'
 
 const key = 'typesirkel:scratch'
@@ -27,9 +28,9 @@ const readNotes = (): Notes => {
     if (stored) return renamed(JSON.parse(stored) as Notes)
     const older = localStorage.getItem(key)
     fresh = older === null
-    return { [first]: older ?? welcome }
+    return { [first]: older ?? welcomeIn(currentLang()) }
   } catch {
-    return { [first]: welcome }
+    return { [first]: welcomeIn(currentLang()) }
   }
 }
 
