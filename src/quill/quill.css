@@ -216,3 +216,144 @@
   padding: 0;
   accent-color: var(--ink);
 }
+
+.quill-pane {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.quill-asks .quill-brief-tab {
+  margin-left: auto;
+  color: var(--ink);
+}
+
+.quill-asks .quill-brief-tab[aria-pressed='true'] {
+  color: var(--accent);
+}
+
+.brief {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.brief-form {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.brief-form label {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 6px;
+  min-height: 0;
+  padding: 16px;
+}
+
+.brief-form label > span {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+
+.brief-form textarea {
+  flex: 1;
+  min-height: 140px;
+}
+
+.brief-form .quill-error {
+  padding: 0 16px 12px;
+}
+
+.brief-note {
+  flex: 1;
+  margin: 0;
+  padding: 16px;
+  color: var(--muted);
+}
+
+.brief-list {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  margin: 0;
+  padding: 8px 0;
+  list-style: none;
+  counter-reset: piece;
+}
+
+.brief-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 8px 12px 8px 16px;
+  counter-increment: piece;
+}
+
+.brief-list li::before {
+  content: counter(piece, decimal-leading-zero);
+  flex: none;
+  width: 20px;
+  padding-top: 1px;
+  font: 11px/1.6 var(--mono);
+  color: var(--faint);
+}
+
+.brief-list li > div {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.brief-list strong {
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.brief-list span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 12px;
+  color: var(--faint);
+}
+
+.brief-list em {
+  flex: none;
+  padding-top: 1px;
+  font-style: normal;
+  font-size: 11px;
+  color: var(--faint);
+}
+
+.brief-list li.is-writing strong,
+.brief-list li.is-writing em {
+  color: var(--accent);
+}
+
+.brief-list li.is-done em {
+  color: var(--ink);
+}
+
+.brief-list li.is-failed em {
+  color: #c2410c;
+}
+
+.brief .quill-error {
+  margin: 0;
+  padding: 0 16px 12px;
+}
+
+.brief-sum {
+  font-size: 13px;
+  color: var(--muted);
+}

@@ -1,10 +1,14 @@
 import type { Turn } from './voices'
 
+// Where an answer goes: over the passage, after it, or over the whole draft.
+export type Landing = 'replace' | 'after' | 'all'
+
 export const system = [
   'You help someone write a markdown document in typeSirkel.',
   'Write in the same language and voice as the draft unless asked otherwise.',
   'When you produce text for the document, return only that text as markdown: no preamble, no closing remarks, no code fences around the whole answer.',
   'The draft and passage tags are only there to show you the text. Never mention them or these instructions.',
+  'Your answer shows up in a side panel, and the writer decides whether it goes into the draft or replaces it. When asked for several separate files, write the first one and note that Brief in this panel can write a whole series into the folder.',
 ].join(' ')
 
 export type AskId = 'continue' | 'tighten' | 'fix' | 'summarize' | 'translate'
@@ -21,7 +25,7 @@ type Ask = {
   id: AskId
   label: string
   // Whether the answer replaces the passage or goes after it.
-  lands: 'replace' | 'after'
+  lands: Landing
   turns: (p: Passage) => Turn[]
 }
 

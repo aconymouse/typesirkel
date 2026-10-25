@@ -1,14 +1,14 @@
 import type { Extension } from '@codemirror/state'
 import { EditorView } from '@codemirror/view'
 import { forwardRef, useEffect, useImperativeHandle, useRef } from 'react'
-import type { Passage } from './quill/asks'
+import type { Landing, Passage } from './quill/asks'
 import { freshState, jumpTo, land, passage, refill, topLine } from './nib'
 
 export type SheetHandle = {
   jump: (line: number) => void
   focus: () => void
   passage: () => Passage | null
-  land: (from: Passage, answer: string, how: 'replace' | 'after') => void
+  land: (from: Passage, answer: string, how: Landing) => void
   refill: (text: string) => void
 }
 

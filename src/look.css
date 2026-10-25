@@ -40,7 +40,7 @@ button {
   grid-template-columns: minmax(0, 1fr);
 }
 
-.desk:not(.quiet):has(> .quill, > .circle) {
+.desk:not(.quiet):has(> .quill:not([hidden]), > .circle) {
   grid-template-columns: 248px minmax(0, 1fr) 320px;
 }
 
@@ -447,7 +447,7 @@ button {
 
 @media (max-width: 1100px) {
   .desk:not(.quiet),
-  .desk:not(.quiet):has(> .quill, > .circle) {
+  .desk:not(.quiet):has(> .quill:not([hidden]), > .circle) {
     grid-template-columns: 220px minmax(0, 1fr);
   }
 
@@ -469,7 +469,7 @@ button {
   }
 
   .desk:not(.quiet),
-  .desk:not(.quiet):has(> .quill, > .circle) {
+  .desk:not(.quiet):has(> .quill:not([hidden]), > .circle) {
     grid-template-columns: minmax(0, 1fr);
   }
 

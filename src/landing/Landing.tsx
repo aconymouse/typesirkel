@@ -2,6 +2,7 @@ import { lazy, Suspense, useEffect, useState } from 'react'
 import type { Heading } from '../ink'
 import { Lookout } from '../Lookout'
 import { Agents } from './Agents'
+import { Star } from './Star'
 
 // The real editor, loaded after the page has painted so the hero never waits on CodeMirror.
 const LiveDemo = lazy(() => import('./LiveDemo'))
@@ -67,7 +68,7 @@ export function Landing() {
           </picture>
         </a>
         <nav>
-          <a href={repo}>GitHub</a>
+          <Star />
           <a href="/write/" className="top-cta">
             Open editor
           </a>
@@ -138,9 +139,12 @@ export function Landing() {
             <p className="kicker">Open source</p>
             <h2 id="source-title">Read the code. Change it. Make it yours.</h2>
             <p>typeSirkel is MIT licensed and small enough to understand in an afternoon. The editor is CodeMirror, the desktop shell is Tauri, and everything else is a few calm React files named after things on a writing desk.</p>
-            <a href={repo} className="button solid">
-              View on GitHub
-            </a>
+            <div className="source-actions">
+              <a href={repo} className="button solid">
+                View on GitHub
+              </a>
+              <Star className="star-large" />
+            </div>
           </div>
           <pre>
             <code>{`git clone ${repo}

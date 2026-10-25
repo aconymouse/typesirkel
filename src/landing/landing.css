@@ -60,6 +60,61 @@ button {
   color: var(--ink);
 }
 
+.star {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 10px;
+  border: 1px solid var(--line);
+  color: var(--ink);
+  font-size: 14px;
+  font-weight: 500;
+  transition: border-color 0.15s ease;
+}
+
+.star svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.4;
+  stroke-linejoin: round;
+}
+
+.star b {
+  margin-left: 2px;
+  padding-left: 8px;
+  border-left: 1px solid var(--line);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.star:hover {
+  border-color: var(--ink);
+}
+
+.star:hover svg {
+  fill: var(--accent);
+  stroke: var(--accent);
+}
+
+.star-large {
+  height: 44px;
+  padding: 0 16px;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.source-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 28px;
+}
+
+.source .source-actions .button {
+  margin-top: 0;
+}
+
 .top-cta {
   padding: 6px 12px;
   border: 1px solid var(--line);
@@ -628,8 +683,8 @@ button {
     border-left: 0;
   }
 
-  .top nav a:not(.top-cta) {
-    display: none;
+  .top nav {
+    gap: 10px;
   }
 
   .foot {

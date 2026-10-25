@@ -40,6 +40,8 @@ export function Desk() {
   const [focusLine, setFocusLine] = useState(0)
   const [pressing, setPressing] = useState(false)
   const [shelfOpen, setShelfOpen] = useState(false)
+  const [quillOpened, setQuillOpened] = useState(false)
+  const [quillBusy, setQuillBusy] = useState<string | null>(null)
   const [circle, setCircle] = useState<Circle | null>(null)
   const [hosting, setHosting] = useState(false)
   const [shareBusy, setShareBusy] = useState(false)
@@ -287,7 +289,25 @@ export function Desk() {
     if (mode !== 'write') proof.current?.showId(heading.id)
   }
 
-  const toggleSide = (next: Side) => setSide((s) => (s === next ? 'none' : next))
+  const toggleSide = (next: Side) => {
+    if (next === 'quill') setQuillOpened(true)
+    setSide((s) => (s === next ? 'none' : next))
+  }
+
+  // Brief writes beside the open file. A name already on the shelf gets a
+  // number instead of being written over.
+  const fileInto = async (name: string, body: string) => {
+    const taken = new Set((await drawer.list()).map((l) => l.path.toLowerCase()))
+    const dot = name.lastIndexOf('.')
+    const stem = dot > 0 ? name.slice(0, dot) : name
+    const ext = dot > 0 ? name.slice(dot) : '.md'
+    let candidate = name
+    for (let n = 2; taken.has(candidate.toLowerCase()); n++) candidate = `${stem}-${n}${ext}`
+    const leaf = await drawer.create(candidate)
+    await drawer.write(leaf.path, body)
+    setLeaves(await drawer.list())
+    return leaf.path
+  }
 
   useEffect(() => {
     remember('mode', mode)
@@ -346,7 +366,7 @@ export function Desk() {
       if (key === 's') run(() => void save())
       else if (key === 'o') run(() => void openFolder())
       else if (key === 'p') run(pressPdf)
-      else if (key === 'j') run(() => toggleSide('quill'))
+      else if (key === 'j') run(() => current && toggleSide('quill'))
       else if (key === '.') run(() => setQuiet((q) => !q))
       else if (key === '1') run(() => setMode('write'))
       else if (key === '2') run(() => setMode('split'))
@@ -365,16 +385,25 @@ export function Desk() {
     live: 'Shared live',
   }
 
-  const sideView = quiet ? null : side === 'quill' && current ? (
-    <Quill
-      take={() => sheet.current?.passage() ?? null}
-      onLand={(from, answer, how) => {
-        if (mode === 'read') setMode('split')
-        sheet.current?.land(from, answer, how)
-      }}
-      onClose={() => setSide('none')}
-    />
-  ) : side === 'circle' ? (
+  // Quill stays mounted once opened, so a Brief keeps writing while its panel is closed.
+  const quillView =
+    quillOpened && current ? (
+      <Quill
+        hidden={quiet || side !== 'quill'}
+        take={() => sheet.current?.passage() ?? null}
+        onLand={(from, answer, how) => {
+          if (mode === 'read') setMode('split')
+          sheet.current?.land(from, answer, how)
+        }}
+        onClose={() => setSide('none')}
+        canFile={drawer.kind === 'browser' || drawer.kind === 'tauri'}
+        onFile={fileInto}
+        onOpenFolder={() => void openFolder()}
+        onBusy={setQuillBusy}
+      />
+    ) : null
+
+  const sideView = quiet ? null : side === 'circle' ? (
     <CirclePanel
       circle={circle}
       hosting={hosting}
@@ -458,7 +487,7 @@ export function Desk() {
           </div>
           <div className="bar-tools">
             <button type="button" className="quiet-button text" aria-pressed={side === 'quill'} onClick={() => toggleSide('quill')} disabled={!current} title="Quill (Mod+J)">
-              quill
+              {quillBusy ? `quill ${quillBusy}` : 'quill'}
             </button>
             <button type="button" className={`quiet-button text${circle ? ' is-sharing' : ''}`} aria-pressed={side === 'circle'} onClick={() => toggleSide('circle')} title="Share">
               share
@@ -491,6 +520,7 @@ export function Desk() {
         </footer>
       </main>
 
+      {quillView}
       {sideView}
     </div>
   )

@@ -8,7 +8,7 @@ import { drawSelection, EditorView, keymap, placeholder, type ViewUpdate } from 
 import { tags } from '@lezer/highlight'
 import { yUndoManagerKeymap } from 'y-codemirror.next'
 import { slide } from './glide'
-import type { Passage } from './quill/asks'
+import type { Landing, Passage } from './quill/asks'
 
 export type SheetEvents = {
   onChange: (text: string) => void
@@ -150,16 +150,18 @@ export const passage = (view: EditorView): Passage => {
 // The draft may have moved while the model was talking, especially on a shared
 // sheet. If the passage is no longer where we left it, the answer goes to the
 // cursor instead of overwriting someone else's words.
-export const land = (view: EditorView, from: Passage, answer: string, how: 'replace' | 'after') => {
+export const land = (view: EditorView, from: Passage, answer: string, how: Landing) => {
   const text = answer.trim()
   const intact = view.state.sliceDoc(from.from, from.to) === from.text
   const head = view.state.selection.main.head
   const change =
-    how === 'replace' && intact && from.text
-      ? { from: from.from, to: from.to, insert: text }
-      : intact && from.text
-        ? { from: from.to, insert: `\n\n${text}` }
-        : { from: head, insert: text }
+    how === 'all'
+      ? { from: 0, to: view.state.doc.length, insert: text }
+      : how === 'replace' && intact && from.text
+        ? { from: from.from, to: from.to, insert: text }
+        : intact && from.text
+          ? { from: from.to, insert: `\n\n${text}` }
+          : { from: head, insert: text }
   const start = change.from + (change.insert.length - text.length)
   view.dispatch({
     changes: change,

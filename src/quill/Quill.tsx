@@ -2,19 +2,25 @@ import './quill.css'
 import { useEffect, useRef, useState } from 'react'
 import { onDesktop } from '../drawer/tauri'
 import { recallShape, rememberShape } from '../keep'
-import { type AskId, asks, type Passage, question, system } from './asks'
+import { type AskId, asks, type Landing, type Passage, question, system } from './asks'
+import { Brief } from './Brief'
 import { keepKey, readKey, remembers, takeOldKeys } from './vault'
 import { listModels, speak, type Tuning, type Turn, type VoiceId, voiceOf, voices } from './voices'
 
 type Props = {
   take: () => Passage | null
-  onLand: (from: Passage, answer: string, how: 'replace' | 'after') => void
+  onLand: (from: Passage, answer: string, how: Landing) => void
   onClose: () => void
+  canFile: boolean
+  onFile: (name: string, text: string) => Promise<string>
+  onOpenFolder: () => void
+  onBusy: (label: string | null) => void
+  hidden?: boolean
 }
 
 type Reply = {
   from: Passage
-  how: 'replace' | 'after'
+  how: Landing
   label: string
   text: string
   done: boolean
@@ -32,7 +38,7 @@ const recallSettings = (): Settings => {
   return { voice: stored.voice, base: stored.base, model: stored.model }
 }
 
-export function Quill({ take, onLand, onClose }: Props) {
+export function Quill({ take, onLand, onClose, canFile, onFile, onOpenFolder, onBusy, hidden }: Props) {
   const [settings, setSettings] = useState<Settings>(recallSettings)
   const [key, setKey] = useState('')
   const [keyFor, setKeyFor] = useState<VoiceId | null>(null)
@@ -43,6 +49,10 @@ export function Quill({ take, onLand, onClose }: Props) {
   const [listError, setListError] = useState('')
   const [reply, setReply] = useState<Reply | null>(null)
   const [words, setWords] = useState('')
+  const [view, setView] = useState<'ask' | 'brief'>('ask')
+  // Free questions are a conversation. Only the words go into the history; the
+  // draft travels with the newest question alone, so a long chat stays cheap.
+  const [thread, setThread] = useState<Turn[]>([])
   const stop = useRef<AbortController | null>(null)
   const voice = voiceOf(settings.voice)
   const kept: Tuning = { ...settings, key }
@@ -102,14 +112,18 @@ export function Quill({ take, onLand, onClose }: Props) {
     const control = new AbortController()
     stop.current = control
     setReply({ from, how, label, text: '', done: false })
+    let text = ''
     try {
       for await (const piece of speak(kept, system, turns, control.signal)) {
+        text += piece
         setReply((r) => (r && !control.signal.aborted ? { ...r, text: r.text + piece } : r))
       }
       setReply((r) => (r ? { ...r, done: true } : r))
+      return text
     } catch (error) {
-      if (control.signal.aborted) return
+      if (control.signal.aborted) return null
       setReply((r) => (r ? { ...r, done: true, error: error instanceof Error ? error.message : String(error) } : r))
+      return null
     }
   }
 
@@ -124,9 +138,12 @@ export function Quill({ take, onLand, onClose }: Props) {
   const send = (event: React.FormEvent) => {
     event.preventDefault()
     const from = take()
-    if (!from || !words.trim()) return
-    void run(from, 'after', words.trim(), question(from, words.trim()))
+    const said = words.trim()
+    if (!from || !said) return
     setWords('')
+    void run(from, 'after', said, [...thread, ...question(from, said)]).then((answer) => {
+      if (answer) setThread((t) => [...t, { role: 'user' as const, content: said }, { role: 'assistant' as const, content: answer }].slice(-16))
+    })
   }
 
   const halt = () => {
@@ -134,14 +151,14 @@ export function Quill({ take, onLand, onClose }: Props) {
     setReply((r) => (r ? { ...r, done: true } : r))
   }
 
-  const settle = () => {
+  const settle = (how: Landing = reply?.how ?? 'after') => {
     if (!reply?.text.trim()) return
-    onLand(reply.from, reply.text, reply.how)
+    onLand(reply.from, reply.text, how)
     setReply(null)
   }
 
   return (
-    <aside className="quill" aria-label="Quill">
+    <aside className="quill" aria-label="Quill" hidden={hidden}>
       <div className="quill-head">
         <span className="quill-title">Quill</span>
         {ready ? (
@@ -221,11 +238,20 @@ export function Quill({ take, onLand, onClose }: Props) {
         <div className="quill-work">
           <div className="quill-asks">
             {asks.map((a) => (
-              <button key={a.id} type="button" onClick={() => ask(a.id)} disabled={Boolean(reply && !reply.done)}>
+              <button key={a.id} type="button" onClick={() => ask(a.id)} disabled={Boolean(reply && !reply.done) || view === 'brief'}>
                 {a.label}
               </button>
             ))}
+            <button type="button" className="quill-brief-tab" aria-pressed={view === 'brief'} onClick={() => setView((v) => (v === 'brief' ? 'ask' : 'brief'))}>
+              Brief
+            </button>
           </div>
+
+          <div className="quill-pane" hidden={view !== 'brief'}>
+            <Brief tuning={kept} canFile={canFile} onFile={onFile} onOpenFolder={onOpenFolder} onBusy={onBusy} onBack={() => setView('ask')} />
+          </div>
+
+          <div className="quill-pane" hidden={view !== 'ask'}>
 
           <div className="quill-reply" aria-live="polite">
             {reply ? (
@@ -242,9 +268,14 @@ export function Quill({ take, onLand, onClose }: Props) {
             <div className="quill-act">
               {reply.done ? (
                 <>
-                  <button type="button" className="line-button solid" onClick={settle} disabled={!reply.text.trim()}>
+                  <button type="button" className="line-button solid" onClick={() => settle()} disabled={!reply.text.trim()}>
                     {reply.how === 'replace' && reply.from.text ? 'Replace' : 'Insert'}
                   </button>
+                  {reply.how === 'after' ? (
+                    <button type="button" className="quiet-button text" onClick={() => settle('all')} disabled={!reply.text.trim()}>
+                      Replace all
+                    </button>
+                  ) : null}
                   <button type="button" className="quiet-button text" onClick={() => void navigator.clipboard.writeText(reply.text)} disabled={!reply.text}>
                     Copy
                   </button>
@@ -271,6 +302,7 @@ export function Quill({ take, onLand, onClose }: Props) {
               aria-label="Ask Quill"
             />
           </form>
+          </div>
         </div>
       )}
     </aside>
