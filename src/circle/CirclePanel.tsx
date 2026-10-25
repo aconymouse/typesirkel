@@ -87,7 +87,6 @@ export function CirclePanel({ circle, hosting, me, busy, error, canStart, onStar
           </>
         ) : (
           <>
-            <p className="circle-lead">Write together, live. Anyone with the link can read and edit this draft with you.</p>
             <button type="button" className="line-button solid" onClick={onStart} disabled={busy || !canStart}>
               {busy ? 'Opening' : 'Start sharing'}
             </button>
@@ -122,7 +121,6 @@ export function CirclePanel({ circle, hosting, me, busy, error, canStart, onStar
           </button>
         ) : null}
 
-        <p className="circle-fine">The key lives only in the link, after the #. The relay passes along sealed bytes and never sees your words.</p>
       </div>
     </aside>
   )

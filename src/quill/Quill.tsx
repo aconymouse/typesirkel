@@ -216,14 +216,6 @@ export function Quill({ take, onLand, onClose }: Props) {
           <button type="submit" className="line-button solid" disabled={!ready}>
             Start writing
           </button>
-          <p className="quill-fine">
-            {onDesktop()
-              ? `Your key is kept in your system keychain and sent straight to ${voice.label}.`
-              : remember
-                ? `Your key is saved in this browser and sent straight to ${voice.label}. Anyone using this browser profile can read it.`
-                : `Your key is sent straight to ${voice.label} and forgotten when this tab closes.`}{' '}
-            typeSirkel has no server in between.
-          </p>
         </form>
       ) : (
         <div className="quill-work">
@@ -243,9 +235,7 @@ export function Quill({ take, onLand, onClose }: Props) {
                 {!reply.done ? <span className="quill-pulse" aria-label="Writing" /> : null}
                 {reply.error ? <p className="quill-error">{reply.error}</p> : null}
               </>
-            ) : (
-              <p className="quill-idle">Select a passage, or put the cursor in a paragraph, then pick what to do with it.</p>
-            )}
+            ) : null}
           </div>
 
           {reply ? (
@@ -278,7 +268,6 @@ export function Quill({ take, onLand, onClose }: Props) {
                 if (e.key === 'Enter' && !e.shiftKey) send(e)
               }}
               rows={2}
-              placeholder="Ask about this draft"
               aria-label="Ask Quill"
             />
           </form>
