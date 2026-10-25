@@ -1,7 +1,9 @@
 import './quill.css'
 import { useEffect, useRef, useState } from 'react'
+import { onDesktop } from '../drawer/tauri'
 import { recallShape, rememberShape } from '../keep'
 import { type AskId, asks, type Passage, question, system } from './asks'
+import { keepKey, readKey, remembers, takeOldKeys } from './vault'
 import { listModels, speak, type Tuning, type Turn, type VoiceId, voiceOf, voices } from './voices'
 
 type Props = {
@@ -19,32 +21,66 @@ type Reply = {
   error?: string
 }
 
-const untuned: Tuning = { voice: 'anthropic', base: voiceOf('anthropic').base, key: '', model: '' }
+// Settings are plain preferences. The key is not one of them; it lives in the vault.
+type Settings = Omit<Tuning, 'key'>
 
-// Keys are kept per provider, so switching to try another one doesn't wipe the first.
-type Kept = Tuning & { keys: Partial<Record<VoiceId, string>> }
+const untuned: Settings = { voice: 'anthropic', base: voiceOf('anthropic').base, model: '' }
+
+const recallSettings = (): Settings => {
+  const stored = recallShape<Settings & Record<string, unknown>>('quill', { ...untuned })
+  for (const [voice, key] of Object.entries(takeOldKeys(stored))) if (key) void keepKey(voice as VoiceId, key, false)
+  return { voice: stored.voice, base: stored.base, model: stored.model }
+}
 
 export function Quill({ take, onLand, onClose }: Props) {
-  const [kept, setKept] = useState<Kept>(() => recallShape('quill', { ...untuned, keys: {} }))
-  const [tuning, setTuning] = useState(!kept.model)
+  const [settings, setSettings] = useState<Settings>(recallSettings)
+  const [key, setKey] = useState('')
+  const [keyFor, setKeyFor] = useState<VoiceId | null>(null)
+  const [remember, setRemember] = useState(() => remembers(settings.voice))
+  const [tuning, setTuning] = useState(!settings.model)
   const [models, setModels] = useState<string[]>([])
   const [listing, setListing] = useState<'idle' | 'busy' | 'failed'>('idle')
   const [listError, setListError] = useState('')
   const [reply, setReply] = useState<Reply | null>(null)
   const [words, setWords] = useState('')
   const stop = useRef<AbortController | null>(null)
-  const voice = voiceOf(kept.voice)
+  const voice = voiceOf(settings.voice)
+  const kept: Tuning = { ...settings, key }
 
-  useEffect(() => rememberShape('quill', kept), [kept])
+  useEffect(() => rememberShape('quill', settings), [settings])
   useEffect(() => () => stop.current?.abort(), [])
+
+  // Each provider has its own key. Nothing is written back until the stored one
+  // has been read, so opening the panel can never wipe a saved key.
+  useEffect(() => {
+    let live = true
+    setKeyFor(null)
+    setRemember(remembers(settings.voice))
+    void readKey(settings.voice)
+      .catch(() => '')
+      .then((found) => {
+        if (!live) return
+        setKey(found)
+        setKeyFor(settings.voice)
+      })
+    return () => {
+      live = false
+    }
+  }, [settings.voice])
+
+  useEffect(() => {
+    if (keyFor !== settings.voice) return
+    const later = window.setTimeout(() => void keepKey(keyFor, key.trim(), remember).catch(() => {}), 400)
+    return () => window.clearTimeout(later)
+  }, [key, remember, keyFor, settings.voice])
 
   const ready = Boolean(kept.model && kept.base && (!voice.keyed || kept.key))
 
   const pickVoice = (id: VoiceId) => {
-    const next = voiceOf(id)
     setModels([])
     setListing('idle')
-    setKept((k) => ({ ...k, keys: { ...k.keys, [k.voice]: k.key }, voice: id, base: next.base, key: k.keys[id] ?? '', model: '' }))
+    setKey('')
+    setSettings((k) => ({ ...k, voice: id, base: voiceOf(id).base, model: '' }))
   }
 
   const fetchModels = async () => {
@@ -54,7 +90,7 @@ export function Quill({ take, onLand, onClose }: Props) {
       const found = await listModels(kept)
       setModels(found)
       setListing('idle')
-      if (!found.includes(kept.model)) setKept((k) => ({ ...k, model: found[0] ?? '' }))
+      if (!found.includes(kept.model)) setSettings((k) => ({ ...k, model: found[0] ?? '' }))
     } catch (error) {
       setListing('failed')
       setListError(error instanceof Error ? error.message : String(error))
@@ -142,20 +178,26 @@ export function Quill({ take, onLand, onClose }: Props) {
           {voice.id === 'custom' || voice.id === 'ollama' ? (
             <label>
               <span>Endpoint</span>
-              <input value={kept.base} onChange={(e) => setKept((k) => ({ ...k, base: e.target.value }))} spellCheck={false} autoComplete="off" />
+              <input value={kept.base} onChange={(e) => setSettings((k) => ({ ...k, base: e.target.value }))} spellCheck={false} autoComplete="off" />
             </label>
           ) : null}
           {voice.keyed ? (
             <label>
               <span>API key</span>
-              <input type="password" value={kept.key} onChange={(e) => setKept((k) => ({ ...k, key: e.target.value }))} spellCheck={false} autoComplete="off" />
+              <input type="password" value={key} onChange={(e) => setKey(e.target.value)} spellCheck={false} autoComplete="off" />
+            </label>
+          ) : null}
+          {voice.keyed && !onDesktop() ? (
+            <label className="quill-remember">
+              <input type="checkbox" checked={remember} onChange={(e) => setRemember(e.target.checked)} />
+              <span>Remember on this device</span>
             </label>
           ) : null}
           <label>
             <span>Model</span>
             <div className="quill-row">
               {models.length ? (
-                <select value={kept.model} onChange={(e) => setKept((k) => ({ ...k, model: e.target.value }))}>
+                <select value={kept.model} onChange={(e) => setSettings((k) => ({ ...k, model: e.target.value }))}>
                   {models.map((m) => (
                     <option key={m} value={m}>
                       {m}
@@ -163,7 +205,7 @@ export function Quill({ take, onLand, onClose }: Props) {
                   ))}
                 </select>
               ) : (
-                <input value={kept.model} onChange={(e) => setKept((k) => ({ ...k, model: e.target.value }))} spellCheck={false} autoComplete="off" />
+                <input value={kept.model} onChange={(e) => setSettings((k) => ({ ...k, model: e.target.value }))} spellCheck={false} autoComplete="off" />
               )}
               <button type="button" className="line-button" onClick={() => void fetchModels()} disabled={listing === 'busy' || (voice.keyed && !kept.key)}>
                 {listing === 'busy' ? 'Loading' : 'Load'}
@@ -174,7 +216,14 @@ export function Quill({ take, onLand, onClose }: Props) {
           <button type="submit" className="line-button solid" disabled={!ready}>
             Start writing
           </button>
-          <p className="quill-fine">Your key stays on this device and goes straight to {voice.label}. typeSirkel has no server in between.</p>
+          <p className="quill-fine">
+            {onDesktop()
+              ? `Your key is kept in your system keychain and sent straight to ${voice.label}.`
+              : remember
+                ? `Your key is saved in this browser and sent straight to ${voice.label}. Anyone using this browser profile can read it.`
+                : `Your key is sent straight to ${voice.label} and forgotten when this tab closes.`}{' '}
+            typeSirkel has no server in between.
+          </p>
         </form>
       ) : (
         <div className="quill-work">
