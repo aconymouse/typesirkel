@@ -1,5 +1,5 @@
 ---
-title: Reescrita segura
+title: Reescrever artigo
 category: Notícias
 description: Reescreva com palavras novas sem mudar nenhuma citação, instituição, nome, data ou lugar.
 ---

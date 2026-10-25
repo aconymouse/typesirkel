@@ -1,5 +1,5 @@
 ---
-title: 安全改写
+title: 改写文章
 category: 新闻
 description: 用新的措辞改写，但引语、机构、人名、时间和地点一个字都不动。
 ---

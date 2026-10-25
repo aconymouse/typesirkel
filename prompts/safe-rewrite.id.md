@@ -1,5 +1,5 @@
 ---
-title: Tulis ulang aman
+title: Tulis ulang artikel
 category: Berita
 description: Tulis ulang dengan kata baru tanpa mengubah kutipan, instansi, nama, waktu, dan tempat sedikit pun.
 ---

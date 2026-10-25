@@ -1,85 +1,17 @@
 import '../proof.css'
 import { useDeferredValue, useMemo, useRef, useState } from 'react'
 import { counts, ink } from '../ink'
+import type { Lang } from '../lang'
 import { Lookout } from '../Lookout'
 import { LookoutRow } from '../LookoutRow'
 import { Proof, type ProofHandle } from '../Proof'
 import { Sheet, type SheetHandle } from '../Sheet'
-
-// Three small notes, so the shelf has something to switch between. Nothing here
-// is saved; the demo forgets everything when the page closes.
-const drafts = [
-  {
-    name: 'essay.md',
-    text: `# Notes on writing in folders
-
-Every draft starts as a single file. A folder is just a shelf you can carry around.
-
-## Why plain files
-
-A \`.md\` file opens in anything, survives every app you will ever switch to, and diffs nicely in git.
-
-### What you lose
-
-Nothing worth keeping. No accounts, no export button, no lock-in.
-
-## How the lookout helps
-
-Long drafts get lost in the middle. The marker on the right always knows which section you are in.
-
-### Try it
-
-Scroll this note, or click a heading on the right.
-
-## Next
-
-Type anything here. The preview and the outline follow along.
-`,
-  },
-  {
-    name: 'trip.md',
-    text: `# Lisbon, three days
-
-## Day one
-
-Arrive early, coffee at the corner place, then the long walk up to the castle.
-
-## Day two
-
-Tram 28 before the crowds. Lunch by the river.
-
-### Pack
-
-- Light jacket
-- Good shoes
-- The small notebook
-
-## Day three
-
-Nothing planned. That is the plan.
-`,
-  },
-  {
-    name: 'ideas.md',
-    text: `# Ideas
-
-## For the newsletter
-
-- A week of writing only in the morning
-- What a folder of notes looks like after a year
-
-## For later
-
-> Write the thing you wish you could read.
-
-**Bold** and *italic* work the way you expect.
-`,
-  },
-]
+import { drafts as allDrafts } from './drafts'
 
 type Mode = 'write' | 'split' | 'read'
 
-export default function LiveDemo() {
+export default function LiveDemo({ lang }: { lang: Lang }) {
+  const drafts = allDrafts[lang]
   const [index, setIndex] = useState(0)
   const [texts, setTexts] = useState(() => drafts.map((d) => d.text))
   const [mode, setMode] = useState<Mode>('split')

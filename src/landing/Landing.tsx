@@ -84,7 +84,7 @@ export function Landing({ lang }: { lang: Lang }) {
 
         <section className="showcase" aria-label={t.nav.openEditor}>
           <Suspense fallback={<div className="demo demo-waiting" />}>
-            <LiveDemo />
+            <LiveDemo lang={lang} />
           </Suspense>
         </section>
 

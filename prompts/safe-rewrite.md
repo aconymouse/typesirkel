@@ -1,5 +1,5 @@
 ---
-title: Safe rewrite
+title: Rewrite an article
 category: News
 description: Rewrite a story in fresh words while keeping every quote, institution, name, time and place exactly as they are.
 ---
