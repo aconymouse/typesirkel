@@ -8,13 +8,13 @@ description: Cara pakai typeSirkel: buka folder, menulis markdown, menu slash da
 typeSirkel bisa dipakai di dua tempat, dan keduanya aplikasi yang sama.
 
 - **Di browser** lewat [sirkel.asia/write](/write/). Gak perlu pasang apa-apa.
-- **Di desktop** untuk macOS 11 ke atas dan Windows 10 ke atas, dari [halaman rilis](https://github.com/aconymouse/typesirkel/releases).
+- **Di desktop** untuk macOS 11 ke atas, Windows 10 ke atas, dan Linux (AppImage atau .deb), dari [halaman rilis](https://github.com/aconymouse/typesirkel/releases).
 
 Saat pertama dibuka, kamu masuk ke **Scratch**, buku catatan kecil yang tersimpan di browser. Cocok untuk catatan cepat. Untuk kerja beneran, tekan **Open folder** di bawah sidebar lalu pilih folder di disk-mu. Setiap catatan di dalamnya jadi file `.md` biasa yang bisa dibaca aplikasi lain.
 
 Membuka satu folder utuh di browser butuh browser berbasis Chromium seperti Chrome, Edge, Brave, atau Arc. Safari dan Firefox membuka satu file sekaligus.
 
-Versi macOS belum dinotarisasi. Saat pertama kali, klik kanan aplikasinya lalu pilih **Open**.
+Aplikasi desktopnya belum ditandatangani. Di Mac, buka aplikasinya sekali, lalu ke **System Settings → Privacy & Security** dan pilih **Open Anyway**. Di Windows, kalau muncul SmartScreen, pilih **More info** lalu **Run anyway**.
 
 ## Menulis {#writing}
 

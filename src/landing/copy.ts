@@ -25,7 +25,7 @@ const en: Copy = {
     mac: 'Download for Mac',
     windows: 'Download for Windows',
     browser: 'Try it in your browser →',
-    fine: 'macOS 11 or newer, Windows 10 or newer, or any Chromium browser. MIT licensed.',
+    fine: 'macOS 11 or newer, Windows 10 or newer, Linux, or any Chromium browser. MIT licensed.',
   },
   lookout: {
     title: 'Always know where you are in a long draft.',
@@ -76,7 +76,7 @@ const id: Copy = {
     mac: 'Unduh untuk Mac',
     windows: 'Unduh untuk Windows',
     browser: 'Coba langsung di browser →',
-    fine: 'macOS 11 ke atas, Windows 10 ke atas, atau browser berbasis Chromium. Lisensi MIT.',
+    fine: 'macOS 11 ke atas, Windows 10 ke atas, Linux, atau browser berbasis Chromium. Lisensi MIT.',
   },
   lookout: {
     title: 'Selalu tahu posisimu di draf yang panjang.',
@@ -127,7 +127,7 @@ const ptBR: Copy = {
     mac: 'Baixar para Mac',
     windows: 'Baixar para Windows',
     browser: 'Experimente no navegador →',
-    fine: 'macOS 11 ou mais recente, Windows 10 ou mais recente, ou qualquer navegador Chromium. Licença MIT.',
+    fine: 'macOS 11 ou mais recente, Windows 10 ou mais recente, Linux ou qualquer navegador Chromium. Licença MIT.',
   },
   lookout: {
     title: 'Saiba sempre onde você está num texto longo.',
@@ -178,7 +178,7 @@ const ko: Copy = {
     mac: 'Mac용 다운로드',
     windows: 'Windows용 다운로드',
     browser: '브라우저에서 바로 써 보기 →',
-    fine: 'macOS 11 이상, Windows 10 이상, 또는 Chromium 기반 브라우저. MIT 라이선스.',
+    fine: 'macOS 11 이상, Windows 10 이상, Linux, 또는 Chromium 기반 브라우저. MIT 라이선스.',
   },
   lookout: {
     title: '긴 글에서도 지금 어디쯤인지 늘 알 수 있어요.',
@@ -229,7 +229,7 @@ const th: Copy = {
     mac: 'ดาวน์โหลดสำหรับ Mac',
     windows: 'ดาวน์โหลดสำหรับ Windows',
     browser: 'ลองใช้ในเบราว์เซอร์ →',
-    fine: 'macOS 11 ขึ้นไป, Windows 10 ขึ้นไป หรือเบราว์เซอร์ที่ใช้ Chromium สัญญาอนุญาต MIT',
+    fine: 'macOS 11 ขึ้นไป, Windows 10 ขึ้นไป, Linux หรือเบราว์เซอร์ที่ใช้ Chromium สัญญาอนุญาต MIT',
   },
   lookout: {
     title: 'รู้เสมอว่ากำลังอยู่ตรงไหนของงานเขียนยาว ๆ',
@@ -280,7 +280,7 @@ const zh: Copy = {
     mac: '下载 Mac 版',
     windows: '下载 Windows 版',
     browser: '在浏览器中试用 →',
-    fine: '支持 macOS 11 及以上、Windows 10 及以上，或任意 Chromium 浏览器。MIT 许可。',
+    fine: '支持 macOS 11 及以上、Windows 10 及以上、Linux，或任意 Chromium 浏览器。MIT 许可。',
   },
   lookout: {
     title: '在长稿里，永远知道自己在哪儿。',

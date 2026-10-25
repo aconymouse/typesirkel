@@ -1,6 +1,6 @@
 name: release
 
-# Push a tag like v0.1.0 and this builds the Mac and Windows apps,
+# Push a tag like v0.1.0 and this builds the Mac, Windows and Linux apps,
 # then leaves them in a draft release for a human to look over.
 on:
   push:
@@ -20,9 +20,16 @@ jobs:
             args: --target universal-apple-darwin
           - platform: windows-latest
             args: ''
+          - platform: ubuntu-22.04
+            args: ''
     runs-on: ${{ matrix.platform }}
     steps:
       - uses: actions/checkout@v7
+
+      - if: matrix.platform == 'ubuntu-22.04'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
 
       - uses: pnpm/action-setup@v6
 
@@ -47,7 +54,11 @@ jobs:
         with:
           tagName: ${{ github.ref_name }}
           releaseName: typeSirkel ${{ github.ref_name }}
-          releaseBody: Grab the file for your system below. The Mac build is unsigned for now, so right-click and choose Open the first time.
+          releaseBody: >-
+            Grab the file for your system: the .dmg for Mac, the .exe for Windows,
+            the .AppImage or .deb for Linux. The apps are not signed yet. On a Mac,
+            open the app once, then go to System Settings, Privacy & Security, and
+            choose Open Anyway. On Windows, choose More info, then Run anyway.
           releaseDraft: true
           prerelease: false
           args: ${{ matrix.args }}

@@ -8,7 +8,7 @@
 
 typeSirkel opens a folder of `.md` files and gets out of the way. You write on the left, read on the right, and a small marker walks down the outline as you move through your headings. Files stay plain markdown on your own disk. There are no accounts and nothing to migrate away from later.
 
-It runs in the browser and as a desktop app for macOS and Windows. Both are the same code; only the way files are opened and saved changes.
+It runs in the browser and as a desktop app for macOS, Windows and Linux. Both are the same code; only the way files are opened and saved changes.
 
 ## What it does
 
@@ -78,9 +78,9 @@ The desktop app watches the folder, so an agent's edits show up in the open docu
 
 ## Download
 
-Builds for macOS and Windows show up on the [releases page](https://github.com/aconymouse/typesirkel/releases). The browser edition runs at [sirkel.asia/write](https://sirkel.asia/write/). Opening whole folders in the browser needs a Chromium based browser; elsewhere it opens one file at a time.
+Builds for macOS, Windows and Linux (AppImage and .deb) show up on the [releases page](https://github.com/aconymouse/typesirkel/releases). The browser edition runs at [sirkel.asia/write](https://sirkel.asia/write/). Opening whole folders in the browser needs a Chromium based browser; elsewhere it opens one file at a time.
 
-The macOS build is not notarized yet. The first time, right-click the app and choose Open.
+The desktop apps are not signed yet. On a Mac, open the app once, then go to System Settings → Privacy & Security and choose Open Anyway. On Windows, choose More info, then Run anyway when SmartScreen appears.
 
 ## Building it yourself
 

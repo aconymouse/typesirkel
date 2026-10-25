@@ -8,13 +8,13 @@ description: Como usar o typeSirkel: abrir uma pasta, escrever em markdown, usar
 O typeSirkel roda em dois lugares, e os dois são o mesmo app.
 
 - **No navegador**, em [sirkel.asia/write](/write/). Nada para instalar.
-- **No desktop**, para macOS 11 ou mais recente e Windows 10 ou mais recente, pela [página de releases](https://github.com/aconymouse/typesirkel/releases).
+- **No desktop**, para macOS 11 ou mais recente, Windows 10 ou mais recente e Linux (AppImage ou .deb), pela [página de releases](https://github.com/aconymouse/typesirkel/releases).
 
 Na primeira vez que você abre, cai no **Scratch**, um caderninho guardado no seu navegador. Ele serve bem para anotações rápidas. Para trabalho de verdade, aperte **Open folder** na parte de baixo da barra lateral e escolha uma pasta no seu disco. Cada nota nela vira um arquivo `.md` simples que qualquer outro app consegue ler.
 
 Para abrir uma pasta inteira no navegador, você precisa de um navegador baseado em Chromium, como Chrome, Edge, Brave ou Arc. Safari e Firefox abrem um arquivo por vez.
 
-A versão para macOS ainda não é notarizada. Na primeira vez, clique com o botão direito no app e escolha **Open**.
+Os apps de desktop ainda não são assinados. No Mac, abra o app uma vez, depois vá em **System Settings → Privacy & Security** e escolha **Open Anyway**. No Windows, quando o SmartScreen aparecer, escolha **More info** e depois **Run anyway**.
 
 ## Escrevendo {#writing}
 

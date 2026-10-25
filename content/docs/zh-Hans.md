@@ -8,13 +8,13 @@ description: typeSirkel 怎么用：打开文件夹、用 markdown 写作、使�
 typeSirkel 可以在两个地方运行，两者是同一个应用。
 
 - **在浏览器里**，打开 [sirkel.asia/write](/write/) 就能用，什么都不用安装。
-- **在桌面上**，支持 macOS 11 及以上和 Windows 10 及以上，从[发布页面](https://github.com/aconymouse/typesirkel/releases)下载。
+- **在桌面上**，支持 macOS 11 及以上、Windows 10 及以上和 Linux（AppImage 或 .deb），从[发布页面](https://github.com/aconymouse/typesirkel/releases)下载。
 
 第一次打开时，你会进入 **Scratch**，这是一个保存在浏览器里的小笔记本，随手记点东西没问题。要正经干活的话，点侧边栏底部的 **Open folder**，选择硬盘上的一个文件夹。里面的每篇笔记都会是一个普通的 `.md` 文件，任何其他应用都能读取。
 
 在浏览器里打开整个文件夹，需要基于 Chromium 的浏览器，比如 Chrome、Edge、Brave 或 Arc。Safari 和 Firefox 一次只能打开一个文件。
 
-macOS 版本暂时还没有经过公证。第一次打开时，请右键点击应用，然后选择 **Open**。
+桌面应用暂时还没有签名。在 Mac 上，先打开一次应用，然后前往 **System Settings → Privacy & Security**，选择 **Open Anyway**。在 Windows 上，如果出现 SmartScreen，请点 **More info**，再点 **Run anyway**。
 
 ## 写作 {#writing}
 
