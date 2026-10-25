@@ -200,9 +200,12 @@ button {
   text-transform: capitalize;
 }
 
-.quiet-button:hover,
-.quiet-button[aria-pressed='true'] {
+.quiet-button:hover {
   color: var(--ink);
+}
+
+.quiet-button[aria-pressed='true'] {
+  color: var(--accent);
 }
 
 .quiet-button svg path {
@@ -452,8 +455,7 @@ button {
 }
 
 .bar-modes button[aria-pressed='true'] {
-  background: var(--accent);
-  color: var(--accent-ink);
+  color: var(--accent);
 }
 
 .bar-tools {

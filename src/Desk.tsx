@@ -26,6 +26,7 @@ export function Desk() {
   const [mode, setMode] = useState<Mode>(() => recall('mode', 'split', modes))
   const [theme, setTheme] = useState<Theme>(() => recall('theme', 'system', themes))
   const [quiet, setQuiet] = useState(false)
+  const [systemDark, setSystemDark] = useState(() => window.matchMedia('(prefers-color-scheme: dark)').matches)
   const [focusLine, setFocusLine] = useState(0)
   const [pressing, setPressing] = useState(false)
 
@@ -149,6 +150,19 @@ export function Desk() {
   }, [mode])
 
   useEffect(() => {
+    const query = window.matchMedia('(prefers-color-scheme: dark)')
+    const follow = () => setSystemDark(query.matches)
+    query.addEventListener('change', follow)
+    return () => query.removeEventListener('change', follow)
+  }, [])
+
+  // The button names where it will take you, not where you are. Landing back on
+  // whatever the system already shows hands the choice back to the system.
+  const shown = theme === 'system' ? (systemDark ? 'dark' : 'light') : theme
+  const flip = shown === 'dark' ? 'light' : 'dark'
+  const flipTheme = () => setTheme(flip === (systemDark ? 'dark' : 'light') ? 'system' : flip)
+
+  useEffect(() => {
     remember('theme', theme)
     if (theme === 'system') delete document.documentElement.dataset.theme
     else document.documentElement.dataset.theme = theme
@@ -258,8 +272,8 @@ export function Desk() {
                 </div>
               ) : null}
             </div>
-            <button type="button" className="quiet-button text" onClick={() => setTheme(themes[(themes.indexOf(theme) + 1) % themes.length])} title="Theme">
-              {theme}
+            <button type="button" className="quiet-button text" onClick={flipTheme} title={`Switch to ${flip} theme`}>
+              {flip}
             </button>
             <button type="button" className="quiet-button text" aria-pressed={quiet} onClick={() => setQuiet((q) => !q)} title="Quiet mode (Mod+.)">
               quiet
