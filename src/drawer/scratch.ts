@@ -38,14 +38,24 @@ const notesKey = 'typesirkel:scratch-notes'
 
 type Notes = Record<string, string>
 
+const first = 'First note.md'
+
+// Earlier versions called the starting note scratch.md, which said nothing to
+// someone opening the app for the first time.
+const renamed = (stored: Notes): Notes => {
+  if (!('scratch.md' in stored) || first in stored) return stored
+  const { 'scratch.md': body, ...rest } = stored
+  return { [first]: body, ...rest }
+}
+
 const readNotes = (): Notes => {
   try {
     const stored = localStorage.getItem(notesKey)
-    if (stored) return JSON.parse(stored) as Notes
+    if (stored) return renamed(JSON.parse(stored) as Notes)
     const older = localStorage.getItem(key)
-    return { 'scratch.md': older ?? welcome }
+    return { [first]: older ?? welcome }
   } catch {
-    return { 'scratch.md': welcome }
+    return { [first]: welcome }
   }
 }
 

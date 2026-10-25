@@ -10,6 +10,7 @@ import { forgetFolder, type Recent, recentFolders, rememberFolder, reopenFolder 
 import { PromptCard } from './PromptCard'
 import type { Prompt } from './prompts'
 import { Quill } from './quill/Quill'
+import { QuillDoor } from './quill/QuillDoor'
 import type { Tool } from './quill/voices'
 import { desktopDrawer, onDesktop } from './drawer/tauri'
 import { pressHtml, pressMarkdown, pressPdf } from './press'
@@ -549,6 +550,8 @@ export function Desk() {
       {!quiet ? (
         <Shelf
           drawer={drawer}
+          shownTheme={shown}
+          onFlipTheme={flipTheme}
           leaves={leaves}
           current={current?.path ?? null}
           canFolder={folderSupport() === 'folder'}
@@ -616,9 +619,7 @@ export function Desk() {
             ))}
           </div>
           <div className="bar-tools">
-            <button type="button" className="quiet-button text" aria-pressed={side === 'quill'} onClick={() => toggleSide('quill')} title="Quill (Mod+J)">
-              {quillBusy ? `quill ${quillBusy}` : 'quill'}
-            </button>
+            <QuillDoor open={side === 'quill'} busy={quillBusy} onToggle={() => toggleSide('quill')} />
             <button type="button" className={`quiet-button text${circle ? ' is-sharing' : ''}`} aria-pressed={side === 'circle'} onClick={() => toggleSide('circle')} title="Share">
               share
             </button>
@@ -640,9 +641,6 @@ export function Desk() {
                 </div>
               ) : null}
             </div>
-            <button type="button" className="quiet-button text" onClick={flipTheme} title={`Switch to ${flip} theme`}>
-              {flip}
-            </button>
             <button type="button" className="quiet-button text bar-quiet" aria-pressed={quiet} onClick={() => setQuiet((q) => !q)} title="Quiet mode (Mod+.)">
               quiet
             </button>

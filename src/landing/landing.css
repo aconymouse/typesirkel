@@ -92,7 +92,16 @@ button {
   border-color: var(--ink);
 }
 
-.star:hover svg {
+.star .star-github {
+  fill: currentColor;
+  stroke: none;
+}
+
+.star .star-github + .star-mark {
+  margin-left: 2px;
+}
+
+.star:hover .star-mark {
   fill: var(--accent);
   stroke: var(--accent);
 }

@@ -1,8 +1,9 @@
 import { type ReactNode, useEffect, useRef, useState } from 'react'
 import type { Drawer, Leaf } from './drawer'
 import type { Recent } from './drawer/recent'
+import { onDesktop } from './drawer/tauri'
 import { recall, remember } from './keep'
-import { langs, type Lang, useLang } from './lang'
+import { type Lang, langOf, langs, useLang } from './lang'
 import { byCategory, type Prompt } from './prompts'
 
 type Props = {
@@ -18,12 +19,25 @@ type Props = {
   onPick: (leaf: Leaf) => void
   onCreate: (name: string) => void
   onScratch: () => void
+  shownTheme: 'light' | 'dark'
+  onFlipTheme: () => void
 }
 
 const groupByDir = (leaves: Leaf[]) => {
   const groups = new Map<string, Leaf[]>()
   for (const leaf of leaves) groups.set(leaf.dir, [...(groups.get(leaf.dir) ?? []), leaf])
   return [...groups.entries()].sort(([a], [b]) => (a === '' ? -1 : b === '' ? 1 : a.localeCompare(b)))
+}
+
+// The browser build lives on sirkel.asia, so home is a relative hop there; the
+// desktop app hands the link to the system browser instead.
+const home = (medium: string) => `/?utm_source=typesirkel&utm_medium=${medium}&utm_campaign=sidebar_logo`
+
+const goHome = async (event: React.MouseEvent) => {
+  if (!onDesktop()) return
+  event.preventDefault()
+  const { openUrl } = await import('@tauri-apps/plugin-opener')
+  await openUrl(`https://sirkel.asia${home('desktop')}`)
 }
 
 const shortName = (name: string) => name.replace(/\.(md|markdown|mdx|txt)$/i, '')
@@ -49,7 +63,7 @@ function Fold({ open }: { open: boolean }) {
   )
 }
 
-export function Shelf({ drawer, leaves, current, canFolder, outline, recents, onReopen, onPrompt, onOpen, onPick, onCreate, onScratch }: Props) {
+export function Shelf({ drawer, leaves, current, canFolder, outline, recents, onReopen, onPrompt, onOpen, onPick, onCreate, onScratch, shownTheme, onFlipTheme }: Props) {
   const [naming, setNaming] = useState(false)
   const [name, setName] = useState('')
   const [filesOpen, toggleFiles] = useFold('shelf-files')
@@ -84,6 +98,23 @@ export function Shelf({ drawer, leaves, current, canFolder, outline, recents, on
 
   return (
     <nav className={`shelf${filesOpen ? '' : ' files-shut'}${(outline && outlineOpen) || promptsOpen ? ' lower-open' : ''}`} aria-label="Files">
+      <div className="shelf-brand">
+        <a href={home('editor')} onClick={(e) => void goHome(e)} aria-label="typeSirkel home">
+          <img src={shownTheme === 'dark' ? '/logo.svg' : '/logo-ink.svg'} alt="typeSirkel" width={76} height={24} />
+        </a>
+        <button type="button" className="theme-flip" onClick={onFlipTheme} aria-label={shownTheme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'} title={shownTheme === 'dark' ? 'Light theme' : 'Dark theme'}>
+          {shownTheme === 'dark' ? (
+            <svg width="15" height="15" viewBox="0 0 16 16" aria-hidden="true">
+              <circle cx="8" cy="8" r="3.2" />
+              <path d="M8 1.5v1.6M8 12.9v1.6M1.5 8h1.6M12.9 8h1.6M3.4 3.4l1.1 1.1M11.5 11.5l1.1 1.1M3.4 12.6l1.1-1.1M11.5 4.5l1.1-1.1" />
+            </svg>
+          ) : (
+            <svg width="15" height="15" viewBox="0 0 16 16" aria-hidden="true">
+              <path d="M13.2 9.6A5.6 5.6 0 0 1 6.4 2.8a5.6 5.6 0 1 0 6.8 6.8z" />
+            </svg>
+          )}
+        </button>
+      </div>
       <div className="shelf-head" ref={head}>
         <button type="button" className="shelf-fold" onClick={toggleFiles} aria-expanded={filesOpen} aria-label={filesOpen ? 'Fold files' : 'Unfold files'}>
           <Fold open={filesOpen} />
@@ -203,7 +234,7 @@ export function Shelf({ drawer, leaves, current, canFolder, outline, recents, on
                 </option>
               ))}
             </select>
-            <b aria-hidden="true">{lang === 'pt-BR' ? 'PT' : lang.toUpperCase()}</b>
+            <b aria-hidden="true">{langOf(lang).short}</b>
           </label>
         </div>
         {promptsOpen ? (

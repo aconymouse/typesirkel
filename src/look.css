@@ -859,3 +859,45 @@ button {
   clip-path: inset(50%);
   white-space: nowrap;
 }
+
+.shelf-brand {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: space-between;
+  height: 48px;
+  padding: 0 10px 0 16px;
+  border-bottom: 1px solid var(--line);
+}
+
+.shelf-brand a {
+  display: flex;
+}
+
+.shelf-brand img {
+  display: block;
+  height: 22px;
+  width: auto;
+}
+
+.theme-flip {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-small);
+  color: var(--muted);
+}
+
+.theme-flip svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.4;
+  stroke-linecap: round;
+}
+
+.theme-flip:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}

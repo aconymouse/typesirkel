@@ -106,8 +106,8 @@ const id: Copy = {
   agents: {
     kicker: 'MCP',
     title: 'Biarkan AI bekerja di foldermu.',
-    p1: 'typeSirkel menyertakan server MCP kecil. Arahkan Claude, Cursor, atau klien MCP lain ke folder catatanmu, dan ia bisa mencari, membaca, membuat outline, dan menulis markdown di sana, sementara kamu tetap menulis di file yang sama.',
-    p2: 'Minta ia merangkum rapat seminggu, mengisi changelog, atau mengumpulkan catatan yang tercecer jadi satu outline. Aplikasi desktop langsung menampilkan perubahannya, jadi tidak perlu salin tempel antarjendela.',
+    p1: 'typeSirkel menyertakan server MCP kecil. Arahkan Claude, Cursor, atau klien MCP lain ke folder catatanmu, dan dia bisa mencari, membaca, membuat outline, dan menulis markdown di sana, sementara kamu tetap menulis di file yang sama.',
+    p2: 'Minta dia merangkum rapat seminggu, mengisi changelog, atau mengumpulkan catatan yang tercecer jadi satu outline. Aplikasi desktop langsung menampilkan perubahannya, jadi tidak perlu salin tempel antarjendela.',
     folder: 'Catatan',
     label: 'Bisa dengan klien MCP apa pun',
     created: 'Membuat',
@@ -291,4 +291,60 @@ const th: Copy = {
   },
 }
 
-export const copies: Record<Lang, Copy> = { en, id, 'pt-BR': ptBR, ko, th }
+const zh: Copy = {
+  meta: {
+    title: 'typeSirkel · 适用于 Mac、Windows 和浏览器的安静 Markdown 编辑器',
+    description: 'typeSirkel 是一款免费开源的 Markdown 编辑器。笔记就是你自己文件夹里的普通文件，带实时预览，还有一个跟着你在标题间移动的大纲。',
+  },
+  nav: { openEditor: '打开编辑器', star: 'Star', toLight: '切换到浅色主题', toDark: '切换到深色主题', language: '语言' },
+  hero: {
+    kicker: '免费开源的 Markdown 编辑器',
+    line1: '在文件夹里写作。',
+    line2: '边写边读。',
+    lead: 'typeSirkel 把你的笔记保存为自己硬盘上的普通 Markdown 文件，在旁边显示实时预览，还有一个小标记陪你穿过每一个标题。',
+    mac: '下载 Mac 版',
+    windows: '下载 Windows 版',
+    browser: '在浏览器中试用 →',
+    fine: '支持 macOS 11 及以上、Windows 10 及以上，或任意 Chromium 浏览器。MIT 许可。',
+  },
+  demoNote: '这就是真正的编辑器。试着输入、切换笔记，或点击一个标题。',
+  lookout: {
+    kicker: '瞭望',
+    title: '在长稿里，永远知道自己在哪儿。',
+    body: '标题变成一条小路上的站点。你写作或滚动时，标记会走到你所在的章节。走过的路是实线，前面的路还是虚线。点击任意站点即可跳过去。',
+    hint: '来，点一个标题试试。',
+    stops: ['第一章', '抵达', '港口', '集市', '入夜', '一封家书', '清晨'],
+  },
+  features: {
+    kicker: '它能做什么',
+    title: '刻意保持小巧。',
+    notes: [
+      { title: '普通文件', body: '指向一个文件夹即可。每条笔记都是 .md 文件，任何软件都能打开，随处备份，永久保存。' },
+      { title: '边写边读', body: '编辑器和预览并排，滚动时始终对齐。需要空间时，也可以隐藏其中一个。' },
+      { title: '用你自己的 AI', body: '填入 Anthropic、OpenAI 或 OpenRouter 的密钥，或使用本地的 Ollama。续写、精简、修正或翻译段落，都不用离开页面。' },
+      { title: '一起写', body: '分享一个链接，多人实时编辑同一份草稿，每个人的光标都看得见。所有内容在浏览器里加密后才发送，中继服务器读不到一个字。' },
+      { title: '与 AI 智能体协作', body: '一个小小的 MCP 服务器，让 Claude、Cursor 或任意 MCP 客户端读写你的文件夹。桌面应用会即时显示它们的修改。' },
+      { title: '提示词书架', body: '恐怖、奇幻、纯新闻、绝不改动引语和名字的改写、SEO 文章和分镜脚本。复制一个，或交给 Quill。' },
+    ],
+  },
+  agents: {
+    kicker: 'MCP',
+    title: '让 AI 在你的文件夹里工作。',
+    p1: 'typeSirkel 自带一个小型 MCP 服务器。把 Claude、Cursor 或其他 MCP 客户端指向你的笔记文件夹，它就能在里面搜索、阅读、生成大纲和写 Markdown，而你照样在同一批文件里写作。',
+    p2: '让它总结一周的会议、维护更新日志，或把零散的笔记整理成一份大纲。桌面应用会即时显示它的修改，不用在窗口之间来回复制粘贴。',
+    folder: '笔记',
+    label: '兼容任意 MCP 客户端',
+    created: '已创建',
+    updated: '已更新',
+    done: '完成。',
+    prompts: ['把这周的会议记录整理成一份总结。', '把我今天发布的内容加到更新日志里。', '找出我写过的所有关于里斯本的内容，列一份指南大纲。'],
+  },
+  source: {
+    kicker: '开源',
+    title: '读代码，改代码，让它成为你的。',
+    body: 'typeSirkel 采用 MIT 许可，小到一个下午就能读懂。编辑器是 CodeMirror，桌面外壳是 Tauri，其余是几个安静的 React 文件，名字都取自书桌上的物件。',
+    button: '在 GitHub 上查看',
+  },
+}
+
+export const copies: Record<Lang, Copy> = { en, id, 'pt-BR': ptBR, ko, th, 'zh-Hans': zh }

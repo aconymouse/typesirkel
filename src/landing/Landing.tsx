@@ -1,7 +1,7 @@
 import { lazy, Suspense, useEffect, useMemo, useState } from 'react'
 import type { Heading } from '../ink'
 import { recall, remember } from '../keep'
-import { chooseLang, currentLang, type Lang, langs } from '../lang'
+import { chooseLang, type Lang, langOf, langs } from '../lang'
 import { Lookout } from '../Lookout'
 import { Agents } from './Agents'
 import { copies } from './copy'
@@ -35,11 +35,12 @@ const guessSystem = (): System => {
 }
 
 const dark = () => window.matchMedia('(prefers-color-scheme: dark)')
+const inBrowser = typeof window !== 'undefined'
 
 // The same theme key as the editor, so a choice made here carries over to /write.
 const useTheme = () => {
   const [theme, setTheme] = useState<Theme>(() => recall('theme', 'system', ['system', 'light', 'dark'] as const))
-  const [systemDark, setSystemDark] = useState(() => dark().matches)
+  const [systemDark, setSystemDark] = useState(() => inBrowser && dark().matches)
 
   useEffect(() => {
     const query = dark()
@@ -62,9 +63,8 @@ const useTheme = () => {
   return { shown, flip }
 }
 
-export function Landing() {
+export function Landing({ lang }: { lang: Lang }) {
   const [system, setSystem] = useState<System>('other')
-  const [lang, setLang] = useState<Lang>(currentLang)
   const [stop, setStop] = useState(0)
   const [held, setHeld] = useState(false)
   const { shown, flip } = useTheme()
@@ -75,7 +75,7 @@ export function Landing() {
   useEffect(() => setSystem(guessSystem()), [])
 
   useEffect(() => {
-    chooseLang(lang)
+    document.documentElement.lang = lang
     document.title = t.meta.title
     document.querySelector('meta[name="description"]')?.setAttribute('content', t.meta.description)
   }, [lang, t])
@@ -87,6 +87,11 @@ export function Landing() {
     return () => window.clearInterval(walk)
   }, [held])
 
+  const switchTo = (next: Lang) => {
+    chooseLang(next)
+    window.location.assign(langOf(next).path)
+  }
+
   const pick = (heading: Heading) => {
     setHeld(true)
     setStop(trip.findIndex((h) => h.id === heading.id))
@@ -95,15 +100,15 @@ export function Landing() {
   return (
     <div className="landing">
       <header className="top">
-        <a href="/" className="brand" aria-label="typeSirkel home">
+        <a href={langOf(lang).path} className="brand" aria-label="typeSirkel home">
           <img src={shown === 'dark' ? '/logo.svg' : '/logo-ink.svg'} alt="typeSirkel" width={101} height={32} />
         </a>
         <nav>
-          <label className="lang" data-short={lang === 'pt-BR' ? 'PT' : lang.toUpperCase()}>
+          <label className="lang" data-short={langOf(lang).short}>
             <span className="sr-only">{t.nav.language}</span>
-            <select value={lang} onChange={(e) => setLang(e.target.value as Lang)}>
+            <select value={lang} onChange={(e) => switchTo(e.target.value as Lang)}>
               {langs.map((l) => (
-                <option key={l.id} value={l.id}>
+                <option key={l.id} value={l.id} lang={l.id}>
                   {l.name}
                 </option>
               ))}
@@ -161,6 +166,8 @@ export function Landing() {
           <p className="fine">{t.demoNote}</p>
         </section>
 
+        <Agents copy={t.agents} />
+
         <section className="lookout-demo" aria-labelledby="lookout-title">
           <div className="lookout-copy">
             <p className="kicker">{t.lookout.kicker}</p>
@@ -188,8 +195,6 @@ export function Landing() {
           </div>
         </section>
 
-        <Agents copy={t.agents} />
-
         <section className="source" aria-labelledby="source-title">
           <div>
             <p className="kicker">{t.source.kicker}</p>
@@ -213,7 +218,12 @@ pnpm tauri dev    # desktop`}</code>
       </main>
 
       <footer className="foot">
-        <span>© 2026 Hafidz Nc</span>
+        <span>
+          © 2026{' '}
+          <a href="https://aconymous.com" title="Hafidz Nc" rel="author">
+            Hafidz Nc
+          </a>
+        </span>
         <span>
           <a href={repo}>GitHub</a> · <a href={`${repo}/blob/main/LICENSE`}>MIT</a> · sirkel.asia
         </span>

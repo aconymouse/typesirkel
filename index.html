@@ -12,6 +12,12 @@
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
     <meta name="theme-color" content="#121214" />
+    <script>
+      try {
+        const theme = localStorage.getItem('typesirkel:theme')
+        if (theme === 'light' || theme === 'dark') document.documentElement.dataset.theme = theme
+      } catch {}
+    </script>
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://sirkel.asia/" />
     <meta property="og:title" content="typeSirkel" />

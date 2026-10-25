@@ -6,3 +6,4 @@ dist
 !.vscode/extensions.json
 .wrangler
 .dev.vars
+dist-ssr
