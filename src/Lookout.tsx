@@ -6,6 +6,8 @@ type Props = {
   headings: Heading[]
   active: number
   onPick: (heading: Heading) => void
+  // When it sits inside another panel that already names it, the outline drops its own heading.
+  bare?: boolean
 }
 
 type Stop = { x: number; y: number }
@@ -25,7 +27,7 @@ const trailOf = (stops: Stop[]) =>
 
 const ease = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - (-2 * t + 2) ** 3 / 2)
 
-export function Lookout({ headings, active, onPick }: Props) {
+export function Lookout({ headings, active, onPick, bare = false }: Props) {
   const list = useRef<HTMLOListElement>(null)
   const road = useRef<SVGPathElement>(null)
   const walked = useRef<SVGPathElement>(null)
@@ -113,16 +115,16 @@ export function Lookout({ headings, active, onPick }: Props) {
 
   if (headings.length === 0) {
     return (
-      <aside className="lookout">
-        <p className="lookout-title">On this page</p>
-        <p className="lookout-empty">Headings will show up here.</p>
+      <aside className={bare ? 'lookout bare' : 'lookout'}>
+        {bare ? null : <p className="lookout-title">On this page</p>}
+        <p className="lookout-empty">No headings yet</p>
       </aside>
     )
   }
 
   return (
-    <aside className="lookout">
-      <p className="lookout-title">On this page</p>
+    <aside className={bare ? 'lookout bare' : 'lookout'}>
+      {bare ? null : <p className="lookout-title">On this page</p>}
       <div className="lookout-body">
         <svg className="lookout-trail" width={size.width} height={size.height} aria-hidden="true">
           <path ref={road} d={d} className="trail-ahead" />

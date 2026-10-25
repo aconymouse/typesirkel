@@ -16,7 +16,7 @@ const modes = ['write', 'split', 'read'] as const
 const themes = ['system', 'light', 'dark'] as const
 type Mode = (typeof modes)[number]
 type Theme = (typeof themes)[number]
-type Side = 'lookout' | 'quill' | 'circle'
+type Side = 'none' | 'quill' | 'circle'
 type SaveState = 'saved' | 'dirty' | 'saving' | 'failed' | 'loose' | 'live'
 
 const settle = 700
@@ -36,7 +36,7 @@ export function Desk() {
   const [theme, setTheme] = useState<Theme>(() => recall('theme', 'system', themes))
   const [systemDark, setSystemDark] = useState(() => window.matchMedia('(prefers-color-scheme: dark)').matches)
   const [quiet, setQuiet] = useState(false)
-  const [side, setSide] = useState<Side>('lookout')
+  const [side, setSide] = useState<Side>('none')
   const [focusLine, setFocusLine] = useState(0)
   const [pressing, setPressing] = useState(false)
   const [shelfOpen, setShelfOpen] = useState(false)
@@ -287,7 +287,7 @@ export function Desk() {
     if (mode !== 'write') proof.current?.showId(heading.id)
   }
 
-  const toggleSide = (next: Side) => setSide((s) => (s === next ? 'lookout' : next))
+  const toggleSide = (next: Side) => setSide((s) => (s === next ? 'none' : next))
 
   useEffect(() => {
     remember('mode', mode)
@@ -372,7 +372,7 @@ export function Desk() {
         if (mode === 'read') setMode('split')
         sheet.current?.land(from, answer, how)
       }}
-      onClose={() => setSide('lookout')}
+      onClose={() => setSide('none')}
     />
   ) : side === 'circle' ? (
     <CirclePanel
@@ -386,10 +386,8 @@ export function Desk() {
       onJoin={(invite) => void join(invite)}
       onLeave={stopSharing}
       onRename={rename}
-      onClose={() => setSide('lookout')}
+      onClose={() => setSide('none')}
     />
-  ) : current ? (
-    <Lookout headings={inked.headings} active={active} onPick={pick} />
   ) : null
 
   return (
@@ -401,6 +399,7 @@ export function Desk() {
           leaves={leaves}
           current={current?.path ?? null}
           canFolder={folderSupport() === 'folder'}
+          outline={current ? <Lookout headings={inked.headings} active={active} onPick={pick} bare /> : null}
           onOpen={() => {
             setShelfOpen(false)
             void openFolder()

@@ -32,7 +32,7 @@ button {
 
 .desk {
   display: grid;
-  grid-template-columns: 232px minmax(0, 1fr) 248px;
+  grid-template-columns: 248px minmax(0, 1fr);
   height: 100%;
 }
 
@@ -40,12 +40,8 @@ button {
   grid-template-columns: minmax(0, 1fr);
 }
 
-.desk:not(.quiet):has(> .shelf):not(:has(> .lookout, > .quill, > .circle)) {
-  grid-template-columns: 232px minmax(0, 1fr);
-}
-
 .desk:not(.quiet):has(> .quill, > .circle) {
-  grid-template-columns: 232px minmax(0, 1fr) 320px;
+  grid-template-columns: 248px minmax(0, 1fr) 320px;
 }
 
 /* window */
@@ -68,10 +64,6 @@ button {
   padding-top: 28px;
 }
 
-:root[data-shell='mac'] .lookout {
-  padding-top: 40px;
-}
-
 :root[data-shell='mac'] .proof-page,
 :root[data-shell='mac'] .cm-scroller {
   padding-top: 64px;
@@ -90,14 +82,23 @@ button {
 .shelf-head {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 4px;
   height: 44px;
-  padding: 0 10px 0 16px;
+  padding: 0 10px;
   border-bottom: 1px solid var(--line);
 }
 
-.shelf-label {
+.shelf-toggle {
+  display: flex;
   flex: 1;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  height: 100%;
+  text-align: left;
+}
+
+.shelf-label {
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -105,9 +106,76 @@ button {
   font-weight: 650;
 }
 
+.fold {
+  flex: none;
+  width: 10px;
+  height: 10px;
+  transition: transform 0.15s ease;
+}
+
+.fold path {
+  fill: none;
+  stroke: var(--faint);
+  stroke-width: 1.5;
+}
+
+.fold.open {
+  transform: rotate(90deg);
+}
+
+.shelf-toggle:hover .fold path {
+  stroke: var(--accent);
+}
+
+.shelf.files-shut .shelf-head {
+  border-bottom: 0;
+}
+
+.shelf-outline {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  border-top: 1px solid var(--line);
+}
+
+.shelf.outline-open .shelf-outline {
+  flex: 1 1 auto;
+}
+
+.shelf.outline-open .shelf-list {
+  flex: 0 1 auto;
+  max-height: 45%;
+}
+
+.shelf-rule {
+  flex: none;
+  height: 36px;
+  padding: 0 10px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+
+.shelf-rule:hover {
+  color: var(--ink);
+}
+
+.shelf-outline-body {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+}
+
+.shelf .lookout.bare {
+  overflow: visible;
+  padding: 2px 12px 24px 6px;
+  border-left: 0;
+}
+
 .shelf-new {
-  padding: 8px 10px;
-  border-bottom: 1px solid var(--line);
+  padding: 0 10px 8px;
 }
 
 .shelf-new input {
@@ -125,7 +193,7 @@ button {
 }
 
 .shelf-list {
-  flex: 1;
+  flex: 1 1 auto;
   min-height: 0;
   overflow: auto;
   padding: 8px 0;
@@ -174,6 +242,7 @@ button {
 }
 
 .shelf-foot {
+  margin-top: auto;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -380,10 +449,6 @@ button {
   .desk:not(.quiet),
   .desk:not(.quiet):has(> .quill, > .circle) {
     grid-template-columns: 220px minmax(0, 1fr);
-  }
-
-  .lookout {
-    display: none;
   }
 
   .quill,
