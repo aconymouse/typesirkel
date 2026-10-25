@@ -46,50 +46,6 @@ export const useHead = (lang: Lang, title: string, description: string) => {
   }, [lang, title, description])
 }
 
-// Header and links ride along the top. The link row tucks under the bar while
-// you read down the page and comes back the moment you scroll up, the same way
-// aconymous.com does it. Small wiggles of a trackpad are ignored, the first
-// stretch of the page always shows everything, and people who asked their
-// system for less motion get a header that simply stays.
-const useTuck = () => {
-  useEffect(() => {
-    const root = document.documentElement
-    const still = window.matchMedia('(prefers-reduced-motion: reduce)')
-    const threshold = 8
-    const offset = 120
-    let last = Math.max(0, window.scrollY)
-    let frame = 0
-    const set = (state: 'shown' | 'hidden') => {
-      if (root.dataset.nav !== state) root.dataset.nav = state
-    }
-    const read = () => {
-      frame = 0
-      const y = Math.max(0, window.scrollY)
-      if (still.matches || y < offset) {
-        last = y
-        return set('shown')
-      }
-      if (Math.abs(y - last) < threshold) return
-      set(y > last ? 'hidden' : 'shown')
-      last = y
-    }
-    const scrolled = () => {
-      if (!frame) frame = requestAnimationFrame(read)
-    }
-    const focused = (event: FocusEvent) => {
-      if ((event.target as Element | null)?.closest('.site-head')) set('shown')
-    }
-    set('shown')
-    window.addEventListener('scroll', scrolled, { passive: true })
-    document.addEventListener('focusin', focused)
-    return () => {
-      cancelAnimationFrame(frame)
-      window.removeEventListener('scroll', scrolled)
-      document.removeEventListener('focusin', focused)
-    }
-  }, [])
-}
-
 const links = (lang: Lang) => {
   const t = copies[lang].nav
   return [
@@ -141,7 +97,6 @@ export function SiteHeader({ lang, page }: { lang: Lang; page: Page }) {
   const t = copies[lang].nav
   const menu = useRef<HTMLDialogElement>(null)
   const [open, setOpen] = useState(false)
-  useTuck()
 
   const toggle = () => {
     const dialog = menu.current
@@ -163,14 +118,12 @@ export function SiteHeader({ lang, page }: { lang: Lang; page: Page }) {
     <header className="site-head">
       <div className="site-bar">
         <div className="site-bar-in">
-          <div className="site-bar-start">
+          {logo}
+          <div className="site-bar-end">
             <button type="button" className="theme-flip" onClick={flip} aria-label={shown === 'dark' ? t.toLight : t.toDark} title={shown === 'dark' ? t.toLight : t.toDark}>
               {shown === 'dark' ? <Sun /> : <Moon />}
             </button>
             <LangPick lang={lang} page={page} />
-          </div>
-          {logo}
-          <div className="site-bar-end">
             <Star label={t.star} />
             <a href={`/write/?lang=${lang}`} className="top-cta">
               {t.openEditor}
@@ -184,19 +137,6 @@ export function SiteHeader({ lang, page }: { lang: Lang; page: Page }) {
             </button>
           </div>
         </div>
-      </div>
-      <div className="site-subnav-clip">
-        <nav className="site-subnav" aria-label={t.menu}>
-          <ul>
-            {links(lang).map((link) => (
-              <li key={link.href}>
-                <a href={link.href} aria-current={link.page === page ? 'page' : undefined}>
-                  {link.label}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </nav>
       </div>
       <dialog id="site-menu" className="site-menu" ref={menu} aria-label={t.menu} onClose={() => setOpen(false)}>
         <div className="site-menu-top">

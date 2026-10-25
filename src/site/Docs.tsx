@@ -23,7 +23,7 @@ export function Docs({ lang }: { lang: Lang }) {
     const read = () => {
       cancelAnimationFrame(frame)
       frame = requestAnimationFrame(() => {
-        const edge = 140
+        const edge = 100
         const near = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 8
         let index = 0
         trail.forEach((h, i) => {
@@ -45,7 +45,7 @@ export function Docs({ lang }: { lang: Lang }) {
     const el = document.getElementById(heading.id)
     if (!el) return
     history.replaceState(null, '', `#${heading.id}`)
-    window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 124, behavior: 'smooth' })
+    window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 88, behavior: 'smooth' })
   }
 
   return (
