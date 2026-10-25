@@ -74,6 +74,17 @@ for (const page of pages) {
   }
 }
 
+// The FAQ moved onto the about page. Old links still land on the right spot.
+for (const lang of langs) {
+  const from = pathFor(lang.id, 'faq')
+  const to = `${pathFor(lang.id, 'about')}#faq`
+  await mkdir(`${dist}${from.slice(1)}`, { recursive: true })
+  await writeFile(
+    `${dist}${from.slice(1)}index.html`,
+    `<!doctype html><html lang="${lang.id}"><head><meta charset="UTF-8"><meta name="robots" content="noindex"><link rel="canonical" href="${site}${pathFor(lang.id, 'about')}"><meta http-equiv="refresh" content="0; url=${to}"><script>location.replace(${JSON.stringify(to)})</script><title>typeSirkel</title></head><body><a href="${to}">${to}</a></body></html>\n`,
+  )
+}
+
 const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
 ${pages

@@ -8,9 +8,17 @@
   padding: 56px 0 104px;
 }
 
-.site-main.about,
-.site-main.faq {
-  max-width: 720px;
+.site-main.about {
+  display: grid;
+  grid-template-columns: minmax(0, 720px) 240px;
+  justify-content: space-between;
+  gap: 64px;
+}
+
+.about-maker {
+  position: sticky;
+  top: 32px;
+  align-self: start;
 }
 
 .site-title {
@@ -148,39 +156,71 @@
 
 .signed {
   display: flex;
-  align-items: center;
-  gap: 28px;
-  margin: 56px 0 0;
-  padding-top: 32px;
-  border-top: 1px solid var(--line);
+  flex-direction: column;
+  gap: 18px;
+  margin: 0;
 }
 
 .signed img {
-  flex: none;
-  width: 132px;
+  width: 200px;
   height: auto;
 }
 
 .signed figcaption {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
   min-width: 0;
-  font-size: 14px;
+  font-size: 13px;
   color: var(--muted);
 }
 
 .signature {
-  width: min(300px, 100%);
+  width: 220px;
+  max-width: 100%;
   height: auto;
   fill: var(--ink);
   stroke: var(--ink);
-  stroke-width: 16;
+  stroke-width: 40;
   stroke-linejoin: round;
 }
 
 .signed a:hover {
   color: var(--accent);
+}
+
+.about-rule {
+  margin: 72px 0 56px;
+  border: 0;
+  border-top: 1px solid var(--line);
+}
+
+.faq-title {
+  margin: 0 0 28px;
+  font-size: clamp(26px, 4vw, 36px);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+
+/* The about page as a lyric sheet. */
+.theater .beat {
+  color: var(--muted);
+  transition: color 0.5s ease;
+}
+
+.theater .beat.is-now {
+  color: var(--ink);
+}
+
+.theater .w {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.theater .beat.is-shown .w {
+  opacity: 1;
+  transition-delay: calc(var(--i) * 22ms);
 }
 
 .faq-list details {
@@ -205,7 +245,7 @@
   display: none;
 }
 
-.faq-list summary h2 {
+.faq-list summary h3 {
   margin: 0;
   font-size: 19px;
   font-weight: 650;
@@ -213,24 +253,54 @@
   letter-spacing: -0.01em;
 }
 
-.faq-list summary svg {
+.faq-list summary h3 {
+  flex: 1;
+}
+
+.faq-hash {
   flex: none;
+  padding: 0 4px;
+  color: var(--faint);
+  font-weight: 600;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.faq-list summary:hover .faq-hash,
+.faq-hash:focus-visible {
+  opacity: 1;
+}
+
+.faq-hash:hover {
+  color: var(--accent);
+}
+
+.faq-sign {
+  flex: none;
+}
+
+.faq-sign path {
+  stroke: var(--muted);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  transform-origin: center;
   transition: transform 0.2s ease;
 }
 
-.faq-list summary path {
-  stroke: var(--muted);
-  stroke-width: 1.5;
+.faq-list summary:hover h3 {
+  color: var(--accent);
 }
 
-.faq-list summary:hover h2,
-.faq-list summary:hover path {
-  color: var(--accent);
+.faq-list summary:hover .faq-sign path {
   stroke: var(--accent);
 }
 
-.faq-list details[open] summary svg {
-  transform: rotate(45deg);
+.faq-list details[open] .faq-down {
+  transform: scaleY(0);
+}
+
+.faq-list details {
+  scroll-margin-top: 24px;
 }
 
 .faq-list .site-prose {
@@ -271,6 +341,25 @@
 }
 
 @media (max-width: 900px) {
+  .site-main.about {
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 40px;
+  }
+
+  .about-maker {
+    position: static;
+  }
+
+  .signed {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .signed img {
+    width: 96px;
+  }
+
   .site-main.docs {
     display: block;
   }
@@ -292,11 +381,6 @@
   .site-prose h2 {
     margin-top: 44px;
     font-size: 22px;
-  }
-
-  .signed {
-    flex-direction: column;
-    align-items: flex-start;
   }
 
   .foot {

@@ -13,6 +13,6 @@ export const render = (lang: Lang, page: Page) => renderToString(<SitePage lang=
 
 export const metaFor = (lang: Lang, page: Page) => (page === 'home' ? copies[lang].meta : contentFor(page, lang))
 
-export const schemaFor = (lang: Lang, page: Page) => (page === 'faq' ? faqSchema(lang) : '')
+export const schemaFor = (lang: Lang, page: Page) => (page === 'about' ? faqSchema(lang) : '')
 
 export { langs, pages, pathFor }

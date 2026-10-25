@@ -24,4 +24,4 @@ for (const [path, raw] of Object.entries(files)) {
   if (page && lang) shelf.set(`${page}/${lang}`, parse(raw))
 }
 
-export const contentFor = (page: Exclude<Page, 'home'>, lang: Lang): Content => shelf.get(`${page}/${lang}`) ?? shelf.get(`${page}/en`) ?? { title: '', description: '', kicker: '', body: '' }
+export const contentFor = (page: Exclude<Page, 'home'> | 'faq', lang: Lang): Content => shelf.get(`${page}/${lang}`) ?? shelf.get(`${page}/en`) ?? { title: '', description: '', kicker: '', body: '' }

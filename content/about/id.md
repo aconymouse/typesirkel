@@ -4,7 +4,7 @@ description: Kenapa typeSirkel dibuat. Semua yang kita baca, tonton, dan pakai b
 kicker: Tentang
 ---
 
-> Iya, saya tahu membaca itu penting. Tapi gak ada yang bisa dibaca sebelum ada yang menulisnya.
+> Saya tahu membaca itu penting. Tapi gak ada yang bisa dibaca sebelum ada yang menulisnya.
 >
 > Sekarang kamu bisa menulis ditemani asisten AI favoritmu, atau sendiri saja, dan tetap merasa nyaman.
 
