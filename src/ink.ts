@@ -30,12 +30,27 @@ const md = new MarkdownIt({
   },
 })
 
-// Links to the web open in a new tab, and stay plain followed links.
+// Links to the web open in a new tab. Only our own sites are followed links;
+// anything else a note points at is marked as user content, so a page full of
+// someone's links never vouches for them on our behalf.
+const vouched = ['aconymous.com', 'sirkel.asia']
+
+const ours = (href: string) => {
+  try {
+    const host = new URL(href).hostname
+    const here = typeof location === 'undefined' ? '' : location.hostname
+    return host === here || vouched.some((site) => host === site || host.endsWith(`.${site}`))
+  } catch {
+    return false
+  }
+}
+
 const linkOpen = md.renderer.rules.link_open ?? ((tokens, i, options, _env, self) => self.renderToken(tokens, i, options))
 md.renderer.rules.link_open = (tokens, i, options, env, self) => {
-  if (/^https?:/i.test(String(tokens[i].attrGet('href') ?? ''))) {
+  const href = String(tokens[i].attrGet('href') ?? '')
+  if (/^https?:/i.test(href)) {
     tokens[i].attrSet('target', '_blank')
-    tokens[i].attrSet('rel', 'noopener')
+    tokens[i].attrSet('rel', ours(href) ? 'noopener' : 'nofollow ugc noopener')
   }
   return linkOpen(tokens, i, options, env, self)
 }

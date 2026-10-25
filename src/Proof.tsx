@@ -1,16 +1,18 @@
 import './proof.css'
-import { forwardRef, useEffect, useImperativeHandle, useRef } from 'react'
+import { forwardRef, type ReactNode, useEffect, useImperativeHandle, useRef } from 'react'
 import { onDesktop } from './drawer/tauri'
 import { slide } from './glide'
 
 export type ProofHandle = {
   showLine: (line: number, smooth?: boolean) => void
   showId: (id: string) => void
+  keepEnd: () => void
 }
 
 type Props = {
   html: string
   onScrollLine: (line: number) => void
+  after?: ReactNode
 }
 
 const marked = (root: HTMLElement) => Array.from(root.querySelectorAll<HTMLElement>('[data-line]'))
@@ -24,7 +26,7 @@ const openOutside = async (href: string) => {
   }
 }
 
-export const Proof = forwardRef<ProofHandle, Props>(function Proof({ html, onScrollLine }, ref) {
+export const Proof = forwardRef<ProofHandle, Props>(function Proof({ html, onScrollLine, after }, ref) {
   const scroller = useRef<HTMLDivElement>(null)
   const page = useRef<HTMLElement>(null)
   const quiet = useRef(0)
@@ -44,6 +46,16 @@ export const Proof = forwardRef<ProofHandle, Props>(function Proof({ html, onScr
       // Programmatic scrolls should not echo back as if the reader moved.
       quiet.current = performance.now() + 400
       box.scrollTo({ top: target ? target.offsetTop - 32 : 0, behavior: smooth ? 'smooth' : 'auto' })
+    },
+    // While text is still arriving, the newest lines stay in view.
+    keepEnd() {
+      const box = scroller.current
+      const last = page.current?.lastElementChild as HTMLElement | null | undefined
+      if (!box || !last) return
+      const bottom = last.offsetTop + last.offsetHeight + 96
+      if (bottom <= box.scrollTop + box.clientHeight) return
+      quiet.current = performance.now() + 400
+      box.scrollTo({ top: bottom - box.clientHeight })
     },
     showId(id) {
       const el = page.current?.querySelector<HTMLElement>(`#${CSS.escape(id)}`)
@@ -94,6 +106,7 @@ export const Proof = forwardRef<ProofHandle, Props>(function Proof({ html, onScr
   return (
     <div className="proof" ref={scroller}>
       <article className="proof-page" ref={page} onClick={follow} dangerouslySetInnerHTML={{ __html: html }} />
+      {after}
     </div>
   )
 })

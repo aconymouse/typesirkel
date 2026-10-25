@@ -4,6 +4,7 @@ import { CirclePanel } from './circle/CirclePanel'
 import { circleDrawer } from './circle/drawer'
 import { type Drawer, folderSupport, type Leaf, openDrawer, scratchDrawer } from './drawer'
 import { firstVisit } from './drawer/scratch'
+import { type Guide, guideButtons, guideIn, guides } from './tour'
 import { counts, ink, titleOf } from './ink'
 import { recall, recallShape, remember, rememberShape } from './keep'
 import { Lookout } from './Lookout'
@@ -32,6 +33,19 @@ const stamp = (target: Drawer, leaf: Leaf | null) => `${target.label}:${leaf?.pa
 
 const reason = (error: unknown) => (error instanceof Error ? error.message : String(error))
 
+// The guide buttons are plain DOM so the editor widget and the preview share them.
+function GuideRow({ here, onPick }: { here: Guide; onPick: (guide: Guide) => void }) {
+  const host = useRef<HTMLDivElement>(null)
+  const pick = useRef(onPick)
+  pick.current = onPick
+  useEffect(() => {
+    const row = guideButtons(here, (guide) => pick.current(guide))
+    host.current?.append(row)
+    return () => row.remove()
+  }, [here])
+  return <div className="proof-after" ref={host} />
+}
+
 export function Desk() {
   const [drawer, setDrawer] = useState<Drawer>(() => scratchDrawer())
   const [leaves, setLeaves] = useState<Leaf[]>([])
@@ -57,7 +71,7 @@ export function Desk() {
   const [shareBusy, setShareBusy] = useState(false)
   const [shareError, setShareError] = useState('')
   const [me, setMe] = useState<Person>(() => recallShape('me', somebody()))
-  const [wantTour, setWantTour] = useState(false)
+  const [playing, setPlaying] = useState<{ guide: Guide; path: string } | null>(null)
   const [nudge, setNudge] = useState(false)
 
   const sheet = useRef<SheetHandle>(null)
@@ -73,6 +87,8 @@ export function Desk() {
   textRef.current = text
   const echo = useRef<string | null>(null)
   const touring = useRef(false)
+  const beforeGuide = useRef<Mode | null>(null)
+  const guideNotes = useRef(new Set<string>())
   const modeRef = useRef(mode)
   modeRef.current = mode
 
@@ -188,28 +204,59 @@ export function Desk() {
       if (invite && (await join(invite))) return
       if (invite) history.replaceState(null, '', location.pathname + location.search)
       await shelve(scratchDrawer())
-      if (firstVisit() && recall<'yes' | ''>('toured', '', ['yes']) !== 'yes') setWantTour(true)
+      if (firstVisit() && recall<'yes' | ''>('toured', '', ['yes']) !== 'yes') setPlaying({ guide: 'welcome', path: guides.welcome.file })
     })()
     // Only the address the app was opened with counts; later hash changes are ours.
   }, [])
 
+  // A guide only ever plays into the note it was opened for. Walking away
+  // mid-way leaves that note complete, since its text was saved up front.
   useEffect(() => {
     const handle = sheet.current
-    if (!wantTour || !current || !handle) return
+    if (!playing || !current || !handle) return
+    if (drawer.kind !== 'scratch' || current.path !== playing.path) return setPlaying(null)
     const quit = new AbortController()
     touring.current = true
-    remember('toured', 'yes')
-    void handle.tour(quit.signal).then(() => {
+    if (playing.guide === 'welcome') remember('toured', 'yes')
+    void handle.play(playing.guide, quit.signal).then(() => {
       if (quit.signal.aborted) return
       touring.current = false
-      setWantTour(false)
-      setNudge(true)
+      setPlaying(null)
+      if (playing.guide === 'welcome') setNudge(true)
     })
     return () => {
       quit.abort()
       touring.current = false
     }
-  }, [wantTour, docKey])
+  }, [playing, docKey])
+
+  // Guides are read, so they open in read mode. Leaving them puts the desk
+  // back the way it was.
+  useEffect(() => {
+    if (!beforeGuide.current || !current || guideNotes.current.has(current.path)) return
+    setMode(beforeGuide.current)
+    beforeGuide.current = null
+  }, [current?.path])
+
+  const openGuide = async (guide: Guide) => {
+    await flush()
+    const target = drawerRef.current.kind === 'scratch' ? drawerRef.current : scratchDrawer()
+    const { file, text: body } = guides[guide]
+    const notes = await target.list()
+    const existing = notes.find((leaf) => leaf.path === file)
+    const kept = existing ? await target.read(existing.path) : null
+    const leaf = existing && (kept === body || kept === '') ? existing : await target.create(file)
+    await target.write(leaf.path, body)
+    guideNotes.current.add(leaf.path)
+    if (modeRef.current !== 'read') {
+      beforeGuide.current = modeRef.current
+      setMode('read')
+    }
+    await shelve(target, leaf.path)
+    setPlaying({ guide, path: leaf.path })
+  }
+
+  const guideHere = useMemo(() => guideIn(deferred), [deferred])
 
   useEffect(() => {
     if (!nudge) return
@@ -338,6 +385,7 @@ export function Desk() {
     cursorMoved.current = performance.now()
     setFocusLine(line)
     if (modeRef.current === 'split') proof.current?.showLine(line)
+    else if (modeRef.current === 'read' && touring.current) proof.current?.keepEnd()
   }
 
   const followSheetScroll = (line: number) => {
@@ -626,10 +674,10 @@ export function Desk() {
           {current ? (
             <>
               <section className="pane pane-sheet" aria-label="Editor" hidden={mode === 'read'}>
-                <Sheet ref={sheet} docKey={docKey} text={text} shared={shared} onChange={change} onCursor={followCursor} onScrollLine={followSheetScroll} />
+                <Sheet ref={sheet} docKey={docKey} text={text} shared={shared} onChange={change} onCursor={followCursor} onScrollLine={followSheetScroll} onGuide={(guide) => void openGuide(guide)} />
               </section>
               <section className="pane pane-proof" aria-label="Preview" hidden={mode === 'write'}>
-                <Proof ref={proof} html={inked.html} onScrollLine={followProof} />
+                <Proof ref={proof} html={inked.html} onScrollLine={followProof} after={guideHere ? <GuideRow here={guideHere} onPick={(guide) => void openGuide(guide)} /> : null} />
               </section>
             </>
           ) : (
