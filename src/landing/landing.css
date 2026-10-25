@@ -315,6 +315,10 @@ button {
   border-left: 0;
 }
 
+.demo-strip {
+  display: none;
+}
+
 .demo-bar {
   grid-column: 1 / -1;
   display: flex;
@@ -658,10 +662,17 @@ button {
 @media (max-width: 1000px) {
   .demo {
     grid-template-columns: 150px minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr) auto 34px;
   }
 
   .demo-lookout {
     display: none;
+  }
+
+  .demo-strip {
+    display: block;
+    grid-column: 1 / -1;
+    min-width: 0;
   }
 
   .agents-clients ul {
@@ -730,8 +741,8 @@ button {
 
   .demo {
     grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: auto minmax(0, 1fr) 34px;
-    height: 520px;
+    grid-template-rows: auto minmax(0, 1fr) auto 34px;
+    height: 540px;
   }
 
   .demo-shelf {

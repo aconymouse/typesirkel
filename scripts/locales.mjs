@@ -2,7 +2,7 @@ import { mkdir, readFile, rm, writeFile } from 'node:fs/promises'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 
 // Runs after `vite build`: turns the one site entry into a page per language
-// and per page (home, about, faq, docs), each with its own markup, head and
+// and per page (home, about, docs, support), each with its own markup, head and
 // hreflang links, plus a sitemap that ties them together. GitHub Pages then
 // serves /ko/docs/ from dist/ko/docs/index.html.
 

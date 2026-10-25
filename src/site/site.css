@@ -359,6 +359,67 @@
   color: var(--muted);
 }
 
+.site-main.support {
+  max-width: 720px;
+}
+
+.support-doors {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 40px;
+}
+
+.support-door {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 22px 48px 22px 22px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--rail);
+  color: var(--ink);
+  transition:
+    background-color 0.15s,
+    border-color 0.15s,
+    color 0.15s;
+}
+
+.support-door strong {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+}
+
+.support-door span {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.support-door svg {
+  position: absolute;
+  top: 22px;
+  right: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.support-door:hover,
+.support-door:focus-visible {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-ink);
+}
+
+.support-door:hover span,
+.support-door:focus-visible span {
+  color: inherit;
+}
+
 .site-main.docs {
   display: grid;
   grid-template-columns: 220px minmax(0, 1fr);
@@ -442,6 +503,10 @@
 }
 
 @media (max-width: 640px) {
+  .support-doors {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
   .site-main {
     padding: 32px 0 72px;
   }

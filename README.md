@@ -124,6 +124,10 @@ Issues, prompts, translations and pull requests are all welcome. Keep changes sm
 
 The full guide for writers lives at [sirkel.asia/docs](https://sirkel.asia/docs/).
 
+## Support
+
+typeSirkel is free and will stay that way. If it helps your writing and you want to chip in, there is [Saweria](https://saweria.co/aconymous) for QRIS and e-wallets in Indonesia and [PayPal](https://www.paypal.com/paypalme/sarangseo) from anywhere else. More at [sirkel.asia/support](https://sirkel.asia/support/).
+
 ## License
 
 MIT

@@ -111,6 +111,7 @@ export function SiteFooter({ lang }: { lang: Lang }) {
         <a href={pathFor(lang, 'docs')}>{t.docs}</a>
         <a href={`${pathFor(lang, 'about')}#faq`}>{t.faq}</a>
         <a href={pathFor(lang, 'about')}>{t.about}</a>
+        <a href={pathFor(lang, 'support')}>{t.support}</a>
         <a href={repo}>GitHub</a>
         <a href={`${repo}/blob/main/LICENSE`}>MIT</a>
       </span>

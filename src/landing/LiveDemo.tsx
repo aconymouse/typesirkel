@@ -2,6 +2,7 @@ import '../proof.css'
 import { useDeferredValue, useMemo, useRef, useState } from 'react'
 import { counts, ink } from '../ink'
 import { Lookout } from '../Lookout'
+import { LookoutRow } from '../LookoutRow'
 import { Proof, type ProofHandle } from '../Proof'
 import { Sheet, type SheetHandle } from '../Sheet'
 
@@ -104,6 +105,12 @@ export default function LiveDemo() {
 
   const change = (value: string) => setTexts((all) => all.map((t, i) => (i === index ? value : t)))
 
+  const pick = (h: { line: number; id: string }) => {
+    setFocusLine(h.line)
+    if (mode !== 'read') sheet.current?.jump(h.line)
+    if (mode !== 'write') proof.current?.showId(h.id)
+  }
+
   const open = (i: number) => {
     setIndex(i)
     setFocusLine(0)
@@ -143,15 +150,11 @@ export default function LiveDemo() {
       </div>
 
       <div className="demo-lookout">
-        <Lookout
-          headings={inked.headings}
-          active={active}
-          onPick={(h) => {
-            setFocusLine(h.line)
-            if (mode !== 'read') sheet.current?.jump(h.line)
-            if (mode !== 'write') proof.current?.showId(h.id)
-          }}
-        />
+        <Lookout headings={inked.headings} active={active} onPick={pick} />
+      </div>
+
+      <div className="demo-strip">
+        <LookoutRow headings={inked.headings} active={active} onPick={pick} />
       </div>
 
       <div className="demo-bar">

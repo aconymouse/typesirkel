@@ -119,6 +119,65 @@
   color: var(--ink);
 }
 
+.lookout-row {
+  min-width: 0;
+  border-top: 1px solid var(--line);
+}
+
+.lookout-row-track {
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+  mask-image: linear-gradient(to right, transparent, #000 14px, #000 calc(100% - 28px), transparent);
+}
+
+.lookout-row-track::-webkit-scrollbar {
+  display: none;
+}
+
+.lookout-row-body {
+  position: relative;
+  width: max-content;
+}
+
+.lookout-row ol {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0 14px;
+}
+
+.lookout-row li {
+  flex: none;
+  padding: 25px 20px 9px 0;
+}
+
+.lookout-row li:last-child {
+  padding-right: 28px;
+}
+
+.lookout-row li button {
+  display: block;
+  max-width: 220px;
+  padding: 0;
+  font-size: 12px;
+  line-height: 1.3;
+  color: var(--faint);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: color 0.2s ease;
+}
+
+.lookout-row li button.behind {
+  color: var(--muted);
+}
+
+.lookout-row li button.here {
+  color: var(--ink);
+  font-weight: 600;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .marker-tile.blink {
     animation: none;

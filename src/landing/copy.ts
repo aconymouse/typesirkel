@@ -2,7 +2,8 @@ import type { Lang } from '../lang'
 
 export type Copy = {
   meta: { title: string; description: string }
-  nav: { openEditor: string; star: string; toLight: string; toDark: string; language: string; docs: string; faq: string; about: string; contents: string; maker: string }
+  nav: { openEditor: string; star: string; toLight: string; toDark: string; language: string; docs: string; faq: string; about: string; contents: string; maker: string; support: string }
+  give: { saweria: string; paypal: string }
   hero: { kicker: string; line1: string; line2: string; lead: string; mac: string; windows: string; browser: string; fine: string }
   demoNote: string
   lookout: { kicker: string; title: string; body: string; hint: string; stops: string[] }
@@ -16,7 +17,8 @@ const en: Copy = {
     title: 'typeSirkel · A quiet markdown editor for Mac, Windows and the browser',
     description: 'typeSirkel is a free, open source markdown editor. Plain files in your own folders, a live preview, and an outline that follows you through your headings.',
   },
-  nav: { openEditor: 'Open editor', star: 'Star', toLight: 'Switch to light theme', toDark: 'Switch to dark theme', language: 'Language', docs: 'Docs', faq: 'FAQ', about: 'About', contents: 'On this page', maker: 'Maker of typeSirkel' },
+  nav: { openEditor: 'Open editor', star: 'Star', toLight: 'Switch to light theme', toDark: 'Switch to dark theme', language: 'Language', docs: 'Docs', faq: 'FAQ', about: 'About', contents: 'On this page', maker: 'Maker of typeSirkel', support: 'Support' },
+  give: { saweria: 'QRIS and e-wallets, for Indonesia', paypal: 'Cards or PayPal, from anywhere' },
   hero: {
     kicker: 'Free and open source markdown editor',
     line1: 'Write in folders.',
@@ -72,7 +74,8 @@ const id: Copy = {
     title: 'typeSirkel · Editor markdown yang tenang untuk Mac, Windows, dan browser',
     description: 'typeSirkel adalah editor markdown gratis dan open source. File biasa di folder sendiri, pratinjau langsung, dan outline yang mengikuti kamu di setiap heading.',
   },
-  nav: { openEditor: 'Buka editor', star: 'Star', toLight: 'Ganti ke tema terang', toDark: 'Ganti ke tema gelap', language: 'Bahasa', docs: 'Dokumentasi', faq: 'FAQ', about: 'Tentang', contents: 'Di halaman ini', maker: 'Pembuat typeSirkel' },
+  nav: { openEditor: 'Buka editor', star: 'Star', toLight: 'Ganti ke tema terang', toDark: 'Ganti ke tema gelap', language: 'Bahasa', docs: 'Dokumentasi', faq: 'FAQ', about: 'Tentang', contents: 'Di halaman ini', maker: 'Pembuat typeSirkel', support: 'Dukung' },
+  give: { saweria: 'QRIS dan e-wallet, dari Indonesia', paypal: 'Kartu atau PayPal, dari mana saja' },
   hero: {
     kicker: 'Editor markdown gratis dan open source',
     line1: 'Menulis di folder.',
@@ -128,7 +131,8 @@ const ptBR: Copy = {
     title: 'typeSirkel · Um editor de markdown tranquilo para Mac, Windows e navegador',
     description: 'typeSirkel é um editor de markdown gratuito e de código aberto. Arquivos simples nas suas pastas, pré-visualização ao vivo e um sumário que acompanha você pelos títulos.',
   },
-  nav: { openEditor: 'Abrir editor', star: 'Star', toLight: 'Mudar para tema claro', toDark: 'Mudar para tema escuro', language: 'Idioma', docs: 'Documentação', faq: 'FAQ', about: 'Sobre', contents: 'Nesta página', maker: 'Criador do typeSirkel' },
+  nav: { openEditor: 'Abrir editor', star: 'Star', toLight: 'Mudar para tema claro', toDark: 'Mudar para tema escuro', language: 'Idioma', docs: 'Documentação', faq: 'FAQ', about: 'Sobre', contents: 'Nesta página', maker: 'Criador do typeSirkel', support: 'Apoie' },
+  give: { saweria: 'QRIS e carteiras digitais, na Indonésia', paypal: 'Cartão ou PayPal, de qualquer lugar' },
   hero: {
     kicker: 'Editor de markdown gratuito e de código aberto',
     line1: 'Escreva em pastas.',
@@ -184,7 +188,8 @@ const ko: Copy = {
     title: 'typeSirkel · Mac, Windows, 브라우저를 위한 조용한 마크다운 에디터',
     description: 'typeSirkel은 무료 오픈소스 마크다운 에디터입니다. 내 폴더 속 평범한 파일, 실시간 미리보기, 그리고 제목을 따라 움직이는 목차.',
   },
-  nav: { openEditor: '에디터 열기', star: 'Star', toLight: '라이트 테마로 전환', toDark: '다크 테마로 전환', language: '언어', docs: '문서', faq: 'FAQ', about: '소개', contents: '이 페이지에서', maker: 'typeSirkel 제작자' },
+  nav: { openEditor: '에디터 열기', star: 'Star', toLight: '라이트 테마로 전환', toDark: '다크 테마로 전환', language: '언어', docs: '문서', faq: 'FAQ', about: '소개', contents: '이 페이지에서', maker: 'typeSirkel 제작자', support: '후원' },
+  give: { saweria: 'QRIS·전자지갑, 인도네시아에서', paypal: '카드 또는 PayPal, 어디서나' },
   hero: {
     kicker: '무료 오픈소스 마크다운 에디터',
     line1: '폴더에서 쓰고,',
@@ -240,7 +245,8 @@ const th: Copy = {
     title: 'typeSirkel · โปรแกรมเขียนมาร์กดาวน์ที่เงียบสงบ สำหรับ Mac, Windows และเบราว์เซอร์',
     description: 'typeSirkel คือโปรแกรมเขียนมาร์กดาวน์ฟรีและโอเพนซอร์ส ไฟล์ธรรมดาในโฟลเดอร์ของคุณเอง พรีวิวสด และสารบัญที่เดินตามหัวข้อไปกับคุณ',
   },
-  nav: { openEditor: 'เปิดโปรแกรม', star: 'Star', toLight: 'เปลี่ยนเป็นธีมสว่าง', toDark: 'เปลี่ยนเป็นธีมมืด', language: 'ภาษา', docs: 'เอกสาร', faq: 'คำถามที่พบบ่อย', about: 'เกี่ยวกับ', contents: 'ในหน้านี้', maker: 'ผู้สร้าง typeSirkel' },
+  nav: { openEditor: 'เปิดโปรแกรม', star: 'Star', toLight: 'เปลี่ยนเป็นธีมสว่าง', toDark: 'เปลี่ยนเป็นธีมมืด', language: 'ภาษา', docs: 'เอกสาร', faq: 'คำถามที่พบบ่อย', about: 'เกี่ยวกับ', contents: 'ในหน้านี้', maker: 'ผู้สร้าง typeSirkel', support: 'สนับสนุน' },
+  give: { saweria: 'QRIS และวอลเล็ต สำหรับอินโดนีเซีย', paypal: 'บัตรหรือ PayPal จากทุกที่' },
   hero: {
     kicker: 'โปรแกรมเขียนมาร์กดาวน์ ฟรีและโอเพนซอร์ส',
     line1: 'เขียนในโฟลเดอร์',
@@ -296,7 +302,8 @@ const zh: Copy = {
     title: 'typeSirkel · 适用于 Mac、Windows 和浏览器的安静 Markdown 编辑器',
     description: 'typeSirkel 是一款免费开源的 Markdown 编辑器。笔记就是你自己文件夹里的普通文件，带实时预览，还有一个跟着你在标题间移动的大纲。',
   },
-  nav: { openEditor: '打开编辑器', star: 'Star', toLight: '切换到浅色主题', toDark: '切换到深色主题', language: '语言', docs: '文档', faq: '常见问题', about: '关于', contents: '本页内容', maker: 'typeSirkel 作者' },
+  nav: { openEditor: '打开编辑器', star: 'Star', toLight: '切换到浅色主题', toDark: '切换到深色主题', language: '语言', docs: '文档', faq: '常见问题', about: '关于', contents: '本页内容', maker: 'typeSirkel 作者', support: '支持' },
+  give: { saweria: 'QRIS 和电子钱包，适用于印度尼西亚', paypal: '银行卡或 PayPal，全球可用' },
   hero: {
     kicker: '免费开源的 Markdown 编辑器',
     line1: '在文件夹里写作。',
