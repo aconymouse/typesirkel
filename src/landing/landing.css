@@ -40,9 +40,12 @@ button {
 .brand {
   display: flex;
   align-items: center;
-  gap: 10px;
-  font-weight: 700;
-  letter-spacing: -0.01em;
+}
+
+.brand img {
+  display: block;
+  height: 32px;
+  width: auto;
 }
 
 .top nav {

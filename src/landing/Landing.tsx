@@ -57,8 +57,10 @@ export function Landing() {
     <div className="landing">
       <header className="top">
         <a href="/" className="brand" aria-label="typeSirkel home">
-          <img src="/mark.svg" alt="" width={26} height={26} />
-          <span>typeSirkel</span>
+          <picture>
+            <source srcSet="/logo.svg" media="(prefers-color-scheme: dark)" />
+            <img src="/logo-ink.svg" alt="typeSirkel" width={101} height={32} />
+          </picture>
         </a>
         <nav>
           <a href={repo}>GitHub</a>
