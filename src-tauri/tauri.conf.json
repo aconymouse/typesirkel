@@ -1,0 +1,54 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "typeSirkel",
+  "version": "0.1.0",
+  "identifier": "com.aconymous.typesirkel",
+  "build": {
+    "beforeDevCommand": "pnpm dev",
+    "devUrl": "http://localhost:1420",
+    "beforeBuildCommand": "pnpm build",
+    "frontendDist": "../dist"
+  },
+  "app": {
+    "windows": [
+      {
+        "title": "typeSirkel",
+        "width": 1320,
+        "height": 860,
+        "minWidth": 720,
+        "minHeight": 480,
+        "titleBarStyle": "Overlay",
+        "hiddenTitle": true,
+        "url": "write/index.html"
+      }
+    ],
+    "security": {
+      "csp": "default-src 'self'; img-src 'self' https: data: asset: http://asset.localhost; style-src 'self' 'unsafe-inline'; font-src 'self' data:; connect-src 'self' ipc: http://ipc.localhost"
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "category": "Productivity",
+    "shortDescription": "A quiet markdown editor",
+    "longDescription": "typeSirkel is a quiet markdown editor for people who write in folders. Plain files, live preview, and a lookout that follows you through your headings.",
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ],
+    "fileAssociations": [
+      {
+        "ext": [
+          "md",
+          "markdown"
+        ],
+        "name": "Markdown document",
+        "role": "Editor",
+        "mimeType": "text/markdown"
+      }
+    ]
+  }
+}

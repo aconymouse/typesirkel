@@ -1,0 +1,128 @@
+.lookout {
+  min-height: 0;
+  overflow: auto;
+  padding: 18px 16px 40px 12px;
+  border-left: 1px solid var(--line);
+}
+
+.lookout-title {
+  margin: 0 0 12px 8px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+
+.lookout-empty {
+  margin: 0 0 0 8px;
+  color: var(--faint);
+}
+
+.lookout-body {
+  position: relative;
+}
+
+.lookout-trail {
+  position: absolute;
+  inset: 0 auto auto 0;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.trail-ahead {
+  fill: none;
+  stroke: var(--faint);
+  stroke-width: 1.2;
+  stroke-dasharray: 2 4;
+  opacity: 0.8;
+}
+
+.trail-walked {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+}
+
+.stop {
+  fill: var(--paper);
+  stroke: var(--faint);
+  stroke-width: 1.2;
+}
+
+.stop.passed {
+  fill: var(--accent);
+  stroke: var(--accent);
+}
+
+.eye-lid path {
+  fill: var(--paper);
+  stroke: var(--ink);
+  stroke-width: 1.6;
+  stroke-linejoin: round;
+}
+
+.eye-lid circle {
+  fill: var(--ink);
+  transition: cy 0.18s ease;
+}
+
+.eye-lid {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.eye-lid.blink {
+  animation: blink 0.32s ease;
+}
+
+@keyframes blink {
+  40% {
+    transform: scaleY(0.12);
+  }
+}
+
+.lookout ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.lookout li {
+  padding-top: 3px;
+  padding-bottom: 3px;
+}
+
+.lookout li button {
+  display: block;
+  width: 100%;
+  padding: 2px 0;
+  text-align: left;
+  font-size: 13px;
+  line-height: 1.35;
+  color: var(--faint);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  transition: color 0.2s ease;
+}
+
+.lookout li button.behind {
+  color: var(--muted);
+}
+
+.lookout li button.here {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.lookout li button:hover {
+  color: var(--ink);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .eye-lid.blink {
+    animation: none;
+  }
+}
