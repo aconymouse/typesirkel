@@ -57,25 +57,12 @@ export function SiteHeader({ lang, page }: { lang: Lang; page: Page }) {
     window.location.assign(pathFor(next, page))
   }
 
-  const links: [Exclude<Page, 'home'>, string][] = [
-    ['docs', t.docs],
-    ['faq', t.faq],
-    ['about', t.about],
-  ]
-
   return (
     <header className="top">
       <a href={pathFor(lang, 'home')} className="brand" aria-label="typeSirkel home">
         <img src={shown === 'dark' ? '/logo.svg' : '/logo-ink.svg'} alt="typeSirkel" width={101} height={32} />
       </a>
       <nav>
-        <div className="top-links">
-          {links.map(([id, label]) => (
-            <a key={id} href={pathFor(lang, id)} aria-current={page === id ? 'page' : undefined}>
-              {label}
-            </a>
-          ))}
-        </div>
         <label className="lang" data-short={langOf(lang).short}>
           <span className="sr-only">{t.language}</span>
           <select value={lang} onChange={(e) => switchTo(e.target.value as Lang)}>

@@ -19,6 +19,8 @@ import { desktopDrawer, onDesktop } from './drawer/tauri'
 import { pressHtml, pressMarkdown, pressPdf } from './press'
 import { Proof, type ProofHandle } from './Proof'
 import { Sheet, type SheetHandle } from './Sheet'
+import { canDictate, voiceFor } from './dictate'
+import { Listening, MicButton } from './Dictation'
 import { HomeLink, Shelf } from './Shelf'
 
 const modes = ['write', 'split', 'read'] as const
@@ -74,6 +76,8 @@ export function Desk() {
   const [me, setMe] = useState<Person>(() => recallShape('me', somebody()))
   const [playing, setPlaying] = useState<{ guide: Guide; lang: Lang; path: string } | null>(null)
   const [nudge, setNudge] = useState(false)
+  const [listening, setListening] = useState(false)
+  const [dictation] = useState(canDictate)
 
   const sheet = useRef<SheetHandle>(null)
   const proof = useRef<ProofHandle>(null)
@@ -569,6 +573,7 @@ export function Desk() {
       else if (key === 'o') run(() => void openFolder())
       else if (key === 'p') run(pressPdf)
       else if (key === 'j') run(() => toggleSide('quill'))
+      else if (key === 'd' && event.shiftKey && dictation) run(() => setListening((on) => !on))
       else if (key === '.') run(() => setQuiet((q) => !q))
       else if (key === '1') run(() => setMode('write'))
       else if (key === '2') run(() => setMode('split'))
@@ -660,6 +665,16 @@ export function Desk() {
           }}
         />
       ) : null}
+      {listening && current ? (
+        <Listening
+          fallback={voiceFor(currentLang())}
+          onHeard={(text) => {
+            if (modeRef.current === 'read') setMode('split')
+            sheet.current?.say(text)
+          }}
+          onStop={() => setListening(false)}
+        />
+      ) : null}
       {shelfOpen ? <button type="button" className="scrim" aria-label="Close files" onClick={() => setShelfOpen(false)} /> : null}
 
       <main className="work">
@@ -711,6 +726,7 @@ export function Desk() {
             ))}
           </div>
           <div className="bar-tools">
+            {dictation && current ? <MicButton on={listening} onToggle={() => setListening((on) => !on)} /> : null}
             <QuillDoor open={side === 'quill'} busy={quillBusy} onToggle={() => toggleSide('quill')} />
             <button type="button" className={`quiet-button text${circle ? ' is-sharing' : ''}`} aria-pressed={side === 'circle'} onClick={() => toggleSide('circle')} title="Share">
               share

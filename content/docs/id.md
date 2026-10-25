@@ -59,8 +59,15 @@ Kalau sebuah format punya isian, seperti teks dan alamat tautan, tekan Tab untuk
 | Cmd/Ctrl + F | Cari |
 | Cmd/Ctrl + 1, 2, 3 | Write, Split, Read |
 | Cmd/Ctrl + J | Quill |
+| Cmd/Ctrl + Shift + D | Dikte suara |
 | Cmd/Ctrl + . | Mode Quiet |
 | Cmd/Ctrl + P | Cetak atau simpan sebagai PDF |
+
+## Dikte suara {#dictate}
+
+Tekan ikon mikrofon di kanan bawah, atau **Cmd/Ctrl + Shift + D**, lalu mulai bicara. Kata-katamu muncul di posisi kursor sambil kamu bicara, cocok untuk menangkap inti rapat lalu merapikannya nanti, manual atau lewat Quill. Pilih bahasa yang kamu ucapkan di bar kecil di bawah, lalu tekan **Stop** kalau sudah selesai.
+
+Dikte memakai pengenal suara bawaan browser, jadi butuh koneksi internet, dan browser mengirim suaramu ke layanan suaranya sendiri. Fitur ini jalan di Chrome, Edge, dan Safari. Tombol mikrofon hanya muncul di tempat yang mendukung dikte.
 
 ## Outline {#outline}
 

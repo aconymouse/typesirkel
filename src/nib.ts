@@ -195,3 +195,16 @@ export const refill = (view: EditorView, next: string) => {
   }
   view.dispatch({ changes: { from: start, to: endPrev, insert: next.slice(start, endNext) } })
 }
+
+// Dictated words land at the cursor as if typed: a space before them when
+// they follow a word, and a capital when they start a line or a sentence.
+export const say = (view: EditorView, heard: string) => {
+  const text = heard.trim()
+  if (!text) return
+  const at = view.state.selection.main.head
+  const before = view.state.sliceDoc(Math.max(0, at - 2), at)
+  const fresh = !before.trim() || /[.!?]\s*$/.test(before) || before.endsWith('\n')
+  const words = fresh ? text.charAt(0).toLocaleUpperCase() + text.slice(1) : text
+  const insert = (before && !/\s$/.test(before) ? ' ' : '') + words
+  view.dispatch({ changes: { from: at, insert }, selection: EditorSelection.cursor(at + insert.length), scrollIntoView: true, userEvent: 'input.dictate' })
+}

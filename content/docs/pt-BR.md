@@ -59,8 +59,15 @@ Quando um formato tem um campo para preencher, como o texto e o endereço de um 
 | Cmd/Ctrl + F | Buscar |
 | Cmd/Ctrl + 1, 2, 3 | Write, Split, Read |
 | Cmd/Ctrl + J | Quill |
+| Cmd/Ctrl + Shift + D | Ditado |
 | Cmd/Ctrl + . | Modo Quiet |
 | Cmd/Ctrl + P | Imprimir ou salvar como PDF |
+
+## Ditado {#dictate}
+
+Clique no microfone no canto inferior direito, ou use **Cmd/Ctrl + Shift + D**, e comece a falar. As palavras aparecem no cursor enquanto você fala, o que ajuda a registrar o essencial de uma reunião e arrumar depois, à mão ou com o Quill. Escolha o idioma em que está falando na barrinha embaixo e clique em **Stop** quando terminar.
+
+O ditado usa o reconhecimento de voz do próprio navegador, então precisa de internet, e o navegador envia o áudio para o serviço de voz dele. Funciona no Chrome, no Edge e no Safari. O botão de microfone só aparece onde o ditado está disponível.
 
 ## O sumário {#outline}
 

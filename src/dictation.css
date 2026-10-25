@@ -1,0 +1,112 @@
+.mic-button {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 24px;
+  margin-right: 2px;
+  border-radius: 999px;
+  color: var(--muted);
+}
+
+.mic-button svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.4;
+  stroke-linecap: round;
+}
+
+.mic-button:hover,
+.mic-button.is-on {
+  color: var(--accent);
+}
+
+.listening {
+  position: fixed;
+  left: 50%;
+  bottom: 52px;
+  z-index: 35;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: min(640px, calc(100vw - 24px));
+  padding: 6px 6px 6px 14px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--paper) 88%, transparent);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  backdrop-filter: blur(24px) saturate(160%);
+  box-shadow: 0 14px 40px rgb(0 0 0 / 0.22);
+  font-size: 13px;
+  transform: translateX(-50%);
+}
+
+.listening-dot {
+  flex: none;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #e5484d;
+  animation: listening 1.3s ease-in-out infinite;
+}
+
+.listening.has-trouble .listening-dot {
+  background: var(--faint);
+  animation: none;
+}
+
+@keyframes listening {
+  50% {
+    opacity: 0.35;
+    transform: scale(0.8);
+  }
+}
+
+.listening-text {
+  flex: 1;
+  min-width: 120px;
+  overflow: hidden;
+  color: var(--muted);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.listening-voice select {
+  height: 28px;
+  padding: 0 8px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  font-size: 12px;
+}
+
+.listening-stop {
+  height: 28px;
+  padding: 0 12px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--paper);
+  font-weight: 600;
+}
+
+.listening-stop:hover {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+@media (max-width: 760px) {
+  .listening {
+    bottom: 44px;
+  }
+
+  .listening-voice {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .listening-dot {
+    animation: none;
+  }
+}

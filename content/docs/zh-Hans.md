@@ -59,8 +59,15 @@ macOS 版本暂时还没有经过公证。第一次打开时，请右键点击�
 | Cmd/Ctrl + F | 查找 |
 | Cmd/Ctrl + 1, 2, 3 | Write、Split、Read |
 | Cmd/Ctrl + J | Quill |
+| Cmd/Ctrl + Shift + D | 语音输入 |
 | Cmd/Ctrl + . | Quiet 模式 |
 | Cmd/Ctrl + P | 打印或另存为 PDF |
+
+## 语音输入 {#dictate}
+
+点击右下角的麦克风，或按 **Cmd/Ctrl + Shift + D**，然后开始说话。你说的话会随说随写在光标处，很适合先记下会议要点，之后再手动或让 Quill 整理。在底部的小条里选择你说的语言，说完点 **Stop**。
+
+语音输入使用浏览器自带的语音识别，所以需要联网，浏览器会把音频发送到它自己的语音服务。它可以在 Chrome、Edge 和 Safari 中使用。只有在支持语音输入的地方才会出现麦克风按钮。
 
 ## 大纲 {#outline}
 

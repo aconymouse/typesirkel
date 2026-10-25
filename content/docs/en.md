@@ -59,8 +59,15 @@ When a format has a blank to fill in, like a link's text and address, press Tab 
 | Cmd/Ctrl + F | Find |
 | Cmd/Ctrl + 1, 2, 3 | Write, Split, Read |
 | Cmd/Ctrl + J | Quill |
+| Cmd/Ctrl + Shift + D | Dictate |
 | Cmd/Ctrl + . | Quiet mode |
 | Cmd/Ctrl + P | Print or save as PDF |
+
+## Dictation {#dictate}
+
+Press the microphone at the bottom right, or **Cmd/Ctrl + Shift + D**, and start talking. Your words appear at the cursor as you speak, which is handy for catching the gist of a meeting and tidying it up later, by hand or with Quill. Pick the language you're speaking in the small bar at the bottom, and press **Stop** when you're done.
+
+Dictation uses the speech recognition built into your browser, so it needs an internet connection, and your browser sends the audio to its own speech service. It works in Chrome, Edge and Safari. The microphone button only shows up where dictation is available.
 
 ## The outline {#outline}
 

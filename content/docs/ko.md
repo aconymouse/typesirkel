@@ -59,8 +59,15 @@ macOS 빌드는 아직 공증을 받지 않았어요. 처음 실행할 때는 �
 | Cmd/Ctrl + F | 찾기 |
 | Cmd/Ctrl + 1, 2, 3 | Write, Split, Read |
 | Cmd/Ctrl + J | Quill |
+| Cmd/Ctrl + Shift + D | 받아쓰기 |
 | Cmd/Ctrl + . | Quiet 모드 |
 | Cmd/Ctrl + P | 인쇄 또는 PDF로 저장 |
+
+## 음성 받아쓰기 {#dictate}
+
+오른쪽 아래의 마이크를 누르거나 **Cmd/Ctrl + Shift + D**를 누르고 말하기 시작하세요. 말하는 대로 커서 위치에 글이 적혀요. 회의 내용을 대략 받아 두고 나중에 직접 또는 Quill로 다듬기에 좋아요. 아래의 작은 바에서 말하는 언어를 고르고, 끝나면 **Stop**을 누르세요.
+
+받아쓰기는 브라우저에 내장된 음성 인식을 사용해서 인터넷 연결이 필요하고, 브라우저가 음성을 자체 음성 서비스로 보내요. Chrome, Edge, Safari에서 작동해요. 마이크 버튼은 받아쓰기를 쓸 수 있는 곳에서만 보여요.
 
 ## 개요 {#outline}
 
