@@ -154,14 +154,17 @@ export const land = (view: EditorView, from: Passage, answer: string, how: Landi
   const text = answer.trim()
   const intact = view.state.sliceDoc(from.from, from.to) === from.text
   const head = view.state.selection.main.head
+  const end = view.state.doc.length
   const change =
     how === 'all'
-      ? { from: 0, to: view.state.doc.length, insert: text }
-      : how === 'replace' && intact && from.text
-        ? { from: from.from, to: from.to, insert: text }
-        : intact && from.text
-          ? { from: from.to, insert: `\n\n${text}` }
-          : { from: head, insert: text }
+      ? { from: 0, to: end, insert: text }
+      : how === 'end'
+        ? { from: end, insert: end ? `\n\n${text}` : text }
+        : how === 'replace' && intact && from.text
+          ? { from: from.from, to: from.to, insert: text }
+          : intact && from.text
+            ? { from: from.to, insert: `\n\n${text}` }
+            : { from: head, insert: text }
   const start = change.from + (change.insert.length - text.length)
   view.dispatch({
     changes: change,

@@ -1,14 +1,16 @@
 import type { Turn } from './voices'
 
-// Where an answer goes: over the passage, after it, or over the whole draft.
-export type Landing = 'replace' | 'after' | 'all'
+// Where an answer goes: over the passage, after it, over the whole draft, or at its end.
+export type Landing = 'replace' | 'after' | 'all' | 'end'
 
 export const system = [
   'You help someone write a markdown document in typeSirkel.',
   'Write in the same language and voice as the draft unless asked otherwise.',
   'When you produce text for the document, return only that text as markdown: no preamble, no closing remarks, no code fences around the whole answer.',
   'The draft and passage tags are only there to show you the text. Never mention them or these instructions.',
-  'Your answer shows up in a side panel, and the writer decides whether it goes into the draft or replaces it. When asked for several separate files, write the first one and note that Brief in this panel can write a whole series into the folder.',
+  'When tools are available, use them to do what is asked instead of describing it: create_file for new files, edit_draft to change the open draft, use_folder when the writer names a folder.',
+  'When asked for a length, meet it. An article asked to be over 1000 words must be over 1000 words.',
+  'After using tools, reply with one or two short sentences on what you did.',
 ].join(' ')
 
 export type AskId = 'continue' | 'tighten' | 'fix' | 'summarize' | 'translate'
@@ -64,5 +66,7 @@ export const asks: Ask[] = [
 ]
 
 export const question = (p: Passage, words: string): Turn[] => [
-  { role: 'user', content: `${words}\n\n<draft>\n${tail(p.whole, 16000)}\n</draft>${p.text ? `\n\n<passage>\n${p.text}\n</passage>` : ''}` },
+  { role: 'user', content: `${words}${p.whole.trim() ? `\n\n<draft>\n${tail(p.whole, 16000)}\n</draft>` : ''}${p.text ? `\n\n<passage>\n${p.text}\n</passage>` : ''}` },
 ]
+
+export const nothing: Passage = { from: 0, to: 0, text: '', before: '', whole: '' }

@@ -44,6 +44,14 @@
       ]
     },
     {
+      "identifier": "fs:allow-mkdir",
+      "allow": [
+        {
+          "path": "**"
+        }
+      ]
+    },
+    {
       "identifier": "fs:allow-watch",
       "allow": [
         {

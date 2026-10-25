@@ -7,6 +7,8 @@ import { counts, ink, titleOf } from './ink'
 import { recall, recallShape, remember, rememberShape } from './keep'
 import { Lookout } from './Lookout'
 import { Quill } from './quill/Quill'
+import type { Tool } from './quill/voices'
+import { desktopDrawer, onDesktop } from './drawer/tauri'
 import { pressHtml, pressMarkdown, pressPdf } from './press'
 import { Proof, type ProofHandle } from './Proof'
 import { Sheet, type SheetHandle } from './Sheet'
@@ -294,20 +296,92 @@ export function Desk() {
     setSide((s) => (s === next ? 'none' : next))
   }
 
-  // Brief writes beside the open file. A name already on the shelf gets a
-  // number instead of being written over.
-  const fileInto = async (name: string, body: string) => {
-    const taken = new Set((await drawer.list()).map((l) => l.path.toLowerCase()))
+  // Where Quill writes. It starts as the open folder and can be pointed at
+  // another one by name, without pulling the shelf away from the writer.
+  const workspace = useRef<Drawer>(drawer)
+  const [away, setAway] = useState<Drawer | null>(null)
+  useEffect(() => {
+    workspace.current = drawer
+    setAway(null)
+  }, [drawer])
+
+  const writable = (target: Drawer) => target.kind === 'browser' || target.kind === 'tauri'
+
+  // A name already taken gets a number instead of being written over.
+  const fileInto = async (name: string, body: string, target: Drawer = workspace.current) => {
+    if (!writable(target)) throw new Error('No folder is open. Ask the writer to open one with Open folder.')
+    const taken = new Set((await target.list()).map((l) => l.path.toLowerCase()))
     const dot = name.lastIndexOf('.')
     const stem = dot > 0 ? name.slice(0, dot) : name
     const ext = dot > 0 ? name.slice(dot) : '.md'
     let candidate = name
     for (let n = 2; taken.has(candidate.toLowerCase()); n++) candidate = `${stem}-${n}${ext}`
-    const leaf = await drawer.create(candidate)
-    await drawer.write(leaf.path, body)
-    setLeaves(await drawer.list())
+    const leaf = await target.create(candidate)
+    await target.write(leaf.path, body)
+    if (target === drawer) setLeaves(await target.list())
     return leaf.path
   }
+
+  const text_ = (input: Record<string, unknown>, key: string) => (typeof input[key] === 'string' ? (input[key] as string) : '')
+
+  const tools: Tool[] = [
+    {
+      name: 'list_files',
+      description: 'List the markdown files in the folder Quill is working in.',
+      schema: { type: 'object', properties: {} },
+      run: async () => {
+        const target = workspace.current
+        if (!writable(target)) return 'No folder is open.'
+        const found = await target.list()
+        return found.length ? found.map((l) => l.path).join('\n') : 'The folder is empty.'
+      },
+    },
+    {
+      name: 'read_file',
+      description: 'Read one markdown file from the folder.',
+      schema: { type: 'object', properties: { path: { type: 'string' } }, required: ['path'] },
+      run: (input) => workspace.current.read(text_(input, 'path')),
+    },
+    {
+      name: 'create_file',
+      description: 'Create a new markdown file in the folder. Existing files are never overwritten; a taken name gets a number. Returns the path written.',
+      schema: { type: 'object', properties: { name: { type: 'string', description: 'File name, for example 01-intro-html.md' }, content: { type: 'string' } }, required: ['name', 'content'] },
+      run: (input) => fileInto(text_(input, 'name'), `${text_(input, 'content').trim()}\n`),
+    },
+    {
+      name: 'edit_draft',
+      description: 'Change the draft that is open in the editor: replace all of it, or append to its end. The writer can undo it.',
+      schema: { type: 'object', properties: { mode: { type: 'string', enum: ['replace', 'append'] }, content: { type: 'string' } }, required: ['mode', 'content'] },
+      run: async (input) => {
+        if (!sheet.current || !currentRef.current) throw new Error('No draft is open in the editor.')
+        if (modeRef.current === 'read') setMode('split')
+        const how = text_(input, 'mode') === 'append' ? 'end' : 'all'
+        sheet.current.land({ from: 0, to: 0, text: '', before: '', whole: '' }, text_(input, 'content'), how)
+        return 'Done'
+      },
+    },
+    ...(onDesktop()
+      ? [
+          {
+            name: 'use_folder',
+            description: 'Work in a folder on this computer from now on, creating it if it does not exist. Accepts paths like ~/Documents/notes.',
+            schema: { type: 'object', properties: { path: { type: 'string' } }, required: ['path'] },
+            run: async (input: Record<string, unknown>) => {
+              const [{ homeDir, isAbsolute, join }, fs] = await Promise.all([import('@tauri-apps/api/path'), import('@tauri-apps/plugin-fs')])
+              const home = await homeDir()
+              let path = text_(input, 'path').trim()
+              if (path === '~' || path.startsWith('~/')) path = await join(home, path.slice(2))
+              else if (!(await isAbsolute(path))) path = await join(home, path)
+              if (!(await fs.exists(path))) await fs.mkdir(path, { recursive: true })
+              const target = await desktopDrawer(path)
+              workspace.current = target
+              setAway(target)
+              return path
+            },
+          } satisfies Tool,
+        ]
+      : []),
+  ]
 
   useEffect(() => {
     remember('mode', mode)
@@ -366,7 +440,7 @@ export function Desk() {
       if (key === 's') run(() => void save())
       else if (key === 'o') run(() => void openFolder())
       else if (key === 'p') run(pressPdf)
-      else if (key === 'j') run(() => current && toggleSide('quill'))
+      else if (key === 'j') run(() => toggleSide('quill'))
       else if (key === '.') run(() => setQuiet((q) => !q))
       else if (key === '1') run(() => setMode('write'))
       else if (key === '2') run(() => setMode('split'))
@@ -387,7 +461,7 @@ export function Desk() {
 
   // Quill stays mounted once opened, so a Brief keeps writing while its panel is closed.
   const quillView =
-    quillOpened && current ? (
+    quillOpened ? (
       <Quill
         hidden={quiet || side !== 'quill'}
         take={() => sheet.current?.passage() ?? null}
@@ -400,6 +474,8 @@ export function Desk() {
         onFile={fileInto}
         onOpenFolder={() => void openFolder()}
         onBusy={setQuillBusy}
+        tools={tools}
+        away={away && away !== drawer ? { label: away.label, open: () => void shelve(away) } : null}
       />
     ) : null
 
@@ -486,7 +562,7 @@ export function Desk() {
             ))}
           </div>
           <div className="bar-tools">
-            <button type="button" className="quiet-button text" aria-pressed={side === 'quill'} onClick={() => toggleSide('quill')} disabled={!current} title="Quill (Mod+J)">
+            <button type="button" className="quiet-button text" aria-pressed={side === 'quill'} onClick={() => toggleSide('quill')} title="Quill (Mod+J)">
               {quillBusy ? `quill ${quillBusy}` : 'quill'}
             </button>
             <button type="button" className={`quiet-button text${circle ? ' is-sharing' : ''}`} aria-pressed={side === 'circle'} onClick={() => toggleSide('circle')} title="Share">

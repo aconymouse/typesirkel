@@ -2,10 +2,10 @@ import './quill.css'
 import { useEffect, useRef, useState } from 'react'
 import { onDesktop } from '../drawer/tauri'
 import { recallShape, rememberShape } from '../keep'
-import { type AskId, asks, type Landing, type Passage, question, system } from './asks'
+import { type AskId, asks, type Landing, nothing, type Passage, question, system } from './asks'
 import { Brief } from './Brief'
 import { keepKey, readKey, remembers, takeOldKeys } from './vault'
-import { listModels, speak, type Tuning, type Turn, type VoiceId, voiceOf, voices } from './voices'
+import { converse, listModels, speak, type Tool, type Tuning, type Turn, type VoiceId, voiceOf, voices } from './voices'
 
 type Props = {
   take: () => Passage | null
@@ -15,6 +15,8 @@ type Props = {
   onFile: (name: string, text: string) => Promise<string>
   onOpenFolder: () => void
   onBusy: (label: string | null) => void
+  tools: Tool[]
+  away: { label: string; open: () => void } | null
   hidden?: boolean
 }
 
@@ -25,6 +27,19 @@ type Reply = {
   text: string
   done: boolean
   error?: string
+  log: { line: string; failed: boolean }[]
+}
+
+// What a tool call did, in a few words, for the activity list under an answer.
+const describe = (name: string, input: Record<string, unknown>, result: string, failed: boolean) => {
+  if (failed) return result
+  const said = (key: string) => (typeof input[key] === 'string' ? (input[key] as string) : '')
+  if (name === 'create_file') return `Created ${result}`
+  if (name === 'edit_draft') return said('mode') === 'append' ? 'Added to the draft' : 'Replaced the draft'
+  if (name === 'use_folder') return `Using ${result}`
+  if (name === 'read_file') return `Read ${said('path')}`
+  if (name === 'list_files') return 'Looked at the folder'
+  return name
 }
 
 // Settings are plain preferences. The key is not one of them; it lives in the vault.
@@ -38,7 +53,7 @@ const recallSettings = (): Settings => {
   return { voice: stored.voice, base: stored.base, model: stored.model }
 }
 
-export function Quill({ take, onLand, onClose, canFile, onFile, onOpenFolder, onBusy, hidden }: Props) {
+export function Quill({ take, onLand, onClose, canFile, onFile, onOpenFolder, onBusy, tools, away, hidden }: Props) {
   const [settings, setSettings] = useState<Settings>(recallSettings)
   const [key, setKey] = useState('')
   const [keyFor, setKeyFor] = useState<VoiceId | null>(null)
@@ -111,7 +126,7 @@ export function Quill({ take, onLand, onClose, canFile, onFile, onOpenFolder, on
     stop.current?.abort()
     const control = new AbortController()
     stop.current = control
-    setReply({ from, how, label, text: '', done: false })
+    setReply({ from, how, label, text: '', done: false, log: [] })
     let text = ''
     try {
       for await (const piece of speak(kept, system, turns, control.signal)) {
@@ -135,15 +150,31 @@ export function Quill({ take, onLand, onClose, canFile, onFile, onOpenFolder, on
     void run(from, chosen.lands, chosen.label, chosen.turns(from))
   }
 
-  const send = (event: React.FormEvent) => {
+  // Free questions may use tools: write files, change the draft, pick a folder.
+  const send = async (event: React.FormEvent) => {
     event.preventDefault()
-    const from = take()
+    const from = take() ?? nothing
     const said = words.trim()
-    if (!from || !said) return
+    if (!said) return
     setWords('')
-    void run(from, 'after', said, [...thread, ...question(from, said)]).then((answer) => {
-      if (answer) setThread((t) => [...t, { role: 'user' as const, content: said }, { role: 'assistant' as const, content: answer }].slice(-16))
-    })
+    stop.current?.abort()
+    const control = new AbortController()
+    stop.current = control
+    setReply({ from, how: 'after', label: said, text: '', done: false, log: [] })
+    onBusy('…')
+    try {
+      const answer = await converse(kept, system, [...thread, ...question(from, said)], tools, control.signal, (e) => {
+        if (control.signal.aborted) return
+        if (e.kind === 'text') setReply((r) => (r ? { ...r, text: r.text + e.text } : r))
+        else setReply((r) => (r ? { ...r, text: r.text ? `${r.text.trimEnd()}\n\n` : '', log: [...r.log, { line: describe(e.name, e.input, e.result, e.failed), failed: e.failed }] } : r))
+      })
+      setReply((r) => (r ? { ...r, done: true } : r))
+      setThread((t) => [...t, { role: 'user' as const, content: said }, { role: 'assistant' as const, content: answer || 'Done.' }].slice(-16))
+    } catch (error) {
+      if (!control.signal.aborted) setReply((r) => (r ? { ...r, done: true, error: error instanceof Error ? error.message : String(error) } : r))
+    } finally {
+      onBusy(null)
+    }
   }
 
   const halt = () => {
@@ -257,7 +288,21 @@ export function Quill({ take, onLand, onClose, canFile, onFile, onOpenFolder, on
             {reply ? (
               <>
                 <p className="quill-label">{reply.label}</p>
-                {reply.text ? <div className="quill-text">{reply.text}</div> : null}
+                {reply.log.length ? (
+                  <ul className="quill-log">
+                    {reply.log.map((entry, i) => (
+                      <li key={i} className={entry.failed ? 'is-failed' : undefined}>
+                        {entry.line}
+                      </li>
+                    ))}
+                  </ul>
+                ) : null}
+                {reply.text ? <div className="quill-text">{reply.text.trim()}</div> : null}
+                {reply.done && away ? (
+                  <button type="button" className="line-button quill-away" onClick={away.open}>
+                    Open {away.label}
+                  </button>
+                ) : null}
                 {!reply.done ? <span className="quill-pulse" aria-label="Writing" /> : null}
                 {reply.error ? <p className="quill-error">{reply.error}</p> : null}
               </>
@@ -291,12 +336,12 @@ export function Quill({ take, onLand, onClose, canFile, onFile, onOpenFolder, on
             </div>
           ) : null}
 
-          <form className="quill-ask" onSubmit={send}>
+          <form className="quill-ask" onSubmit={(e) => void send(e)}>
             <textarea
               value={words}
               onChange={(e) => setWords(e.target.value)}
               onKeyDown={(e) => {
-                if (e.key === 'Enter' && !e.shiftKey) send(e)
+                if (e.key === 'Enter' && !e.shiftKey) void send(e)
               }}
               rows={2}
               aria-label="Ask Quill"
