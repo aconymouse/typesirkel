@@ -784,3 +784,128 @@ button {
     font-size: 13px;
   }
 }
+
+/* rounding and header controls */
+
+.button,
+.top-cta,
+.star,
+.theme-flip,
+.lang select {
+  border-radius: var(--radius);
+}
+
+.demo,
+.agents-stage,
+.lookout-stage,
+.agents-config,
+.source pre,
+.demo-waiting {
+  border-radius: 12px;
+}
+
+.agents-clients ul {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.lang {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.lang select {
+  appearance: none;
+  height: 32px;
+  padding: 0 28px 0 10px;
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.lang select:hover {
+  border-color: var(--ink);
+}
+
+.lang svg {
+  position: absolute;
+  right: 10px;
+  pointer-events: none;
+}
+
+.lang svg path,
+.theme-flip path,
+.theme-flip circle {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.theme-flip {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--line);
+  color: var(--ink);
+}
+
+.theme-flip:hover {
+  border-color: var(--ink);
+  color: var(--accent);
+}
+
+.top nav {
+  gap: 10px;
+}
+
+@media (max-width: 640px) {
+  .lang select {
+    width: 46px;
+    padding: 0 0 0 10px;
+    color: transparent;
+  }
+
+  .lang select option {
+    color: var(--ink);
+  }
+
+  .lang::before {
+    content: attr(data-short);
+    position: absolute;
+    left: 10px;
+    font-size: 13px;
+    pointer-events: none;
+  }
+
+  .lang svg {
+    right: 7px;
+  }
+
+  .top nav {
+    gap: 8px;
+  }
+
+  .top .star {
+    display: none;
+  }
+
+  .top-cta {
+    white-space: nowrap;
+  }
+}

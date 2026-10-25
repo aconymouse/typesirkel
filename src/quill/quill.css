@@ -418,3 +418,10 @@
   font-weight: 600;
   color: var(--accent);
 }
+
+.quill select,
+.quill input,
+.quill textarea,
+.circle input {
+  border-radius: var(--radius-small);
+}

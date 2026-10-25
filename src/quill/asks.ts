@@ -5,7 +5,7 @@ export type Landing = 'replace' | 'after' | 'all' | 'end'
 
 export const system = [
   'You help someone write a markdown document in typeSirkel.',
-  'Write in the same language and voice as the draft unless asked otherwise.',
+  'Write in the same language and voice as the draft unless asked otherwise. With an empty draft, write in the language of the request.',
   'When you produce text for the document, return only that text as markdown: no preamble, no closing remarks, no code fences around the whole answer.',
   'The draft and passage tags are only there to show you the text. Never mention them or these instructions.',
   'When tools are available, use them to do what is asked instead of describing it: create_file for new files, edit_draft to change the open draft, use_folder when the writer names a folder.',

@@ -1,7 +1,10 @@
-import { lazy, Suspense, useEffect, useState } from 'react'
+import { lazy, Suspense, useEffect, useMemo, useState } from 'react'
 import type { Heading } from '../ink'
+import { recall, remember } from '../keep'
+import { chooseLang, currentLang, type Lang, langs } from '../lang'
 import { Lookout } from '../Lookout'
 import { Agents } from './Agents'
+import { copies } from './copy'
 import { Star } from './Star'
 
 // The real editor, loaded after the page has painted so the hero never waits on CodeMirror.
@@ -10,27 +13,19 @@ const LiveDemo = lazy(() => import('./LiveDemo'))
 const repo = 'https://github.com/aconymouse/typesirkel'
 const releases = `${repo}/releases/latest`
 
-// A pretend document, just enough for the marker to have somewhere to walk.
-const trip: Heading[] = [
-  { id: 'chapter', level: 1, text: 'Chapter one', line: 0 },
-  { id: 'arrival', level: 2, text: 'Arrival', line: 4 },
-  { id: 'the-harbour', level: 3, text: 'The harbour', line: 9 },
-  { id: 'the-market', level: 3, text: 'The market', line: 15 },
-  { id: 'nightfall', level: 2, text: 'Nightfall', line: 22 },
-  { id: 'a-letter', level: 3, text: 'A letter home', line: 28 },
-  { id: 'morning', level: 2, text: 'Morning', line: 35 },
-]
-
-const notes = [
-  { title: 'Plain files', body: 'Point it at a folder. Every note stays a .md file you can open in anything, back up anywhere, and keep forever.' },
-  { title: 'Write and read at once', body: 'The editor and the preview sit side by side and keep their place together. Or hide either one when you need the room.' },
-  { title: 'Bring your own AI', body: 'Plug in a key from Anthropic, OpenAI or OpenRouter, or a local Ollama. Continue, tighten, fix or translate a passage without leaving the page.' },
-  { title: 'Write together', body: 'Share a link and edit the same draft live, cursors and all. Everything is sealed in your browser before it travels, so the relay never reads a word.' },
-  { title: 'Works with your agents', body: 'A small MCP server lets Claude, Cursor or any MCP client read and write your folder. The desktop app picks up their edits as they land.' },
-  { title: 'Export when ready', body: 'Hand off a clean standalone HTML page, or print to PDF with the same typography you read in the app.' },
+// Where each stop sits in a pretend document, just enough for the marker to walk.
+const trail = [
+  { level: 1, line: 0 },
+  { level: 2, line: 4 },
+  { level: 3, line: 9 },
+  { level: 3, line: 15 },
+  { level: 2, line: 22 },
+  { level: 3, line: 28 },
+  { level: 2, line: 35 },
 ]
 
 type System = 'mac' | 'windows' | 'other'
+type Theme = 'system' | 'light' | 'dark'
 
 const guessSystem = (): System => {
   const agent = navigator.userAgent
@@ -39,17 +34,56 @@ const guessSystem = (): System => {
   return 'other'
 }
 
+const dark = () => window.matchMedia('(prefers-color-scheme: dark)')
+
+// The same theme key as the editor, so a choice made here carries over to /write.
+const useTheme = () => {
+  const [theme, setTheme] = useState<Theme>(() => recall('theme', 'system', ['system', 'light', 'dark'] as const))
+  const [systemDark, setSystemDark] = useState(() => dark().matches)
+
+  useEffect(() => {
+    const query = dark()
+    const follow = () => setSystemDark(query.matches)
+    query.addEventListener('change', follow)
+    return () => query.removeEventListener('change', follow)
+  }, [])
+
+  useEffect(() => {
+    remember('theme', theme)
+    if (theme === 'system') delete document.documentElement.dataset.theme
+    else document.documentElement.dataset.theme = theme
+  }, [theme])
+
+  const shown = theme === 'system' ? (systemDark ? 'dark' : 'light') : theme
+  const flip = () => {
+    const next = shown === 'dark' ? 'light' : 'dark'
+    setTheme(next === (systemDark ? 'dark' : 'light') ? 'system' : next)
+  }
+  return { shown, flip }
+}
+
 export function Landing() {
   const [system, setSystem] = useState<System>('other')
+  const [lang, setLang] = useState<Lang>(currentLang)
   const [stop, setStop] = useState(0)
   const [held, setHeld] = useState(false)
+  const { shown, flip } = useTheme()
+  const t = copies[lang]
+
+  const trip: Heading[] = useMemo(() => trail.map((s, i) => ({ id: `stop-${i}`, text: t.lookout.stops[i], ...s })), [t])
 
   useEffect(() => setSystem(guessSystem()), [])
+
+  useEffect(() => {
+    chooseLang(lang)
+    document.title = t.meta.title
+    document.querySelector('meta[name="description"]')?.setAttribute('content', t.meta.description)
+  }, [lang, t])
 
   // The demo walks on its own until someone takes over.
   useEffect(() => {
     if (held || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
-    const walk = window.setInterval(() => setStop((s) => (s + 1) % trip.length), 1800)
+    const walk = window.setInterval(() => setStop((s) => (s + 1) % trail.length), 1800)
     return () => window.clearInterval(walk)
   }, [held])
 
@@ -62,55 +96,77 @@ export function Landing() {
     <div className="landing">
       <header className="top">
         <a href="/" className="brand" aria-label="typeSirkel home">
-          <picture>
-            <source srcSet="/logo.svg" media="(prefers-color-scheme: dark)" />
-            <img src="/logo-ink.svg" alt="typeSirkel" width={101} height={32} />
-          </picture>
+          <img src={shown === 'dark' ? '/logo.svg' : '/logo-ink.svg'} alt="typeSirkel" width={101} height={32} />
         </a>
         <nav>
-          <Star />
+          <label className="lang" data-short={lang === 'pt-BR' ? 'PT' : lang.toUpperCase()}>
+            <span className="sr-only">{t.nav.language}</span>
+            <select value={lang} onChange={(e) => setLang(e.target.value as Lang)}>
+              {langs.map((l) => (
+                <option key={l.id} value={l.id}>
+                  {l.name}
+                </option>
+              ))}
+            </select>
+            <svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true">
+              <path d="M2.5 4l2.5 2.5L7.5 4" />
+            </svg>
+          </label>
+          <button type="button" className="theme-flip" onClick={flip} aria-label={shown === 'dark' ? t.nav.toLight : t.nav.toDark} title={shown === 'dark' ? t.nav.toLight : t.nav.toDark}>
+            {shown === 'dark' ? (
+              <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
+                <circle cx="8" cy="8" r="3.2" />
+                <path d="M8 1.5v1.6M8 12.9v1.6M1.5 8h1.6M12.9 8h1.6M3.4 3.4l1.1 1.1M11.5 11.5l1.1 1.1M3.4 12.6l1.1-1.1M11.5 4.5l1.1-1.1" />
+              </svg>
+            ) : (
+              <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
+                <path d="M13.2 9.6A5.6 5.6 0 0 1 6.4 2.8a5.6 5.6 0 1 0 6.8 6.8z" />
+              </svg>
+            )}
+          </button>
+          <Star label={t.nav.star} />
           <a href="/write/" className="top-cta">
-            Open editor
+            {t.nav.openEditor}
           </a>
         </nav>
       </header>
 
       <main>
         <section className="hero" aria-labelledby="hero-title">
-          <p className="kicker">Free and open source markdown editor</p>
+          <p className="kicker">{t.hero.kicker}</p>
           <h1 id="hero-title">
-            Write in folders.
+            {t.hero.line1}
             <br />
-            Read as you go.
+            {t.hero.line2}
           </h1>
-          <p className="lead">typeSirkel keeps your notes as plain markdown files on your own disk, shows a live preview beside you, and lets a small marker follow you through your headings.</p>
+          <p className="lead">{t.hero.lead}</p>
           <div className="actions">
             <a href={releases} className={system === 'windows' ? 'button' : 'button solid'}>
-              Download for Mac
+              {t.hero.mac}
             </a>
             <a href={releases} className={system === 'windows' ? 'button solid' : 'button'}>
-              Download for Windows
+              {t.hero.windows}
             </a>
             <a href="/write/" className="button bare">
-              Try it in your browser →
+              {t.hero.browser}
             </a>
           </div>
-          <p className="fine">macOS 11 or newer, Windows 10 or newer, or any Chromium browser. MIT licensed.</p>
+          <p className="fine">{t.hero.fine}</p>
         </section>
 
-        <section className="showcase" aria-label="Try the editor">
+        <section className="showcase" aria-label={t.nav.openEditor}>
           <Suspense fallback={<div className="demo demo-waiting" />}>
             <LiveDemo />
           </Suspense>
-          <p className="fine">This is the real editor. Type in it, switch notes, click a heading.</p>
+          <p className="fine">{t.demoNote}</p>
         </section>
 
         <section className="lookout-demo" aria-labelledby="lookout-title">
           <div className="lookout-copy">
-            <p className="kicker">The lookout</p>
-            <h2 id="lookout-title">Always know where you are in a long draft.</h2>
-            <p>Your headings become stops on a trail. As you write or scroll, the marker walks to the section you are in. The road behind you is drawn in, the road ahead is still dotted. Click any stop to jump there.</p>
-            <p className="fine">Go on, click a heading.</p>
+            <p className="kicker">{t.lookout.kicker}</p>
+            <h2 id="lookout-title">{t.lookout.title}</h2>
+            <p>{t.lookout.body}</p>
+            <p className="fine">{t.lookout.hint}</p>
           </div>
           <div className="lookout-stage">
             <Lookout headings={trip} active={stop} onPick={pick} />
@@ -119,11 +175,11 @@ export function Landing() {
 
         <section className="features" aria-labelledby="features-title">
           <div className="section-head">
-            <p className="kicker">What it does</p>
-            <h2 id="features-title">Small on purpose.</h2>
+            <p className="kicker">{t.features.kicker}</p>
+            <h2 id="features-title">{t.features.title}</h2>
           </div>
           <div className="notes">
-            {notes.map((note) => (
+            {t.features.notes.map((note) => (
               <article key={note.title}>
                 <h3>{note.title}</h3>
                 <p>{note.body}</p>
@@ -132,18 +188,18 @@ export function Landing() {
           </div>
         </section>
 
-        <Agents />
+        <Agents copy={t.agents} />
 
         <section className="source" aria-labelledby="source-title">
           <div>
-            <p className="kicker">Open source</p>
-            <h2 id="source-title">Read the code. Change it. Make it yours.</h2>
-            <p>typeSirkel is MIT licensed and small enough to understand in an afternoon. The editor is CodeMirror, the desktop shell is Tauri, and everything else is a few calm React files named after things on a writing desk.</p>
+            <p className="kicker">{t.source.kicker}</p>
+            <h2 id="source-title">{t.source.title}</h2>
+            <p>{t.source.body}</p>
             <div className="source-actions">
               <a href={repo} className="button solid">
-                View on GitHub
+                {t.source.button}
               </a>
-              <Star className="star-large" />
+              <Star className="star-large" label={t.nav.star} />
             </div>
           </div>
           <pre>

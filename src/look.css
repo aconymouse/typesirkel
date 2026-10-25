@@ -755,3 +755,107 @@ button {
   padding: 14px 22px;
   border-top: 1px solid var(--line);
 }
+
+/* rounding: every control and every floating box */
+
+.line-button,
+.quiet-button,
+.shelf-new input,
+.shelf-menu button,
+.press-menu button,
+.bar-modes button {
+  border-radius: var(--radius-small);
+}
+
+.press-menu,
+.shelf-menu {
+  border-radius: var(--radius);
+  overflow: hidden;
+  padding: 4px;
+}
+
+.quiet-button:hover {
+  background: var(--hover);
+}
+
+.bar .quiet-button:hover,
+.bar-modes button:hover {
+  background: none;
+}
+
+.card-scrim {
+  background: rgb(0 0 0 / 0.22);
+  -webkit-backdrop-filter: blur(14px) saturate(150%);
+  backdrop-filter: blur(14px) saturate(150%);
+}
+
+.card {
+  border-radius: 14px;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--paper) 86%, transparent);
+  -webkit-backdrop-filter: blur(30px) saturate(160%);
+  backdrop-filter: blur(30px) saturate(160%);
+  box-shadow: 0 24px 70px rgb(0 0 0 / 0.35);
+}
+
+.card-foot .quiet-button.text {
+  text-transform: none;
+}
+
+.scrim {
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+
+.shelf-prompts-head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.shelf-prompts-head .shelf-toggle {
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+}
+
+.shelf-lang {
+  position: relative;
+  display: inline-flex;
+  flex: none;
+}
+
+.shelf-lang b {
+  padding: 2px 6px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-small);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--faint);
+  pointer-events: none;
+}
+
+.shelf-lang select {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.shelf-lang:hover b,
+.shelf-lang:focus-within b {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

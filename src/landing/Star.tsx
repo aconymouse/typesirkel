@@ -21,7 +21,7 @@ const readCount = async () => {
 
 const short = (n: number) => (n >= 1000 ? `${(n / 1000).toFixed(n >= 10000 ? 0 : 1)}k` : String(n))
 
-export function Star({ className = '' }: { className?: string }) {
+export function Star({ className = '', label = 'Star' }: { className?: string; label?: string }) {
   const [count, setCount] = useState<number | null>(null)
 
   useEffect(() => {
@@ -35,7 +35,7 @@ export function Star({ className = '' }: { className?: string }) {
       <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true">
         <path d="M8 1.5l1.95 4.1 4.5.55-3.3 3.1.85 4.45L8 11.55 4 13.7l.85-4.45-3.3-3.1 4.5-.55z" />
       </svg>
-      <span>Star</span>
+      <span>{label}</span>
       {count !== null ? <b>{short(count)}</b> : null}
     </a>
   )

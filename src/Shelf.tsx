@@ -2,6 +2,7 @@ import { type ReactNode, useEffect, useRef, useState } from 'react'
 import type { Drawer, Leaf } from './drawer'
 import type { Recent } from './drawer/recent'
 import { recall, remember } from './keep'
+import { langs, type Lang, useLang } from './lang'
 import { byCategory, type Prompt } from './prompts'
 
 type Props = {
@@ -57,7 +58,8 @@ export function Shelf({ drawer, leaves, current, canFolder, outline, recents, on
   const [menu, setMenu] = useState(false)
   const head = useRef<HTMLDivElement>(null)
   const writable = drawer.kind === 'browser' || drawer.kind === 'tauri' || drawer.kind === 'scratch'
-  const groups = byCategory()
+  const [lang, setLang] = useLang()
+  const groups = byCategory(lang)
 
   useEffect(() => {
     if (!menu) return
@@ -187,17 +189,30 @@ export function Shelf({ drawer, leaves, current, canFolder, outline, recents, on
       ) : null}
 
       <section className={`shelf-outline shelf-prompts${promptsOpen ? ' is-open' : ''}`}>
-        <button type="button" className="shelf-toggle shelf-rule" onClick={togglePrompts} aria-expanded={promptsOpen}>
-          <Fold open={promptsOpen} />
-          <span>Prompts</span>
-        </button>
+        <div className="shelf-rule shelf-prompts-head">
+          <button type="button" className="shelf-toggle" onClick={togglePrompts} aria-expanded={promptsOpen}>
+            <Fold open={promptsOpen} />
+            <span>Prompts</span>
+          </button>
+          <label className="shelf-lang" title="Prompt language">
+            <span className="sr-only">Prompt language</span>
+            <select value={lang} onChange={(e) => setLang(e.target.value as Lang)}>
+              {langs.map((l) => (
+                <option key={l.id} value={l.id}>
+                  {l.name}
+                </option>
+              ))}
+            </select>
+            <b aria-hidden="true">{lang === 'pt-BR' ? 'PT' : lang.toUpperCase()}</b>
+          </label>
+        </div>
         {promptsOpen ? (
           <div className="shelf-outline-body">
-            {groups.map(([category, list]) => (
-              <section key={category}>
-                <p className="shelf-dir">{category}</p>
+            {groups.map(({ label, prompts }) => (
+              <section key={label}>
+                <p className="shelf-dir">{label}</p>
                 <ul>
-                  {list.map((p) => (
+                  {prompts.map((p) => (
                     <li key={p.id}>
                       <button type="button" onClick={() => onPrompt(p)} title={p.description}>
                         {p.title}

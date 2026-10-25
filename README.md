@@ -53,7 +53,7 @@ The link carries a key after the `#`, which browsers never send to a server. Eve
 
 The sidebar carries a shelf of writing prompts: horror, fantasy, straight news, a safe rewrite that never touches quotes, names, dates or places, SEO articles, tutorials and storyboards. Open one to copy it, or hand it to Quill so every request follows it.
 
-Each prompt is a markdown file in [`prompts/`](prompts/) with a title, a category and a one line description in its front matter. Adding a good one is a welcome first pull request.
+Each prompt is a markdown file in [`prompts/`](prompts/) with a title, a category and a one line description in its front matter. Translations sit next to the original as `horror.id.md`, `horror.pt-BR.md`, `horror.ko.md` and `horror.th.md`, and the shelf shows the one matching your language, falling back to English. Adding a good prompt, or a translation, is a welcome first pull request.
 
 ## MCP
 

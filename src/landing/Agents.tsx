@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { clients } from './clients'
+import type { Copy } from './copy'
 
 type Scene = {
   client: string
@@ -38,11 +39,11 @@ const scenes: Scene[] = [
 
 const still = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
-export function Agents() {
+export function Agents({ copy }: { copy: Copy['agents'] }) {
   const [scene, setScene] = useState(0)
   const [typed, setTyped] = useState(0)
   const [shown, setShown] = useState(0)
-  const now = scenes[scene]
+  const now = { ...scenes[scene], prompt: copy.prompts[scene] ?? scenes[scene].prompt }
   const done = shown >= now.calls.length
 
   useEffect(() => {
@@ -62,15 +63,15 @@ export function Agents() {
     now.calls.forEach((_, i) => at(start + i * 650, () => setShown(i + 1)))
     at(start + now.calls.length * 650 + 3200, () => setScene((s) => (s + 1) % scenes.length))
     return () => timers.forEach((t) => window.clearTimeout(t))
-  }, [scene, now])
+  }, [scene, now.prompt, now.calls.length])
 
   return (
     <section className="agents" aria-labelledby="agents-title">
       <div className="agents-copy">
-        <p className="kicker">MCP</p>
-        <h2 id="agents-title">Let your AI work in your folder.</h2>
-        <p>typeSirkel ships a small MCP server. Point Claude, Cursor or any other MCP client at your notes folder and it can search, read, outline and write markdown there, while you keep writing in the same files.</p>
-        <p>Ask it to summarize a week of meetings, keep a changelog, or pull scattered notes into one outline. The desktop app picks up its edits as they land, so you never copy and paste between windows.</p>
+        <p className="kicker">{copy.kicker}</p>
+        <h2 id="agents-title">{copy.title}</h2>
+        <p>{copy.p1}</p>
+        <p>{copy.p2}</p>
         <pre className="agents-config">
           <code>{`npx -y typesirkel-mcp ~/Notes`}</code>
         </pre>
@@ -90,10 +91,14 @@ export function Agents() {
               </li>
             ))}
           </ul>
-          {done ? <p className="agents-done">Done. {now.touched.how === 'new' ? 'Created' : 'Updated'} {now.touched.path}</p> : null}
+          {done ? (
+            <p className="agents-done">
+              {copy.done} {now.touched.how === 'new' ? copy.created : copy.updated} {now.touched.path}
+            </p>
+          ) : null}
         </div>
         <div className="agents-shelf">
-          <p className="agents-folder">Notes</p>
+          <p className="agents-folder">{copy.folder}</p>
           <ul>
             {now.shelf.map((path) => {
               const hit = done && path === now.touched.path
@@ -110,7 +115,7 @@ export function Agents() {
       </div>
 
       <div className="agents-clients">
-        <p className="agents-label">Works with any MCP client</p>
+        <p className="agents-label">{copy.label}</p>
         <ul>
           {clients.map((c) => (
             <li key={c.name} title={c.name}>

@@ -27,6 +27,8 @@
   --sheet-size: 15px;
   --measure: 72ch;
   --gutter: 32px;
+  --radius: 8px;
+  --radius-small: 6px;
 }
 
 @media (prefers-color-scheme: dark) {
