@@ -3,6 +3,7 @@ import { type Circle, joinCircle, type Person, readInvite, somebody, startCircle
 import { CirclePanel } from './circle/CirclePanel'
 import { circleDrawer } from './circle/drawer'
 import { type Drawer, folderSupport, type Leaf, openDrawer, scratchDrawer } from './drawer'
+import { firstVisit } from './drawer/scratch'
 import { counts, ink, titleOf } from './ink'
 import { recall, recallShape, remember, rememberShape } from './keep'
 import { Lookout } from './Lookout'
@@ -16,7 +17,7 @@ import { desktopDrawer, onDesktop } from './drawer/tauri'
 import { pressHtml, pressMarkdown, pressPdf } from './press'
 import { Proof, type ProofHandle } from './Proof'
 import { Sheet, type SheetHandle } from './Sheet'
-import { Shelf } from './Shelf'
+import { HomeLink, Shelf } from './Shelf'
 
 const modes = ['write', 'split', 'read'] as const
 const themes = ['system', 'light', 'dark'] as const
@@ -56,6 +57,8 @@ export function Desk() {
   const [shareBusy, setShareBusy] = useState(false)
   const [shareError, setShareError] = useState('')
   const [me, setMe] = useState<Person>(() => recallShape('me', somebody()))
+  const [wantTour, setWantTour] = useState(false)
+  const [nudge, setNudge] = useState(false)
 
   const sheet = useRef<SheetHandle>(null)
   const proof = useRef<ProofHandle>(null)
@@ -69,6 +72,7 @@ export function Desk() {
   const textRef = useRef(text)
   textRef.current = text
   const echo = useRef<string | null>(null)
+  const touring = useRef(false)
   const modeRef = useRef(mode)
   modeRef.current = mode
 
@@ -184,9 +188,34 @@ export function Desk() {
       if (invite && (await join(invite))) return
       if (invite) history.replaceState(null, '', location.pathname + location.search)
       await shelve(scratchDrawer())
+      if (firstVisit() && recall<'yes' | ''>('toured', '', ['yes']) !== 'yes') setWantTour(true)
     })()
     // Only the address the app was opened with counts; later hash changes are ours.
   }, [])
+
+  useEffect(() => {
+    const handle = sheet.current
+    if (!wantTour || !current || !handle) return
+    const quit = new AbortController()
+    touring.current = true
+    remember('toured', 'yes')
+    void handle.tour(quit.signal).then(() => {
+      if (quit.signal.aborted) return
+      touring.current = false
+      setWantTour(false)
+      setNudge(true)
+    })
+    return () => {
+      quit.abort()
+      touring.current = false
+    }
+  }, [wantTour, docKey])
+
+  useEffect(() => {
+    if (!nudge) return
+    const done = window.setTimeout(() => setNudge(false), 12000)
+    return () => window.clearTimeout(done)
+  }, [nudge])
 
   const startSharing = async () => {
     if (!current) return
@@ -228,6 +257,8 @@ export function Desk() {
       echo.current = null
       return
     }
+    // The welcome tour types into a note that is already saved in its final form.
+    if (touring.current) return
     if (!current || drawer.kind === 'circle') return
     if (pending.current) window.clearTimeout(pending.current.timer)
     setSaveState(drawer.kind === 'loose' ? 'loose' : 'dirty')
@@ -565,6 +596,8 @@ export function Desk() {
             if (drawer.kind !== 'circle') void load(drawer, leaf)
           }}
           onCreate={(name) => void create(name)}
+          nudge={nudge}
+          onNudged={() => setNudge(false)}
           recents={recents}
           onReopen={(recent) => {
             setShelfOpen(false)
@@ -580,6 +613,15 @@ export function Desk() {
       {shelfOpen ? <button type="button" className="scrim" aria-label="Close files" onClick={() => setShelfOpen(false)} /> : null}
 
       <main className="work">
+        <header className="top-bar">
+          <HomeLink theme={shown} />
+          <span className="top-bar-name">{current ? current.name.replace(/\.(md|markdown|mdx|txt)$/i, '') : ''}</span>
+          <button type="button" className={`top-bar-menu${nudge ? ' is-nudged' : ''}`} aria-label="Open sidebar" aria-expanded={shelfOpen} onClick={() => setShelfOpen(true)}>
+            <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true">
+              <path d="M3 5h12M3 9h12M3 13h12" />
+            </svg>
+          </button>
+        </header>
         <div className="panes">
           {current ? (
             <>

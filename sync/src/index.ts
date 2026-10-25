@@ -19,6 +19,9 @@ const origins = new Set([
 const largestMessage = 512 * 1024
 const largestRoom = 16 * 1024 * 1024
 const forgetAfter = 30 * 24 * 60 * 60 * 1000
+// A circle is a few people at one desk, not a stadium. Past this, a link gets
+// a polite no instead of a seat.
+const seats = 24
 
 type Incoming = { t: 'u'; d: string } | { t: 'a'; d: string } | { t: 'c'; upto: number; d: string }
 
@@ -44,6 +47,12 @@ export class Room extends DurableObject<Env> {
 
   async fetch() {
     const { 0: client, 1: server } = new WebSocketPair()
+    if (this.ctx.getWebSockets().length >= seats) {
+      server.accept()
+      server.send(JSON.stringify({ t: 'crowded' }))
+      server.close(4001, 'Circle is full')
+      return new Response(null, { status: 101, webSocket: client })
+    }
     this.ctx.acceptWebSocket(server)
     for (const row of this.sql.exec<{ id: number; data: string }>('SELECT id, data FROM rows ORDER BY id')) {
       server.send(JSON.stringify({ t: 'u', id: row.id, d: row.data }))

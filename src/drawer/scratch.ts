@@ -1,36 +1,7 @@
+import { welcome } from '../tour'
 import { type Drawer, type Leaf, plainName } from './types'
 
 const key = 'typesirkel:scratch'
-
-const welcome = `# Hello, typeSirkel
-
-A quiet place to write markdown. Open a folder from the shelf on the left, or keep typing here. This page lives in your browser until you do.
-
-## Writing
-
-Headings become stops on the trail in the sidebar. Move your cursor or scroll, and the marker follows you.
-
-### Shortcuts
-
-- **Bold** with Cmd/Ctrl + B
-- *Italic* with Cmd/Ctrl + I
-- [Links](https://github.com/aconymouse/typesirkel) with Cmd/Ctrl + K
-- Save with Cmd/Ctrl + S
-
-## Reading
-
-Switch between write, split, and read at the bottom. Export to HTML or print to PDF when the draft is ready.
-
-### Code
-
-\`\`\`ts
-const draft = await drawer.read('notes.md')
-\`\`\`
-
-## Folders
-
-Everything stays plain \`.md\` on your disk. No accounts, no sync, no lock-in.
-`
 
 // Scratch is a notebook for things that have no folder yet. Notes live in the
 // app's own storage, kept as plain markdown text under their file names.
@@ -48,11 +19,14 @@ const renamed = (stored: Notes): Notes => {
   return { [first]: body, ...rest }
 }
 
+let fresh = false
+
 const readNotes = (): Notes => {
   try {
     const stored = localStorage.getItem(notesKey)
     if (stored) return renamed(JSON.parse(stored) as Notes)
     const older = localStorage.getItem(key)
+    fresh = older === null
     return { [first]: older ?? welcome }
   } catch {
     return { [first]: welcome }
@@ -71,6 +45,13 @@ const keep = () => {
 }
 
 const book = () => (notes ??= readNotes())
+
+// True on a first visit, before anything has been written. The welcome tour
+// only plays then.
+export const firstVisit = () => {
+  book()
+  return fresh
+}
 
 const leafOf = (name: string): Leaf => ({ path: name, name, dir: '' })
 

@@ -4,13 +4,13 @@ import * as Y from 'yjs'
 import { onDesktop } from '../drawer/tauri'
 import { exportKey, importKey, makeKey, randomId, seal, unseal } from './seal'
 
-export type Status = 'connecting' | 'live' | 'offline' | 'full'
+export type Status = 'connecting' | 'live' | 'offline' | 'full' | 'crowded'
 
 export type Person = { name: string; color: string }
 
 export type Peer = Person & { id: number; me: boolean }
 
-type Wire = { t: 'u'; id: number; d: string } | { t: 'a'; d: string } | { t: 'ready' } | { t: 'join' } | { t: 'full' }
+type Wire = { t: 'u'; id: number; d: string } | { t: 'a'; d: string } | { t: 'ready' } | { t: 'join' } | { t: 'full' } | { t: 'crowded' }
 
 const relayUrl = (import.meta.env.VITE_SIRKEL_SYNC as string | undefined) ?? 'wss://sync.sirkel.asia'
 
@@ -101,8 +101,9 @@ export class Circle {
       const wire = JSON.parse(String(event.data)) as Wire
       this.chain = this.chain.then(() => this.take(wire)).catch(() => {})
     }
-    socket.onclose = () => {
+    socket.onclose = (event) => {
       if (this.socket !== socket || this.shut) return
+      if (event.code === 4001) return this.setStatus('crowded')
       this.setStatus('offline')
       const wait = Math.min(15000, 1000 * 2 ** this.retry++)
       window.setTimeout(() => this.connect(), wait)
@@ -130,6 +131,8 @@ export class Circle {
       applyAwarenessUpdate(this.awareness, await unseal(this.key, wire.d), this)
     } else if (wire.t === 'join') {
       void this.push('a', encodeAwarenessUpdate(this.awareness, [this.doc.clientID]))
+    } else if (wire.t === 'crowded') {
+      this.setStatus('crowded')
     } else if (wire.t === 'full') {
       this.setStatus('full')
     } else if (wire.t === 'ready') {
@@ -157,7 +160,7 @@ export class Circle {
   }
 
   private setStatus(status: Status) {
-    if (this.status === 'full' && status !== 'full') return
+    if ((this.status === 'full' || this.status === 'crowded') && status !== this.status) return
     this.status = status
     this.tell()
   }

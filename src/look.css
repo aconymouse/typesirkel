@@ -79,63 +79,10 @@ button {
   border-right: 1px solid var(--line);
 }
 
-.shelf-head {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  height: 44px;
-  padding: 0 10px;
-  border-bottom: 1px solid var(--line);
-}
-
-.shelf-head {
-  position: relative;
-}
-
-.shelf-fold {
-  display: grid;
-  place-items: center;
-  width: 18px;
-  height: 100%;
-  flex: none;
-}
-
-.shelf-fold:hover .fold path {
-  stroke: var(--accent);
-}
-
-.shelf-switch {
-  display: flex;
-  flex: 1;
-  align-items: center;
-  gap: 6px;
-  min-width: 0;
-  height: 100%;
-  text-align: left;
-}
-
 .shelf-caret path {
   fill: none;
   stroke: var(--faint);
   stroke-width: 1.5;
-}
-
-.shelf-switch:hover .shelf-caret path,
-.shelf-switch[aria-expanded='true'] .shelf-caret path {
-  stroke: var(--accent);
-}
-
-.shelf-menu {
-  position: absolute;
-  top: calc(100% - 4px);
-  left: 10px;
-  right: 10px;
-  z-index: 40;
-  display: flex;
-  flex-direction: column;
-  padding: 4px 0;
-  background: var(--paper);
-  border: 1px solid var(--line);
 }
 
 .shelf-menu button {
@@ -201,34 +148,10 @@ button {
   stroke: var(--accent);
 }
 
-.shelf.files-shut .shelf-head {
-  border-bottom: 0;
-}
-
-.shelf-outline {
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-  border-top: 1px solid var(--line);
-}
-
-.shelf-outline.is-open {
-  flex: 1 1 0;
-}
-
-.shelf.lower-open .shelf-list {
-  flex: 0 1 auto;
-  max-height: 40%;
-}
-
 .shelf-prompts ul {
   list-style: none;
   margin: 0;
   padding: 0 0 8px;
-}
-
-.shelf-prompts .shelf-dir {
-  margin-top: 4px;
 }
 
 .shelf-prompts li button {
@@ -244,27 +167,6 @@ button {
 
 .shelf-prompts li button:hover {
   color: var(--accent);
-}
-
-.shelf-rule {
-  flex: none;
-  height: 36px;
-  padding: 0 10px;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--faint);
-}
-
-.shelf-rule:hover {
-  color: var(--ink);
-}
-
-.shelf-outline-body {
-  flex: 1;
-  min-height: 0;
-  overflow: auto;
 }
 
 .shelf .lookout.bare {
@@ -289,13 +191,6 @@ button {
 
 .shelf-new input:focus {
   border-color: var(--ink);
-}
-
-.shelf-list {
-  flex: 1 1 auto;
-  min-height: 0;
-  overflow: auto;
-  padding: 8px 0;
 }
 
 .shelf-list ul {
@@ -338,15 +233,6 @@ button {
 .shelf-empty {
   margin: 12px 16px;
   color: var(--faint);
-}
-
-.shelf-foot {
-  margin-top: auto;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px;
-  border-top: 1px solid var(--line);
 }
 
 .line-button {
@@ -645,7 +531,6 @@ button {
   }
 }
 
-
 @media print {
   body {
     overflow: visible;
@@ -807,19 +692,6 @@ button {
   backdrop-filter: blur(8px);
 }
 
-.shelf-prompts-head {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.shelf-prompts-head .shelf-toggle {
-  color: inherit;
-  font: inherit;
-  letter-spacing: inherit;
-  text-transform: inherit;
-}
-
 .shelf-lang {
   position: relative;
   display: inline-flex;
@@ -858,26 +730,6 @@ button {
   overflow: hidden;
   clip-path: inset(50%);
   white-space: nowrap;
-}
-
-.shelf-brand {
-  display: flex;
-  flex: none;
-  align-items: center;
-  justify-content: space-between;
-  height: 48px;
-  padding: 0 10px 0 16px;
-  border-bottom: 1px solid var(--line);
-}
-
-.shelf-brand a {
-  display: flex;
-}
-
-.shelf-brand img {
-  display: block;
-  height: 22px;
-  width: auto;
 }
 
 .theme-flip {

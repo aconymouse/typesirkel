@@ -1,0 +1,295 @@
+.shelf-brand {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: space-between;
+  height: 48px;
+  padding: 0 10px 0 16px;
+  border-bottom: 1px solid var(--line);
+}
+
+.home-link {
+  display: flex;
+}
+
+.home-link img {
+  display: block;
+  height: 22px;
+  width: auto;
+}
+
+.shelf-stack {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.shelf-pane {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.shelf-pane.is-open {
+  min-height: 36px;
+}
+
+.shelf-pane-head {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 6px;
+  height: 36px;
+  padding: 0 8px 0 10px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--faint);
+}
+
+.shelf-pane-head .shelf-toggle {
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+}
+
+.shelf-pane-head:hover {
+  color: var(--ink);
+}
+
+.shelf-pane-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+}
+
+.shelf-list {
+  padding: 0 0 8px;
+}
+
+.shelf-prompts .shelf-dir {
+  margin-top: 4px;
+}
+
+.shelf-add {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: var(--radius-small);
+  color: var(--muted);
+}
+
+.shelf-add path {
+  stroke: currentColor;
+  stroke-width: 1.5;
+}
+
+.shelf-add:hover {
+  color: var(--accent);
+}
+
+.shelf-add.is-nudged {
+  color: var(--ink);
+  animation: nudge 1.4s ease-out infinite;
+}
+
+@keyframes nudge {
+  0% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, #e5ff11 80%, transparent);
+    background: color-mix(in srgb, #e5ff11 55%, transparent);
+  }
+  100% {
+    box-shadow: 0 0 0 10px transparent;
+    background: color-mix(in srgb, #e5ff11 20%, transparent);
+  }
+}
+
+/* The rule between sections is a hairline with a wider grip around it. */
+.shelf-rule {
+  position: relative;
+  flex: none;
+  height: 1px;
+  background: var(--line);
+}
+
+.shelf-rule.is-live::before {
+  content: '';
+  position: absolute;
+  inset: -4px 0;
+  z-index: 2;
+  cursor: row-resize;
+}
+
+.shelf-rule.is-live:hover,
+.shelf-rule.is-live:focus-visible,
+.shelf-rule.is-live:active {
+  background: var(--accent);
+  outline: none;
+  box-shadow: 0 0 0 1px var(--accent);
+}
+
+.shelf-foot {
+  position: relative;
+  flex: none;
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border-top: 1px solid var(--line);
+}
+
+.shelf-opener {
+  display: flex;
+  gap: 6px;
+}
+
+.shelf-recent {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-small);
+}
+
+.shelf-recent:hover,
+.shelf-recent[aria-expanded='true'] {
+  border-color: var(--accent);
+}
+
+.shelf-folder {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  min-width: 0;
+  padding: 7px 10px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-small);
+  font-weight: 600;
+  text-align: left;
+}
+
+.shelf-folder > span {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.shelf-folder svg:first-child {
+  flex: none;
+  fill: none;
+  stroke: var(--muted);
+  stroke-width: 1.3;
+  stroke-linejoin: round;
+}
+
+.shelf-folder:hover,
+.shelf-folder[aria-expanded='true'] {
+  border-color: var(--accent);
+}
+
+.shelf-caret {
+  flex: none;
+}
+
+.shelf-recent:hover .shelf-caret path,
+.shelf-recent[aria-expanded='true'] .shelf-caret path,
+.shelf-folder:hover .shelf-caret path,
+.shelf-folder[aria-expanded='true'] .shelf-caret path {
+  stroke: var(--accent);
+}
+
+.shelf-menu {
+  position: absolute;
+  bottom: calc(100% - 4px);
+  left: 10px;
+  right: 10px;
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  background: color-mix(in srgb, var(--paper) 90%, transparent);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  backdrop-filter: blur(24px) saturate(160%);
+  border: 1px solid var(--line);
+  box-shadow: 0 14px 40px rgb(0 0 0 / 0.2);
+}
+
+.shelf-menu button {
+  border-radius: var(--radius-small);
+}
+
+/* A phone gets a slim header with the logo and a way into the sidebar. */
+.top-bar {
+  display: none;
+}
+
+@media (max-width: 760px) {
+  .top-bar {
+    display: flex;
+    flex: none;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    height: 48px;
+    padding: 0 8px 0 16px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .top-bar-name {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 13px;
+    color: var(--muted);
+    text-align: right;
+  }
+
+  .top-bar-menu {
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-small);
+    color: var(--ink);
+  }
+
+  .top-bar-menu path {
+    stroke: currentColor;
+    stroke-width: 1.6;
+    stroke-linecap: round;
+  }
+
+  .top-bar-menu.is-nudged {
+    animation: nudge 1.4s ease-out infinite;
+  }
+
+  .bar-files {
+    display: none !important;
+  }
+
+  .desk.shelf-open .shelf {
+    bottom: 0;
+    z-index: 40;
+  }
+
+  .desk.shelf-open .scrim {
+    inset: 0;
+    z-index: 35;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shelf-add.is-nudged,
+  .top-bar-menu.is-nudged {
+    animation: none;
+    background: color-mix(in srgb, #e5ff11 45%, transparent);
+  }
+}

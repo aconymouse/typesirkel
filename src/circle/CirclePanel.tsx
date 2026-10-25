@@ -17,7 +17,7 @@ type Props = {
   onClose: () => void
 }
 
-const statusLabel = { connecting: 'Connecting', live: 'Live', offline: 'Reconnecting', full: 'Room is full' }
+const statusLabel = { connecting: 'Connecting', live: 'Live', offline: 'Reconnecting', full: 'Room is full', crowded: 'Circle is full' }
 
 const useCircle = (circle: Circle | null) =>
   useSyncExternalStore(

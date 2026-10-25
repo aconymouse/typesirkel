@@ -14,6 +14,7 @@ It runs in the browser and as a desktop app for macOS and Windows. Both are the 
 
 - Opens a whole folder and lists every markdown file in it, nested folders included
 - Writes with a proper editor: syntax highlighting, fenced code in many languages, search, multiple cursors
+- Type `/` for a menu of formats that shows the markdown it writes, so you never have to remember a mark
 - Shows a live preview side by side, or either one on its own
 - Saves on its own a moment after you stop typing
 - Follows you through the document with the lookout, an outline with a marker that travels to the heading you are in
@@ -27,6 +28,7 @@ It runs in the browser and as a desktop app for macOS and Windows. Both are the 
 
 | Keys | Does |
 | --- | --- |
+| / | Format menu |
 | Cmd/Ctrl + S | Save now |
 | Cmd/Ctrl + O | Open a folder |
 | Cmd/Ctrl + B / I / E | Bold, italic, inline code |

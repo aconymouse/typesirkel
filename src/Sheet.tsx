@@ -3,6 +3,7 @@ import { EditorView } from '@codemirror/view'
 import { forwardRef, useEffect, useImperativeHandle, useRef } from 'react'
 import type { Landing, Passage } from './quill/asks'
 import { freshState, jumpTo, land, passage, refill, topLine } from './nib'
+import { playTour } from './tour'
 
 export type SheetHandle = {
   jump: (line: number) => void
@@ -10,6 +11,7 @@ export type SheetHandle = {
   passage: () => Passage | null
   land: (from: Passage, answer: string, how: Landing) => void
   refill: (text: string) => void
+  tour: (signal: AbortSignal) => Promise<void>
 }
 
 type Props = {
@@ -62,6 +64,9 @@ export const Sheet = forwardRef<SheetHandle, Props>(function Sheet({ docKey, tex
     passage: () => (view.current ? passage(view.current) : null),
     land: (from, answer, how) => view.current && land(view.current, from, answer, how),
     refill: (next) => view.current && refill(view.current, next),
+    tour: async (signal) => {
+      if (view.current) await playTour(view.current, signal)
+    },
   }))
 
   return <div className="sheet" ref={host} />

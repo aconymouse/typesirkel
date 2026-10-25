@@ -8,6 +8,7 @@ import { drawSelection, EditorView, keymap, placeholder, type ViewUpdate } from 
 import { tags } from '@lezer/highlight'
 import { yUndoManagerKeymap } from 'y-codemirror.next'
 import { slide } from './glide'
+import { slash } from './slash'
 import type { Landing, Passage } from './quill/asks'
 
 export type SheetEvents = {
@@ -99,6 +100,7 @@ export const sheetExtensions = (events: SheetEvents, hint: string, shared?: Exte
   EditorView.lineWrapping,
   EditorState.allowMultipleSelections.of(true),
   markdown({ base: markdownLanguage, codeLanguages: languages, addKeymap: true }),
+  slash,
   syntaxHighlighting(paint),
   frame,
   placeholder(hint),
