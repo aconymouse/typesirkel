@@ -437,17 +437,21 @@ button {
 
 .bar-modes {
   display: flex;
-  border: 1px solid var(--line);
+  align-items: center;
 }
 
 .bar-modes button {
-  padding: 2px 10px;
+  padding: 2px 8px;
   text-transform: capitalize;
   color: var(--muted);
 }
 
-.bar-modes button + button {
-  border-left: 1px solid var(--line);
+.bar-modes button + button::before {
+  content: '/';
+  margin-right: 8px;
+  margin-left: -8px;
+  color: var(--faint);
+  pointer-events: none;
 }
 
 .bar-modes button:hover {
