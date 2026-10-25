@@ -7,6 +7,7 @@ import { EditorSelection, EditorState, type Extension } from '@codemirror/state'
 import { drawSelection, EditorView, keymap, placeholder, type ViewUpdate } from '@codemirror/view'
 import { tags } from '@lezer/highlight'
 import { yUndoManagerKeymap } from 'y-codemirror.next'
+import { slide } from './glide'
 import type { Passage } from './quill/asks'
 
 export type SheetEvents = {
@@ -125,10 +126,10 @@ export const jumpTo = (view: EditorView, line: number) => {
   view.focus()
 }
 
-// The line sitting at the top edge of the visible sheet.
+// The line the reader is on: the top edge, sliding down once the end is in view.
 export const topLine = (view: EditorView) => {
   const rect = view.scrollDOM.getBoundingClientRect()
-  const block = view.lineBlockAtHeight(rect.top + 56 - view.documentTop)
+  const block = view.lineBlockAtHeight(rect.top + 56 + slide(view.scrollDOM) - view.documentTop)
   return view.state.doc.lineAt(block.from).number - 1
 }
 

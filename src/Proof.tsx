@@ -1,6 +1,7 @@
 import './proof.css'
 import { forwardRef, useEffect, useImperativeHandle, useRef } from 'react'
 import { onDesktop } from './drawer/tauri'
+import { slide } from './glide'
 
 export type ProofHandle = {
   showLine: (line: number, smooth?: boolean) => void
@@ -61,7 +62,7 @@ export const Proof = forwardRef<ProofHandle, Props>(function Proof({ html, onScr
       if (performance.now() < quiet.current) return
       cancelAnimationFrame(frame)
       frame = requestAnimationFrame(() => {
-        const edge = box.scrollTop + 48
+        const edge = box.scrollTop + 48 + slide(box)
         let line = 0
         for (const el of marked(root)) {
           if (el.offsetTop <= edge) line = Number(el.dataset.line)
