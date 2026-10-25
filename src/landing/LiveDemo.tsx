@@ -24,7 +24,7 @@ Nothing worth keeping. No accounts, no export button, no lock-in.
 
 ## How the lookout helps
 
-Long drafts get lost in the middle. The eye on the right always knows which section you are in.
+Long drafts get lost in the middle. The marker on the right always knows which section you are in.
 
 ### Try it
 
@@ -131,7 +131,10 @@ export default function LiveDemo() {
               setFocusLine(line)
               if (mode === 'split') proof.current?.showLine(line)
             }}
-            onScrollLine={(line) => mode === 'split' && proof.current?.showLine(line)}
+            onScrollLine={(line) => {
+              setFocusLine(line)
+              if (mode === 'split') proof.current?.showLine(line)
+            }}
           />
         </div>
         <div className="demo-proof" hidden={mode === 'write'}>

@@ -10,7 +10,7 @@ const LiveDemo = lazy(() => import('./LiveDemo'))
 const repo = 'https://github.com/aconymouse/typesirkel'
 const releases = `${repo}/releases/latest`
 
-// A pretend document, just enough for the eye to have somewhere to walk.
+// A pretend document, just enough for the marker to have somewhere to walk.
 const trip: Heading[] = [
   { id: 'chapter', level: 1, text: 'Chapter one', line: 0 },
   { id: 'arrival', level: 2, text: 'Arrival', line: 4 },
@@ -83,7 +83,7 @@ export function Landing() {
             <br />
             Read as you go.
           </h1>
-          <p className="lead">typeSirkel keeps your notes as plain markdown files on your own disk, shows a live preview beside you, and lets a small eye follow you through your headings.</p>
+          <p className="lead">typeSirkel keeps your notes as plain markdown files on your own disk, shows a live preview beside you, and lets a small marker follow you through your headings.</p>
           <div className="actions">
             <a href={releases} className={system === 'windows' ? 'button' : 'button solid'}>
               Download for Mac
@@ -109,7 +109,7 @@ export function Landing() {
           <div className="lookout-copy">
             <p className="kicker">The lookout</p>
             <h2 id="lookout-title">Always know where you are in a long draft.</h2>
-            <p>Your headings become stops on a trail. As you write or scroll, the eye walks to the section you are in. The road behind you is drawn in, the road ahead is still dotted. Click any stop to jump there.</p>
+            <p>Your headings become stops on a trail. As you write or scroll, the marker walks to the section you are in. The road behind you is drawn in, the road ahead is still dotted. Click any stop to jump there.</p>
             <p className="fine">Go on, click a heading.</p>
           </div>
           <div className="lookout-stage">

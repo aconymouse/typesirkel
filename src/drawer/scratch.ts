@@ -8,7 +8,7 @@ A quiet place to write markdown. Open a folder from the shelf on the left, or ke
 
 ## Writing
 
-Headings become stops on the lookout trail to the right. Move your cursor and the eye follows you.
+Headings become stops on the trail in the sidebar. Move your cursor or scroll, and the marker follows you.
 
 ### Shortcuts
 

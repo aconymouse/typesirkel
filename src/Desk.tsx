@@ -275,14 +275,19 @@ export function Desk() {
     await flush()
   }
 
+  // Typing scrolls the sheet too. For a moment after the cursor moves, the
+  // cursor decides where the reader is; after that, scrolling does.
+  const cursorMoved = useRef(0)
+
   const followCursor = (line: number) => {
+    cursorMoved.current = performance.now()
     setFocusLine(line)
     if (modeRef.current === 'split') proof.current?.showLine(line)
   }
 
   const followSheetScroll = (line: number) => {
-    if (modeRef.current !== 'split') return
-    proof.current?.showLine(line)
+    if (performance.now() - cursorMoved.current > 500) setFocusLine(line)
+    if (modeRef.current === 'split') proof.current?.showLine(line)
   }
 
   const followProof = (line: number) => setFocusLine(line)

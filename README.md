@@ -6,7 +6,7 @@
 
 ---
 
-typeSirkel opens a folder of `.md` files and gets out of the way. You write on the left, read on the right, and a small eye walks down the outline as you move through your headings. Files stay plain markdown on your own disk. There are no accounts and nothing to migrate away from later.
+typeSirkel opens a folder of `.md` files and gets out of the way. You write on the left, read on the right, and a small marker walks down the outline as you move through your headings. Files stay plain markdown on your own disk. There are no accounts and nothing to migrate away from later.
 
 It runs in the browser and as a desktop app for macOS and Windows. Both are the same code; only the way files are opened and saved changes.
 
@@ -16,7 +16,7 @@ It runs in the browser and as a desktop app for macOS and Windows. Both are the 
 - Writes with a proper editor: syntax highlighting, fenced code in many languages, search, multiple cursors
 - Shows a live preview side by side, or either one on its own
 - Saves on its own a moment after you stop typing
-- Follows you through the document with the lookout, an outline with an eye that travels to the heading you are in
+- Follows you through the document with the lookout, an outline with a marker that travels to the heading you are in
 - Helps you write with the AI you already pay for, through your own key
 - Lets you share a link and edit the same draft with other people, live and end-to-end encrypted
 - Lets Claude, Cursor or any MCP client work in your folder, and shows their edits as they land
@@ -93,7 +93,7 @@ The code is small and named after things on a writing desk.
 | `src/Sheet.tsx`, `src/nib.ts` | The editor, built on CodeMirror 6 |
 | `src/Proof.tsx` | The rendered preview, like a printer's proof |
 | `src/Shelf.tsx` | The file list on the left |
-| `src/Lookout.tsx` | The outline on the right and the eye on its trail |
+| `src/Lookout.tsx` | The outline in the sidebar and the marker on its trail |
 | `src/ink.ts` | Markdown to HTML, headings and word counts |
 | `src/press.ts` | Exports |
 | `src/drawer/` | Where files live: browser folders, single files, the desktop filesystem, or scratch |

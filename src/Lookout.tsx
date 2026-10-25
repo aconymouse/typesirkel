@@ -1,6 +1,7 @@
 import './lookout.css'
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import type { Heading } from './ink'
+import { markPath } from './mark'
 
 type Props = {
   headings: Heading[]
@@ -31,8 +32,8 @@ export function Lookout({ headings, active, onPick, bare = false }: Props) {
   const list = useRef<HTMLOListElement>(null)
   const road = useRef<SVGPathElement>(null)
   const walked = useRef<SVGPathElement>(null)
-  const eye = useRef<SVGGElement>(null)
-  const pupil = useRef<SVGCircleElement>(null)
+  const marker = useRef<SVGGElement>(null)
+  const tile = useRef<SVGGElement>(null)
   const [stops, setStops] = useState<Stop[]>([])
   const [marks, setMarks] = useState<number[]>([])
   const [size, setSize] = useState({ width: 0, height: 0 })
@@ -58,7 +59,7 @@ export function Lookout({ headings, active, onPick, bare = false }: Props) {
   const d = trailOf(stops)
 
   // Lengths along the trail where each stop sits. Measured on the real path,
-  // so the eye lands exactly on the dots no matter how the trail bends.
+  // so the marker lands exactly on the dots no matter how the trail bends.
   useLayoutEffect(() => {
     const path = road.current
     if (!path || stops.length === 0) return setMarks([])
@@ -73,14 +74,15 @@ export function Lookout({ headings, active, onPick, bare = false }: Props) {
     setMarks(out)
   }, [stops])
 
-  const place = (length: number, heading: number) => {
+  // The tile leans into the direction it travels and straightens when it stops.
+  const place = (length: number, lean: number) => {
     const path = road.current
-    if (!path || !eye.current) return
+    if (!path || !marker.current) return
     const total = path.getTotalLength()
     const point = path.getPointAtLength(Math.min(length, total))
-    eye.current.setAttribute('transform', `translate(${point.x} ${point.y})`)
+    marker.current.setAttribute('transform', `translate(${point.x} ${point.y})`)
     walked.current?.setAttribute('stroke-dasharray', `${length} ${total + 1}`)
-    pupil.current?.setAttribute('cy', String(heading))
+    tile.current?.setAttribute('transform', `rotate(${lean})`)
   }
 
   useEffect(() => {
@@ -89,7 +91,7 @@ export function Lookout({ headings, active, onPick, bare = false }: Props) {
     const from = at.current
     if (Math.abs(target - from) < 0.5) return place(target, 0)
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    const look = target > from ? 1.4 : -1.4
+    const lean = target > from ? 8 : -8
     const span = reduced ? 0 : Math.min(620, 260 + Math.abs(target - from) * 1.2)
     const start = performance.now()
     cancelAnimationFrame(motion.current)
@@ -97,7 +99,7 @@ export function Lookout({ headings, active, onPick, bare = false }: Props) {
       const t = span ? Math.min(1, (now - start) / span) : 1
       const length = from + (target - from) * ease(t)
       at.current = length
-      place(length, t < 1 ? look : 0)
+      place(length, t < 1 ? lean * Math.sin(Math.PI * t) : 0)
       if (t < 1) motion.current = requestAnimationFrame(tick)
       else blink()
     }
@@ -106,7 +108,7 @@ export function Lookout({ headings, active, onPick, bare = false }: Props) {
   }, [active, marks])
 
   const blink = () => {
-    const el = eye.current?.firstElementChild
+    const el = tile.current?.firstElementChild
     if (!el) return
     el.classList.remove('blink')
     void (el as SVGElement).getBoundingClientRect()
@@ -132,10 +134,12 @@ export function Lookout({ headings, active, onPick, bare = false }: Props) {
           {headings.map((heading, i) =>
             stops[i] ? <circle key={heading.id} cx={stops[i].x} cy={stops[i].y} r={2.6} className={i <= active ? 'stop passed' : 'stop'} /> : null,
           )}
-          <g ref={eye} className="eye" transform={stops[0] ? `translate(${stops[0].x} ${stops[0].y})` : undefined}>
-            <g className="eye-lid">
-              <path d="M -9 0 Q 0 -8.5 9 0 Q 0 8.5 -9 0 Z" />
-              <circle ref={pupil} cx={0} cy={0} r={2.9} />
+          <g ref={marker} className="marker" transform={stops[0] ? `translate(${stops[0].x} ${stops[0].y})` : undefined}>
+            <g ref={tile}>
+              <g className="marker-tile">
+                <rect x={-7.5} y={-7.5} width={15} height={15} rx={3.4} />
+                <path d={markPath} transform="translate(-7.5 -7.5) scale(0.0293)" />
+              </g>
             </g>
           </g>
         </svg>
