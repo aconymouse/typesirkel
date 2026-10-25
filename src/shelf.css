@@ -181,12 +181,52 @@
   white-space: nowrap;
 }
 
-.shelf-folder svg:first-child {
+.folder-icon {
   flex: none;
   fill: none;
-  stroke: var(--muted);
+  stroke: currentColor;
   stroke-width: 1.3;
   stroke-linejoin: round;
+}
+
+.shelf-folder .folder-icon,
+.shelf-menu .folder-icon {
+  color: var(--muted);
+}
+
+.shelf-subfolder {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.shelf-subfolder span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.shelf-open-folder {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.shelf-menu button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.shelf-menu button span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.shelf-menu button.here .folder-icon {
+  color: var(--accent);
 }
 
 .shelf-folder:hover,
@@ -223,6 +263,7 @@
 .shelf-menu button {
   border-radius: var(--radius-small);
 }
+
 
 /* A phone gets a slim header with the logo and a way into the sidebar. */
 .top-bar {

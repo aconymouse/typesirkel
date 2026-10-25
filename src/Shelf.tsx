@@ -81,6 +81,14 @@ function Fold({ open }: { open: boolean }) {
   )
 }
 
+function FolderIcon() {
+  return (
+    <svg className="folder-icon" width="14" height="14" viewBox="0 0 16 16" aria-hidden="true">
+      <path d="M1.75 4.25c0-.69.56-1.25 1.25-1.25h3.1l1.5 1.6h5.4c.69 0 1.25.56 1.25 1.25v6.4c0 .69-.56 1.25-1.25 1.25H3c-.69 0-1.25-.56-1.25-1.25z" />
+    </svg>
+  )
+}
+
 function Caret() {
   return (
     <svg className="shelf-caret" width="10" height="10" viewBox="0 0 10 10" aria-hidden="true">
@@ -251,6 +259,7 @@ export function Shelf({ drawer, leaves, current, canFolder, outline, recents, on
         <div className="shelf-pane-head">
           <button type="button" className="shelf-toggle" onClick={toggleFiles} aria-expanded={filesOpen}>
             <Fold open={filesOpen} />
+            <FolderIcon />
             <span>{inFolder ? 'Files' : 'Scratch'}</span>
           </button>
           {writable ? (
@@ -270,7 +279,12 @@ export function Shelf({ drawer, leaves, current, canFolder, outline, recents, on
             ) : null}
             {groupByDir(leaves).map(([dir, group]) => (
               <section key={dir || '.'}>
-                {dir ? <p className="shelf-dir">{dir}</p> : null}
+                {dir ? (
+                  <p className="shelf-dir shelf-subfolder">
+                    <FolderIcon />
+                    <span>{dir}</span>
+                  </p>
+                ) : null}
                 <ul>
                   {group.map((leaf) => (
                     <li key={leaf.path}>
@@ -336,15 +350,14 @@ export function Shelf({ drawer, leaves, current, canFolder, outline, recents, on
       <div className="shelf-foot" ref={foot}>
         {inFolder ? (
           <button type="button" className="shelf-folder" onClick={() => setMenu((m) => !m)} aria-expanded={menu} aria-haspopup="menu" title={drawer.label}>
-            <svg width="15" height="15" viewBox="0 0 16 16" aria-hidden="true">
-              <path d="M1.75 4.25c0-.69.56-1.25 1.25-1.25h3.1l1.5 1.6h5.4c.69 0 1.25.56 1.25 1.25v6.4c0 .69-.56 1.25-1.25 1.25H3c-.69 0-1.25-.56-1.25-1.25z" />
-            </svg>
+            <FolderIcon />
             <span>{drawer.label}</span>
             <Caret />
           </button>
         ) : (
           <div className="shelf-opener">
-            <button type="button" className="line-button" onClick={onOpen}>
+            <button type="button" className="line-button shelf-open-folder" onClick={onOpen}>
+              {canFolder ? <FolderIcon /> : null}
               {opener}
             </button>
             {recents.length ? (
@@ -368,7 +381,8 @@ export function Shelf({ drawer, leaves, current, canFolder, outline, recents, on
                   onReopen(r)
                 }}
               >
-                {r.label}
+                <FolderIcon />
+                <span>{r.label}</span>
               </button>
             ))}
             {recents.length ? <hr /> : null}
@@ -381,7 +395,8 @@ export function Shelf({ drawer, leaves, current, canFolder, outline, recents, on
                   onScratch()
                 }}
               >
-                Scratch
+                <FolderIcon />
+                <span>Scratch</span>
               </button>
             ) : null}
             <button
@@ -392,7 +407,8 @@ export function Shelf({ drawer, leaves, current, canFolder, outline, recents, on
                 onOpen()
               }}
             >
-              {opener}…
+              <FolderIcon />
+              <span>{opener}…</span>
             </button>
           </div>
         ) : null}
