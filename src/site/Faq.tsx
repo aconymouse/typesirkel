@@ -1,7 +1,8 @@
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import type { Lang } from '../lang'
 import { contentFor } from './content'
 import { plainText, prose } from './prose'
+import { useTheater } from './theater'
 
 // Each question is a level two heading with a fixed id, `## Is it free? {#free}`;
 // everything under it is the answer.
@@ -36,9 +37,18 @@ const openFromHash = () => {
   target.scrollIntoView({ block: 'start' })
 }
 
+// The questions read like the lyric sheet above them. An answer writes itself
+// out each time it is opened.
+const cast = (root: HTMLElement) => ({
+  beats: Array.from(root.querySelectorAll<HTMLElement>(':scope > .kicker, :scope > .faq-title, summary h3')),
+  quiet: Array.from(root.querySelectorAll<HTMLElement>('details > .site-prose')),
+})
+
 export function FaqSection({ lang }: { lang: Lang }) {
   const page = contentFor('faq', lang)
   const entries = useMemo(() => faqEntries(lang).map((e) => ({ ...e, html: prose(e.answer).html })), [lang])
+  const stage = useRef<HTMLElement>(null)
+  useTheater(stage, lang, cast)
 
   useEffect(() => {
     requestAnimationFrame(openFromHash)
@@ -47,7 +57,7 @@ export function FaqSection({ lang }: { lang: Lang }) {
   }, [])
 
   return (
-    <section className="faq" id="faq" aria-labelledby="faq-title">
+    <section className="faq" id="faq" aria-labelledby="faq-title" ref={stage}>
       <p className="kicker">{page.kicker}</p>
       <h2 id="faq-title" className="faq-title">
         {page.title}

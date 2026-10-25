@@ -34,5 +34,8 @@ Sim, pelo navegador. No celular você escreve no Scratch ou abre um único arqui
 ## Como posso ajudar? {#help}
 Dê uma estrela no projeto no [GitHub](https://github.com/aconymouse/typesirkel), reporte bugs, sugira um prompt, traduza uma página ou mande um pull request. O [guia de contribuição](https://github.com/aconymouse/typesirkel/blob/main/CONTRIBUTING.md) explica como.
 
+## Posso fazer uma doação? {#donate}
+Pode, e obrigado. Você pode contribuir pelo Saweria, na Indonésia, ou pelo PayPal, de qualquer lugar. Está tudo na [página de apoio](/pt-br/support/).
+
 ## Quem faz o typeSirkel? {#maker}
 [Hafidz Nc](https://aconymous.com), também conhecido como Aco. Você pode ler o porquê na [página sobre](#top), ou dar um oi em [aconymous.com/chat](https://aconymous.com/chat).

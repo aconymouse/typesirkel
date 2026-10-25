@@ -2,10 +2,9 @@ import type { Lang } from '../lang'
 
 export type Copy = {
   meta: { title: string; description: string }
-  nav: { openEditor: string; star: string; toLight: string; toDark: string; language: string; docs: string; faq: string; about: string; contents: string; maker: string; support: string }
+  nav: { openEditor: string; star: string; toLight: string; toDark: string; language: string; docs: string; faq: string; about: string; contents: string; maker: string; support: string; menu: string; close: string; light: string; dark: string }
   give: { saweria: string; paypal: string }
-  hero: { kicker: string; line1: string; line2: string; lead: string; mac: string; windows: string; browser: string; fine: string }
-  demoNote: string
+  hero: { line1: string; line2: string; lead: string; mac: string; windows: string; browser: string; fine: string }
   lookout: { kicker: string; title: string; body: string; hint: string; stops: string[] }
   features: { kicker: string; title: string; notes: { title: string; body: string }[] }
   agents: { kicker: string; title: string; p1: string; p2: string; folder: string; label: string; created: string; updated: string; done: string; prompts: string[] }
@@ -17,19 +16,17 @@ const en: Copy = {
     title: 'typeSirkel · A quiet markdown editor for Mac, Windows and the browser',
     description: 'typeSirkel is a free, open source markdown editor. Plain files in your own folders, a live preview, and an outline that follows you through your headings.',
   },
-  nav: { openEditor: 'Open editor', star: 'Star', toLight: 'Switch to light theme', toDark: 'Switch to dark theme', language: 'Language', docs: 'Docs', faq: 'FAQ', about: 'About', contents: 'On this page', maker: 'Maker of typeSirkel', support: 'Support' },
+  nav: { openEditor: 'Open editor', star: 'Star', toLight: 'Switch to light theme', toDark: 'Switch to dark theme', language: 'Language', docs: 'Docs', faq: 'FAQ', about: 'About', contents: 'On this page', maker: 'Maker of typeSirkel', support: 'Support', menu: 'Menu', close: 'Close menu', light: 'Light', dark: 'Dark' },
   give: { saweria: 'QRIS and e-wallets, for Indonesia', paypal: 'Cards or PayPal, from anywhere' },
   hero: {
-    kicker: 'Free and open source markdown editor',
-    line1: 'Write in folders.',
-    line2: 'Read as you go.',
-    lead: 'typeSirkel keeps your notes as plain markdown files on your own disk, shows a live preview beside you, and lets a small marker follow you through your headings.',
+    line1: 'Every work in the world',
+    line2: 'starts as writing.',
+    lead: 'Pour everything into your writing. typeSirkel is easy to use, and it connects to your own AI agents.',
     mac: 'Download for Mac',
     windows: 'Download for Windows',
     browser: 'Try it in your browser →',
     fine: 'macOS 11 or newer, Windows 10 or newer, or any Chromium browser. MIT licensed.',
   },
-  demoNote: 'This is the real editor. Type in it, switch notes, click a heading.',
   lookout: {
     kicker: 'The lookout',
     title: 'Always know where you are in a long draft.',
@@ -64,7 +61,7 @@ const en: Copy = {
   source: {
     kicker: 'Open source',
     title: 'Read the code. Change it. Make it yours.',
-    body: 'typeSirkel is MIT licensed and small enough to understand in an afternoon. The editor is CodeMirror, the desktop shell is Tauri, and everything else is a few calm React files named after things on a writing desk.',
+    body: 'typeSirkel is MIT licensed and small enough to understand in an afternoon. The editor is CodeMirror, the desktop shell is Tauri, and everything else is a handful of small React files named after things on a writing desk, like Desk, Sheet and Shelf.',
     button: 'View on GitHub',
   },
 }
@@ -74,19 +71,17 @@ const id: Copy = {
     title: 'typeSirkel · Editor markdown yang tenang untuk Mac, Windows, dan browser',
     description: 'typeSirkel adalah editor markdown gratis dan open source. File biasa di folder sendiri, pratinjau langsung, dan outline yang mengikuti kamu di setiap heading.',
   },
-  nav: { openEditor: 'Buka editor', star: 'Star', toLight: 'Ganti ke tema terang', toDark: 'Ganti ke tema gelap', language: 'Bahasa', docs: 'Dokumentasi', faq: 'FAQ', about: 'Tentang', contents: 'Di halaman ini', maker: 'Pembuat typeSirkel', support: 'Dukung' },
+  nav: { openEditor: 'Buka editor', star: 'Star', toLight: 'Ganti ke tema terang', toDark: 'Ganti ke tema gelap', language: 'Bahasa', docs: 'Dokumentasi', faq: 'FAQ', about: 'Tentang', contents: 'Di halaman ini', maker: 'Pembuat typeSirkel', support: 'Dukung', menu: 'Menu', close: 'Tutup menu', light: 'Terang', dark: 'Gelap' },
   give: { saweria: 'QRIS dan e-wallet, dari Indonesia', paypal: 'Kartu atau PayPal, dari mana saja' },
   hero: {
-    kicker: 'Editor markdown gratis dan open source',
-    line1: 'Menulis di folder.',
-    line2: 'Membaca sambil jalan.',
-    lead: 'typeSirkel menyimpan catatanmu sebagai file markdown biasa di disk sendiri, menampilkan pratinjau langsung di sebelahnya, dan punya penanda kecil yang mengikutimu di setiap heading.',
+    line1: 'Semua karya di dunia,',
+    line2: 'berawal dari tulisan.',
+    lead: 'Tumpahkan semua yang ada di kepalamu ke dalam tulisan. typeSirkel gampang dipakai, dan bisa langsung tersambung ke AI agent milikmu.',
     mac: 'Unduh untuk Mac',
     windows: 'Unduh untuk Windows',
     browser: 'Coba langsung di browser →',
     fine: 'macOS 11 ke atas, Windows 10 ke atas, atau browser berbasis Chromium. Lisensi MIT.',
   },
-  demoNote: 'Ini editor aslinya. Coba ketik, pindah catatan, atau klik heading.',
   lookout: {
     kicker: 'Penunjuk arah',
     title: 'Selalu tahu posisimu di draf yang panjang.',
@@ -121,7 +116,7 @@ const id: Copy = {
   source: {
     kicker: 'Open source',
     title: 'Baca kodenya. Ubah. Jadikan milikmu.',
-    body: 'typeSirkel berlisensi MIT dan cukup kecil untuk dipahami dalam satu sore. Editornya CodeMirror, aplikasi desktopnya Tauri, sisanya beberapa file React tenang yang dinamai seperti benda di meja tulis.',
+    body: 'typeSirkel berlisensi MIT dan cukup kecil buat dipahami dalam satu sore. Editornya pakai CodeMirror, aplikasi desktopnya Tauri, sisanya cuma segelintir file React kecil yang namanya diambil dari barang-barang di meja kerja, kayak Desk, Sheet, dan Shelf.',
     button: 'Lihat di GitHub',
   },
 }
@@ -131,19 +126,17 @@ const ptBR: Copy = {
     title: 'typeSirkel · Um editor de markdown tranquilo para Mac, Windows e navegador',
     description: 'typeSirkel é um editor de markdown gratuito e de código aberto. Arquivos simples nas suas pastas, pré-visualização ao vivo e um sumário que acompanha você pelos títulos.',
   },
-  nav: { openEditor: 'Abrir editor', star: 'Star', toLight: 'Mudar para tema claro', toDark: 'Mudar para tema escuro', language: 'Idioma', docs: 'Documentação', faq: 'FAQ', about: 'Sobre', contents: 'Nesta página', maker: 'Criador do typeSirkel', support: 'Apoie' },
+  nav: { openEditor: 'Abrir editor', star: 'Star', toLight: 'Mudar para tema claro', toDark: 'Mudar para tema escuro', language: 'Idioma', docs: 'Documentação', faq: 'FAQ', about: 'Sobre', contents: 'Nesta página', maker: 'Criador do typeSirkel', support: 'Apoie', menu: 'Menu', close: 'Fechar menu', light: 'Claro', dark: 'Escuro' },
   give: { saweria: 'QRIS e carteiras digitais, na Indonésia', paypal: 'Cartão ou PayPal, de qualquer lugar' },
   hero: {
-    kicker: 'Editor de markdown gratuito e de código aberto',
-    line1: 'Escreva em pastas.',
-    line2: 'Leia enquanto escreve.',
-    lead: 'O typeSirkel guarda suas notas como arquivos markdown simples no seu próprio disco, mostra uma pré-visualização ao lado e tem um pequeno marcador que acompanha você pelos títulos.',
+    line1: 'Toda obra no mundo',
+    line2: 'começa pela escrita.',
+    lead: 'Coloque tudo para fora na escrita. O typeSirkel é fácil de usar e se conecta aos seus próprios agentes de IA.',
     mac: 'Baixar para Mac',
     windows: 'Baixar para Windows',
     browser: 'Experimente no navegador →',
     fine: 'macOS 11 ou mais recente, Windows 10 ou mais recente, ou qualquer navegador Chromium. Licença MIT.',
   },
-  demoNote: 'Este é o editor de verdade. Digite, troque de nota, clique em um título.',
   lookout: {
     kicker: 'O mirante',
     title: 'Saiba sempre onde você está num texto longo.',
@@ -178,7 +171,7 @@ const ptBR: Copy = {
   source: {
     kicker: 'Código aberto',
     title: 'Leia o código. Mude. Faça do seu jeito.',
-    body: 'O typeSirkel tem licença MIT e é pequeno o bastante para entender numa tarde. O editor é CodeMirror, o app de desktop é Tauri, e o resto são alguns arquivos React tranquilos com nomes de objetos de uma escrivaninha.',
+    body: 'O typeSirkel tem licença MIT e é pequeno o bastante para entender numa tarde. O editor é CodeMirror, o app de desktop é Tauri, e o resto são alguns arquivos React pequenos com nomes de coisas de uma escrivaninha, como Desk, Sheet e Shelf.',
     button: 'Ver no GitHub',
   },
 }
@@ -188,19 +181,17 @@ const ko: Copy = {
     title: 'typeSirkel · Mac, Windows, 브라우저를 위한 조용한 마크다운 에디터',
     description: 'typeSirkel은 무료 오픈소스 마크다운 에디터입니다. 내 폴더 속 평범한 파일, 실시간 미리보기, 그리고 제목을 따라 움직이는 목차.',
   },
-  nav: { openEditor: '에디터 열기', star: 'Star', toLight: '라이트 테마로 전환', toDark: '다크 테마로 전환', language: '언어', docs: '문서', faq: 'FAQ', about: '소개', contents: '이 페이지에서', maker: 'typeSirkel 제작자', support: '후원' },
+  nav: { openEditor: '에디터 열기', star: 'Star', toLight: '라이트 테마로 전환', toDark: '다크 테마로 전환', language: '언어', docs: '문서', faq: 'FAQ', about: '소개', contents: '이 페이지에서', maker: 'typeSirkel 제작자', support: '후원', menu: '메뉴', close: '메뉴 닫기', light: '라이트', dark: '다크' },
   give: { saweria: 'QRIS·전자지갑, 인도네시아에서', paypal: '카드 또는 PayPal, 어디서나' },
   hero: {
-    kicker: '무료 오픈소스 마크다운 에디터',
-    line1: '폴더에서 쓰고,',
-    line2: '쓰면서 읽으세요.',
-    lead: 'typeSirkel은 노트를 내 디스크에 평범한 마크다운 파일로 저장하고, 옆에 실시간 미리보기를 보여 주며, 작은 표시가 제목을 따라 함께 움직입니다.',
+    line1: '세상의 모든 작품은',
+    line2: '글에서 시작됩니다.',
+    lead: '머릿속의 모든 것을 글로 쏟아내세요. typeSirkel은 쓰기 쉽고, 내가 쓰는 AI 에이전트와 바로 연결됩니다.',
     mac: 'Mac용 다운로드',
     windows: 'Windows용 다운로드',
     browser: '브라우저에서 바로 써 보기 →',
     fine: 'macOS 11 이상, Windows 10 이상, 또는 Chromium 기반 브라우저. MIT 라이선스.',
   },
-  demoNote: '실제 에디터입니다. 직접 입력하고, 노트를 바꾸고, 제목을 눌러 보세요.',
   lookout: {
     kicker: '전망대',
     title: '긴 글에서도 지금 어디쯤인지 늘 알 수 있어요.',
@@ -235,7 +226,7 @@ const ko: Copy = {
   source: {
     kicker: '오픈소스',
     title: '코드를 읽고, 바꾸고, 내 것으로.',
-    body: 'typeSirkel은 MIT 라이선스이며 오후 한나절이면 이해할 만큼 작습니다. 에디터는 CodeMirror, 데스크톱 셸은 Tauri, 나머지는 책상 위 물건 이름을 딴 차분한 React 파일 몇 개입니다.',
+    body: 'typeSirkel은 MIT 라이선스이며 오후 한나절이면 이해할 만큼 작습니다. 에디터는 CodeMirror, 데스크톱 셸은 Tauri, 나머지는 Desk, Sheet, Shelf처럼 책상 위 물건 이름을 딴 작은 React 파일 몇 개뿐입니다.',
     button: 'GitHub에서 보기',
   },
 }
@@ -245,19 +236,17 @@ const th: Copy = {
     title: 'typeSirkel · โปรแกรมเขียนมาร์กดาวน์ที่เงียบสงบ สำหรับ Mac, Windows และเบราว์เซอร์',
     description: 'typeSirkel คือโปรแกรมเขียนมาร์กดาวน์ฟรีและโอเพนซอร์ส ไฟล์ธรรมดาในโฟลเดอร์ของคุณเอง พรีวิวสด และสารบัญที่เดินตามหัวข้อไปกับคุณ',
   },
-  nav: { openEditor: 'เปิดโปรแกรม', star: 'Star', toLight: 'เปลี่ยนเป็นธีมสว่าง', toDark: 'เปลี่ยนเป็นธีมมืด', language: 'ภาษา', docs: 'เอกสาร', faq: 'คำถามที่พบบ่อย', about: 'เกี่ยวกับ', contents: 'ในหน้านี้', maker: 'ผู้สร้าง typeSirkel', support: 'สนับสนุน' },
+  nav: { openEditor: 'เปิดโปรแกรม', star: 'Star', toLight: 'เปลี่ยนเป็นธีมสว่าง', toDark: 'เปลี่ยนเป็นธีมมืด', language: 'ภาษา', docs: 'เอกสาร', faq: 'คำถามที่พบบ่อย', about: 'เกี่ยวกับ', contents: 'ในหน้านี้', maker: 'ผู้สร้าง typeSirkel', support: 'สนับสนุน', menu: 'เมนู', close: 'ปิดเมนู', light: 'สว่าง', dark: 'มืด' },
   give: { saweria: 'QRIS และวอลเล็ต สำหรับอินโดนีเซีย', paypal: 'บัตรหรือ PayPal จากทุกที่' },
   hero: {
-    kicker: 'โปรแกรมเขียนมาร์กดาวน์ ฟรีและโอเพนซอร์ส',
-    line1: 'เขียนในโฟลเดอร์',
-    line2: 'อ่านไปพร้อมกัน',
-    lead: 'typeSirkel เก็บโน้ตของคุณเป็นไฟล์มาร์กดาวน์ธรรมดาในเครื่องของคุณเอง แสดงพรีวิวสดอยู่ข้าง ๆ และมีเครื่องหมายเล็ก ๆ ที่เดินตามหัวข้อไปกับคุณ',
+    line1: 'ทุกผลงานบนโลก',
+    line2: 'เริ่มต้นจากการเขียน',
+    lead: 'เทความคิดทั้งหมดลงในงานเขียนของคุณ typeSirkel ใช้ง่าย และเชื่อมต่อกับ AI agent ของคุณเองได้ทันที',
     mac: 'ดาวน์โหลดสำหรับ Mac',
     windows: 'ดาวน์โหลดสำหรับ Windows',
     browser: 'ลองใช้ในเบราว์เซอร์ →',
     fine: 'macOS 11 ขึ้นไป, Windows 10 ขึ้นไป หรือเบราว์เซอร์ที่ใช้ Chromium สัญญาอนุญาต MIT',
   },
-  demoNote: 'นี่คือโปรแกรมจริง ลองพิมพ์ สลับโน้ต หรือคลิกหัวข้อดู',
   lookout: {
     kicker: 'จุดชมวิว',
     title: 'รู้เสมอว่ากำลังอยู่ตรงไหนของงานเขียนยาว ๆ',
@@ -292,7 +281,7 @@ const th: Copy = {
   source: {
     kicker: 'โอเพนซอร์ส',
     title: 'อ่านโค้ด แก้ไข แล้วทำให้เป็นของคุณ',
-    body: 'typeSirkel ใช้สัญญาอนุญาต MIT และเล็กพอจะเข้าใจได้ในบ่ายเดียว ตัวเขียนคือ CodeMirror แอปเดสก์ท็อปคือ Tauri ที่เหลือคือไฟล์ React ไม่กี่ไฟล์ที่ตั้งชื่อตามของบนโต๊ะเขียนหนังสือ',
+    body: 'typeSirkel ใช้สัญญาอนุญาต MIT และเล็กพอจะเข้าใจได้ในบ่ายเดียว ตัวเขียนคือ CodeMirror แอปเดสก์ท็อปคือ Tauri ที่เหลือคือไฟล์ React เล็ก ๆ ไม่กี่ไฟล์ ตั้งชื่อตามของบนโต๊ะทำงาน อย่าง Desk, Sheet และ Shelf',
     button: 'ดูบน GitHub',
   },
 }
@@ -302,19 +291,17 @@ const zh: Copy = {
     title: 'typeSirkel · 适用于 Mac、Windows 和浏览器的安静 Markdown 编辑器',
     description: 'typeSirkel 是一款免费开源的 Markdown 编辑器。笔记就是你自己文件夹里的普通文件，带实时预览，还有一个跟着你在标题间移动的大纲。',
   },
-  nav: { openEditor: '打开编辑器', star: 'Star', toLight: '切换到浅色主题', toDark: '切换到深色主题', language: '语言', docs: '文档', faq: '常见问题', about: '关于', contents: '本页内容', maker: 'typeSirkel 作者', support: '支持' },
+  nav: { openEditor: '打开编辑器', star: 'Star', toLight: '切换到浅色主题', toDark: '切换到深色主题', language: '语言', docs: '文档', faq: '常见问题', about: '关于', contents: '本页内容', maker: 'typeSirkel 作者', support: '支持', menu: '菜单', close: '关闭菜单', light: '浅色', dark: '深色' },
   give: { saweria: 'QRIS 和电子钱包，适用于印度尼西亚', paypal: '银行卡或 PayPal，全球可用' },
   hero: {
-    kicker: '免费开源的 Markdown 编辑器',
-    line1: '在文件夹里写作。',
-    line2: '边写边读。',
-    lead: 'typeSirkel 把你的笔记保存为自己硬盘上的普通 Markdown 文件，在旁边显示实时预览，还有一个小标记陪你穿过每一个标题。',
+    line1: '世界上的每一部作品，',
+    line2: '都始于文字。',
+    lead: '把脑海里的一切都倾注到文字里。typeSirkel 简单好用，还能直接连接你自己的 AI 智能体。',
     mac: '下载 Mac 版',
     windows: '下载 Windows 版',
     browser: '在浏览器中试用 →',
     fine: '支持 macOS 11 及以上、Windows 10 及以上，或任意 Chromium 浏览器。MIT 许可。',
   },
-  demoNote: '这就是真正的编辑器。试着输入、切换笔记，或点击一个标题。',
   lookout: {
     kicker: '瞭望',
     title: '在长稿里，永远知道自己在哪儿。',
@@ -349,7 +336,7 @@ const zh: Copy = {
   source: {
     kicker: '开源',
     title: '读代码，改代码，让它成为你的。',
-    body: 'typeSirkel 采用 MIT 许可，小到一个下午就能读懂。编辑器是 CodeMirror，桌面外壳是 Tauri，其余是几个安静的 React 文件，名字都取自书桌上的物件。',
+    body: 'typeSirkel 采用 MIT 许可，小到一个下午就能读懂。编辑器是 CodeMirror，桌面外壳是 Tauri，其余只是几个小小的 React 文件，名字取自书桌上的东西，比如 Desk、Sheet 和 Shelf。',
     button: '在 GitHub 上查看',
   },
 }

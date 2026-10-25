@@ -22,7 +22,7 @@
   align-items: center;
   align-self: start;
   height: 100svh;
-  margin-top: -128px;
+  margin-top: -164px;
   pointer-events: none;
 }
 
@@ -274,6 +274,25 @@
   transition-delay: calc(var(--i) * 22ms);
 }
 
+.theater details > .site-prose .w {
+  opacity: 0;
+}
+
+.theater details[open]:has(summary .is-shown) > .site-prose .w {
+  animation: word-in 0.3s ease both;
+  animation-delay: calc(var(--i) * 14ms);
+}
+
+@keyframes word-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
 .faq-list details {
   border-bottom: 1px solid var(--line);
 }
@@ -372,6 +391,8 @@
 
 .support-door {
   position: relative;
+  overflow: hidden;
+  isolation: isolate;
   display: flex;
   flex-direction: column;
   gap: 6px;
@@ -397,7 +418,7 @@
   color: var(--muted);
 }
 
-.support-door svg {
+.support-door .support-arrow {
   position: absolute;
   top: 22px;
   right: 20px;
@@ -406,6 +427,25 @@
   stroke-width: 1.6;
   stroke-linecap: round;
   stroke-linejoin: round;
+}
+
+.support-mark {
+  position: absolute;
+  z-index: -1;
+  top: 50%;
+  right: -34px;
+  height: 118%;
+  width: auto;
+  fill: currentColor;
+  opacity: 0.07;
+  rotate: -14deg;
+  translate: 0 -50%;
+  pointer-events: none;
+}
+
+.support-door.is-paypal .support-mark {
+  right: 22px;
+  height: 128%;
 }
 
 .support-door:hover,
@@ -428,9 +468,10 @@
 
 .docs-toc {
   position: sticky;
-  top: 24px;
+  top: calc(var(--head-h) + 24px);
   align-self: start;
-  max-height: calc(100vh - 48px);
+  max-height: calc(100vh - var(--head-h) - 48px);
+  transition: top 0.32s var(--ease-soft);
   overflow: auto;
 }
 
@@ -489,8 +530,19 @@
   .maker-links {
     grid-area: links;
     align-self: start;
-    flex-wrap: wrap;
+    gap: 6px;
     margin-top: 12px;
+  }
+
+  .maker-links a {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+  }
+
+  .maker-links svg {
+    width: 14px;
+    height: 14px;
   }
 
   .site-main.docs {

@@ -34,5 +34,8 @@ kicker: คำถามที่พบบ่อย
 ## ช่วยโปรเจกต์ได้อย่างไร? {#help}
 กดดาวให้โปรเจกต์บน [GitHub](https://github.com/aconymouse/typesirkel) รายงานบั๊ก เสนอพรอมต์ แปลหน้าเว็บ หรือส่ง pull request ก็ได้ [คู่มือการมีส่วนร่วม](https://github.com/aconymouse/typesirkel/blob/main/CONTRIBUTING.md) อธิบายวิธีไว้แล้ว
 
+## บริจาคได้ไหม? {#donate}
+ได้เลย ขอบคุณมาก คุณสนับสนุนได้ผ่าน Saweria ถ้าอยู่ในอินโดนีเซีย หรือผ่าน PayPal จากที่ไหนก็ได้ ดูรายละเอียดทั้งหมดได้ที่[หน้าสนับสนุน](/th/support/)
+
 ## ใครเป็นคนสร้าง typeSirkel? {#maker}
 [Hafidz Nc](https://aconymous.com) หรือที่หลายคนเรียกว่า Aco คุณอ่านได้ว่าทำไมเขาถึงสร้างมันขึ้นมาใน[หน้าเกี่ยวกับ](#top) หรือแวะมาทักทายได้ที่ [aconymous.com/chat](https://aconymous.com/chat)

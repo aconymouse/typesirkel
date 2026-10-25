@@ -34,5 +34,8 @@ Chrome, Edge, Brave, Arc 같은 Chromium 기반 브라우저에서는 폴더 전
 ## 어떻게 도울 수 있나요? {#help}
 [GitHub](https://github.com/aconymouse/typesirkel)에서 프로젝트에 별을 달아 주거나, 버그를 제보하거나, 프롬프트를 제안하거나, 페이지를 번역하거나, 풀 리퀘스트를 보내 주세요. 자세한 방법은 [기여 가이드](https://github.com/aconymouse/typesirkel/blob/main/CONTRIBUTING.md)에 나와 있어요.
 
+## 후원할 수 있나요? {#donate}
+네, 정말 고맙습니다. 인도네시아에서는 Saweria로, 그 밖의 곳에서는 PayPal로 후원할 수 있어요. 자세한 내용은 [후원 페이지](/ko/support/)에 있습니다.
+
 ## typeSirkel은 누가 만드나요? {#maker}
 Aco라고도 불리는 [Hafidz Nc](https://aconymous.com)가 만들어요. 왜 만들었는지는 [소개 페이지](#top)에서 읽을 수 있고, [aconymous.com/chat](https://aconymous.com/chat)에서 편하게 인사를 건네도 좋아요.

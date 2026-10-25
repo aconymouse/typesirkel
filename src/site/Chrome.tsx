@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { recall, remember } from '../keep'
 import { chooseLang, type Lang, langOf, langs } from '../lang'
 import { copies } from '../landing/copy'
@@ -31,11 +31,9 @@ export const useTheme = () => {
   }, [theme])
 
   const shown = theme === 'system' ? (systemDark ? 'dark' : 'light') : theme
-  const flip = () => {
-    const next = shown === 'dark' ? 'light' : 'dark'
-    setTheme(next === (systemDark ? 'dark' : 'light') ? 'system' : next)
-  }
-  return { shown, flip }
+  const pick = (next: 'light' | 'dark') => setTheme(next === (systemDark ? 'dark' : 'light') ? 'system' : next)
+  const flip = () => pick(shown === 'dark' ? 'light' : 'dark')
+  return { shown, flip, pick }
 }
 
 // Every page keeps its title and description in step with its language, for
@@ -48,51 +46,195 @@ export const useHead = (lang: Lang, title: string, description: string) => {
   }, [lang, title, description])
 }
 
-export function SiteHeader({ lang, page }: { lang: Lang; page: Page }) {
-  const { shown, flip } = useTheme()
-  const t = copies[lang].nav
+// Header and links ride along the top. The link row tucks under the bar while
+// you read down the page and comes back the moment you scroll up, the same way
+// aconymous.com does it. Small wiggles of a trackpad are ignored, the first
+// stretch of the page always shows everything, and people who asked their
+// system for less motion get a header that simply stays.
+const useTuck = () => {
+  useEffect(() => {
+    const root = document.documentElement
+    const still = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const threshold = 8
+    const offset = 120
+    let last = Math.max(0, window.scrollY)
+    let frame = 0
+    const set = (state: 'shown' | 'hidden') => {
+      if (root.dataset.nav !== state) root.dataset.nav = state
+    }
+    const read = () => {
+      frame = 0
+      const y = Math.max(0, window.scrollY)
+      if (still.matches || y < offset) {
+        last = y
+        return set('shown')
+      }
+      if (Math.abs(y - last) < threshold) return
+      set(y > last ? 'hidden' : 'shown')
+      last = y
+    }
+    const scrolled = () => {
+      if (!frame) frame = requestAnimationFrame(read)
+    }
+    const focused = (event: FocusEvent) => {
+      if ((event.target as Element | null)?.closest('.site-head')) set('shown')
+    }
+    set('shown')
+    window.addEventListener('scroll', scrolled, { passive: true })
+    document.addEventListener('focusin', focused)
+    return () => {
+      cancelAnimationFrame(frame)
+      window.removeEventListener('scroll', scrolled)
+      document.removeEventListener('focusin', focused)
+    }
+  }, [])
+}
 
+const links = (lang: Lang) => {
+  const t = copies[lang].nav
+  return [
+    { page: 'docs' as const, href: pathFor(lang, 'docs'), label: t.docs },
+    { page: 'about' as const, href: pathFor(lang, 'about'), label: t.about },
+    { page: null, href: `${pathFor(lang, 'about')}#faq`, label: t.faq },
+    { page: 'support' as const, href: pathFor(lang, 'support'), label: t.support },
+  ]
+}
+
+function LangPick({ lang, page }: { lang: Lang; page: Page }) {
+  const t = copies[lang].nav
   const switchTo = (next: Lang) => {
     chooseLang(next)
     window.location.assign(pathFor(next, page))
   }
+  return (
+    <label className="lang" data-short={langOf(lang).short}>
+      <span className="sr-only">{t.language}</span>
+      <select value={lang} onChange={(e) => switchTo(e.target.value as Lang)}>
+        {langs.map((l) => (
+          <option key={l.id} value={l.id} lang={l.id}>
+            {l.name}
+          </option>
+        ))}
+      </select>
+      <svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true">
+        <path d="M2.5 4l2.5 2.5L7.5 4" />
+      </svg>
+    </label>
+  )
+}
+
+const Sun = () => (
+  <svg width="18" height="18" viewBox="0 0 16 16" aria-hidden="true">
+    <circle cx="8" cy="8" r="3.2" />
+    <path d="M8 1.5v1.6M8 12.9v1.6M1.5 8h1.6M12.9 8h1.6M3.4 3.4l1.1 1.1M11.5 11.5l1.1 1.1M3.4 12.6l1.1-1.1M11.5 4.5l1.1-1.1" />
+  </svg>
+)
+
+const Moon = () => (
+  <svg width="18" height="18" viewBox="0 0 16 16" aria-hidden="true">
+    <path d="M13.2 9.6A5.6 5.6 0 0 1 6.4 2.8a5.6 5.6 0 1 0 6.8 6.8z" />
+  </svg>
+)
+
+export function SiteHeader({ lang, page }: { lang: Lang; page: Page }) {
+  const { shown, flip, pick } = useTheme()
+  const t = copies[lang].nav
+  const menu = useRef<HTMLDialogElement>(null)
+  const [open, setOpen] = useState(false)
+  useTuck()
+
+  const toggle = () => {
+    const dialog = menu.current
+    if (!dialog) return
+    if (dialog.open) dialog.close()
+    else {
+      dialog.showModal()
+      setOpen(true)
+    }
+  }
+
+  const logo = (
+    <a href={pathFor(lang, 'home')} className="brand" aria-label="typeSirkel">
+      <img src={shown === 'dark' ? '/logo.svg' : '/logo-ink.svg'} alt="typeSirkel" width={101} height={32} />
+    </a>
+  )
 
   return (
-    <header className="top">
-      <a href={pathFor(lang, 'home')} className="brand" aria-label="typeSirkel home">
-        <img src={shown === 'dark' ? '/logo.svg' : '/logo-ink.svg'} alt="typeSirkel" width={101} height={32} />
-      </a>
-      <nav>
-        <label className="lang" data-short={langOf(lang).short}>
-          <span className="sr-only">{t.language}</span>
-          <select value={lang} onChange={(e) => switchTo(e.target.value as Lang)}>
-            {langs.map((l) => (
-              <option key={l.id} value={l.id} lang={l.id}>
-                {l.name}
-              </option>
+    <header className="site-head">
+      <div className="site-bar">
+        <div className="site-bar-in">
+          <div className="site-bar-start">
+            <button type="button" className="theme-flip" onClick={flip} aria-label={shown === 'dark' ? t.toLight : t.toDark} title={shown === 'dark' ? t.toLight : t.toDark}>
+              {shown === 'dark' ? <Sun /> : <Moon />}
+            </button>
+            <LangPick lang={lang} page={page} />
+          </div>
+          {logo}
+          <div className="site-bar-end">
+            <Star label={t.star} />
+            <a href={`/write/?lang=${lang}`} className="top-cta">
+              {t.openEditor}
+            </a>
+            <button type="button" className={`burger${open ? ' is-open' : ''}`} aria-expanded={open} aria-controls="site-menu" onClick={toggle}>
+              <span className="sr-only">{open ? t.close : t.menu}</span>
+              <span className="burger-lines" aria-hidden="true">
+                <span />
+                <span />
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div className="site-subnav-clip">
+        <nav className="site-subnav" aria-label={t.menu}>
+          <ul>
+            {links(lang).map((link) => (
+              <li key={link.href}>
+                <a href={link.href} aria-current={link.page === page ? 'page' : undefined}>
+                  {link.label}
+                </a>
+              </li>
             ))}
-          </select>
-          <svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true">
-            <path d="M2.5 4l2.5 2.5L7.5 4" />
-          </svg>
-        </label>
-        <button type="button" className="theme-flip" onClick={flip} aria-label={shown === 'dark' ? t.toLight : t.toDark} title={shown === 'dark' ? t.toLight : t.toDark}>
-          {shown === 'dark' ? (
-            <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
-              <circle cx="8" cy="8" r="3.2" />
-              <path d="M8 1.5v1.6M8 12.9v1.6M1.5 8h1.6M12.9 8h1.6M3.4 3.4l1.1 1.1M11.5 11.5l1.1 1.1M3.4 12.6l1.1-1.1M11.5 4.5l1.1-1.1" />
-            </svg>
-          ) : (
-            <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
-              <path d="M13.2 9.6A5.6 5.6 0 0 1 6.4 2.8a5.6 5.6 0 1 0 6.8 6.8z" />
-            </svg>
-          )}
-        </button>
-        <Star label={t.star} />
-        <a href={`/write/?lang=${lang}`} className="top-cta">
-          {t.openEditor}
-        </a>
-      </nav>
+          </ul>
+        </nav>
+      </div>
+      <dialog id="site-menu" className="site-menu" ref={menu} aria-label={t.menu} onClose={() => setOpen(false)}>
+        <div className="site-menu-top">
+          {logo}
+          <LangPick lang={lang} page={page} />
+          <button type="button" className="burger is-open" onClick={toggle}>
+            <span className="sr-only">{t.close}</span>
+            <span className="burger-lines" aria-hidden="true">
+              <span />
+              <span />
+            </span>
+          </button>
+        </div>
+        <ol className="site-menu-links">
+          {links(lang).map((link, i) => (
+            <li key={link.href}>
+              <a href={link.href} aria-current={link.page === page ? 'page' : undefined} onClick={() => menu.current?.close()}>
+                <small>{String(i + 1).padStart(2, '0')}</small>
+                {link.label}
+              </a>
+            </li>
+          ))}
+        </ol>
+        <div className="site-menu-theme" role="group" aria-label={t.toDark}>
+          <button type="button" aria-pressed={shown === 'light'} onClick={() => pick('light')}>
+            {t.light}
+          </button>
+          <button type="button" aria-pressed={shown === 'dark'} onClick={() => pick('dark')}>
+            {t.dark}
+          </button>
+        </div>
+        <div className="site-menu-foot">
+          <Star label={t.star} />
+          <a href={`/write/?lang=${lang}`} className="top-cta">
+            {t.openEditor}
+          </a>
+        </div>
+      </dialog>
     </header>
   )
 }

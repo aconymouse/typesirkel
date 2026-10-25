@@ -34,5 +34,8 @@ kicker: 常见问题
 ## 我能怎么帮忙？ {#help}
 在 [GitHub](https://github.com/aconymouse/typesirkel) 上给项目点个 Star，报告 bug，推荐一个提示词，翻译一个页面，或者提交一个 pull request。[贡献指南](https://github.com/aconymouse/typesirkel/blob/main/CONTRIBUTING.md)里写了具体怎么做。
 
+## 可以捐助吗？ {#donate}
+可以，非常感谢。在印度尼西亚可以通过 Saweria，其他地方可以通过 PayPal。详情见[支持页面](/zh/support/)。
+
 ## typeSirkel 是谁做的？ {#maker}
 [Hafidz Nc](https://aconymous.com)，大家也叫他 Aco。你可以在[关于页面](#top)读到他为什么做它，或者到 [aconymous.com/chat](https://aconymous.com/chat) 跟他打个招呼。

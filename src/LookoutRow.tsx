@@ -11,19 +11,9 @@ type Props = {
   label?: string
 }
 
-const rise = 4
-
 // The tall outline laid on its side, for screens too narrow to give it a
-// column. Same trail, same marker; depth now shows as a small dip in the road
-// instead of an indent.
-const trailOf = (stops: Stop[]) =>
-  stops.reduce((d, stop, i) => {
-    if (i === 0) return `M ${stop.x} ${stop.y}`
-    const prev = stops[i - 1]
-    if (prev.y === stop.y) return `${d} L ${stop.x} ${stop.y}`
-    const bend = Math.min(18, (stop.x - prev.x) / 2)
-    return `${d} L ${stop.x - bend} ${prev.y} C ${stop.x - bend / 2} ${prev.y} ${stop.x - bend / 2} ${stop.y} ${stop.x} ${stop.y}`
-  }, '')
+// column. Same marker, on a straight road: at this size depth reads as noise.
+const trailOf = (stops: Stop[]) => stops.reduce((d, stop, i) => (i === 0 ? `M ${stop.x} ${stop.y}` : `${d} L ${stop.x} ${stop.y}`), '')
 
 export function LookoutRow({ headings, active, onPick, label = 'On this page' }: Props) {
   const track = useRef<HTMLDivElement>(null)
@@ -32,14 +22,12 @@ export function LookoutRow({ headings, active, onPick, label = 'On this page' }:
   const [size, setSize] = useState({ width: 0, height: 0 })
   const { d, road, walked, marker, tile } = useWalker(stops, trailOf, active)
 
-  const shallowest = headings.reduce((min, h) => Math.min(min, h.level), 6)
-
   useLayoutEffect(() => {
     const el = list.current
     if (!el) return
     const measure = () => {
       const items = Array.from(el.querySelectorAll<HTMLLIElement>('li'))
-      const next = items.slice(0, headings.length).map((li, i) => ({ x: li.offsetLeft + 4, y: 11 + Math.min(headings[i].level - shallowest, 3) * rise }))
+      const next = items.slice(0, headings.length).map((li) => ({ x: li.offsetLeft + 4, y: 11 }))
       setStops((prev) => (sameStops(prev, next) ? prev : next))
       setSize((prev) => (prev.width === el.scrollWidth && prev.height === el.offsetHeight ? prev : { width: el.scrollWidth, height: el.offsetHeight }))
     }
@@ -47,7 +35,7 @@ export function LookoutRow({ headings, active, onPick, label = 'On this page' }:
     const watch = new ResizeObserver(measure)
     watch.observe(el)
     return () => watch.disconnect()
-  }, [headings, shallowest])
+  }, [headings])
 
   // The heading you are in stays in view, sliding the row along as you read.
   useEffect(() => {
@@ -85,7 +73,7 @@ export function LookoutRow({ headings, active, onPick, label = 'On this page' }:
           <ol ref={list}>
             {headings.map((heading, i) => (
               <li key={heading.id}>
-                <button type="button" onClick={() => onPick(heading)} className={i === active ? 'here' : i < active ? 'behind' : undefined}>
+                <button type="button" onClick={() => onPick(heading)} className={i === active ? 'here' : i < active ? 'behind' : undefined} title={heading.text}>
                   {heading.text}
                 </button>
               </li>

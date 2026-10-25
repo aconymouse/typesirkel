@@ -62,7 +62,6 @@ export function Landing({ lang }: { lang: Lang }) {
 
       <main>
         <section className="hero" aria-labelledby="hero-title">
-          <p className="kicker">{t.hero.kicker}</p>
           <h1 id="hero-title">
             {t.hero.line1}
             <br />
@@ -87,7 +86,6 @@ export function Landing({ lang }: { lang: Lang }) {
           <Suspense fallback={<div className="demo demo-waiting" />}>
             <LiveDemo />
           </Suspense>
-          <p className="fine">{t.demoNote}</p>
         </section>
 
         <Agents copy={t.agents} />

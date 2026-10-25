@@ -34,5 +34,8 @@ Bisa, lewat browser. Di HP kamu menulis di Scratch atau membuka satu file, dan s
 ## Gimana cara membantu? {#help}
 Kasih bintang di [GitHub](https://github.com/aconymouse/typesirkel), laporkan bug, usulkan prompt, terjemahkan halaman, atau kirim pull request. [Panduan kontribusi](https://github.com/aconymouse/typesirkel/blob/main/CONTRIBUTING.md) menjelaskan caranya.
 
+## Boleh donasi? {#donate}
+Boleh banget, makasih. Kamu bisa nyawer lewat Saweria kalau dari Indonesia, atau PayPal dari mana saja. Semuanya ada di [halaman dukung](/id/support/).
+
 ## Siapa yang membuat typeSirkel? {#maker}
 [Hafidz Nc](https://aconymous.com), biasa dipanggil Aco. Alasannya bisa kamu baca di [halaman tentang](#top), atau sapa langsung di [aconymous.com/chat](https://aconymous.com/chat).
