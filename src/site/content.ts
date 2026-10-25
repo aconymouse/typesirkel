@@ -4,7 +4,7 @@ import type { Page } from './pages'
 // Page words live in content/<page>/<lang>.md, so translating a page means
 // adding one file. A page without a translation falls back to English.
 
-export type Content = { title: string; description: string; kicker: string; body: string }
+export type Content = { title: string; description: string; body: string }
 
 const files = import.meta.glob<string>('../../content/*/*.md', { query: '?raw', import: 'default', eager: true })
 
@@ -15,7 +15,7 @@ const parse = (raw: string): Content => {
     const at = line.indexOf(':')
     if (at > 0) meta[line.slice(0, at).trim()] = line.slice(at + 1).trim()
   }
-  return { title: meta.title ?? '', description: meta.description ?? '', kicker: meta.kicker ?? '', body: (match?.[2] ?? raw).trim() }
+  return { title: meta.title ?? '', description: meta.description ?? '', body: (match?.[2] ?? raw).trim() }
 }
 
 const shelf = new Map<string, Content>()
@@ -24,4 +24,4 @@ for (const [path, raw] of Object.entries(files)) {
   if (page && lang) shelf.set(`${page}/${lang}`, parse(raw))
 }
 
-export const contentFor = (page: Exclude<Page, 'home'> | 'faq', lang: Lang): Content => shelf.get(`${page}/${lang}`) ?? shelf.get(`${page}/en`) ?? { title: '', description: '', kicker: '', body: '' }
+export const contentFor = (page: Exclude<Page, 'home'> | 'faq', lang: Lang): Content => shelf.get(`${page}/${lang}`) ?? shelf.get(`${page}/en`) ?? { title: '', description: '', body: '' }

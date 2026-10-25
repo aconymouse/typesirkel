@@ -1,7 +1,6 @@
 ---
 title: Perguntas frequentes sobre o typeSirkel
 description: Respostas sobre o typeSirkel, o editor de markdown gratuito: onde as notas ficam, qual IA usar, como o compartilhamento é privado e como ajudar.
-kicker: FAQ
 ---
 
 ## O typeSirkel é gratuito? {#free}

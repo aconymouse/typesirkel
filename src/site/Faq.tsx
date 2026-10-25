@@ -40,7 +40,7 @@ const openFromHash = () => {
 // The questions read like the lyric sheet above them. An answer writes itself
 // out each time it is opened.
 const cast = (root: HTMLElement) => ({
-  beats: Array.from(root.querySelectorAll<HTMLElement>(':scope > .kicker, :scope > .faq-title, summary h3')),
+  beats: Array.from(root.querySelectorAll<HTMLElement>(':scope > .faq-title, summary h3')),
   quiet: Array.from(root.querySelectorAll<HTMLElement>('details > .site-prose')),
 })
 
@@ -58,7 +58,6 @@ export function FaqSection({ lang }: { lang: Lang }) {
 
   return (
     <section className="faq" id="faq" aria-labelledby="faq-title" ref={stage}>
-      <p className="kicker">{page.kicker}</p>
       <h2 id="faq-title" className="faq-title">
         {page.title}
       </h2>

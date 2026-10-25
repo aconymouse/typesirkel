@@ -1,7 +1,6 @@
 ---
 title: typeSirkel 후원하기
 description: typeSirkel은 무료 오픈 소스입니다. 글쓰기가 조금 편해졌다면 Saweria나 PayPal로 후원해 계속 이어 갈 수 있게 도와주세요.
-kicker: 후원
 ---
 
 typeSirkel은 유료 요금제도 광고도 없는 무료 앱이고, 앞으로도 그럴 겁니다. 다른 일을 하는 틈틈이 만들고 있어요.

@@ -1,7 +1,6 @@
 ---
 title: About typeSirkel
 description: Why typeSirkel exists. Everything we read, watch and use starts as writing. A short note from the person who made it, Hafidz Nc.
-kicker: About
 ---
 
 > I know, reading matters. But nothing gets read until someone writes it.

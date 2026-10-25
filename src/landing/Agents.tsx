@@ -68,7 +68,6 @@ export function Agents({ copy }: { copy: Copy['agents'] }) {
   return (
     <section className="agents" aria-labelledby="agents-title">
       <div className="agents-copy">
-        <p className="kicker">{copy.kicker}</p>
         <h2 id="agents-title">{copy.title}</h2>
         <p>{copy.p1}</p>
         <p>{copy.p2}</p>

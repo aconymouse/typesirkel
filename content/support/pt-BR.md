@@ -1,7 +1,6 @@
 ---
 title: Apoie o typeSirkel
 description: O typeSirkel é gratuito e de código aberto. Se ele deixa sua escrita mais leve, você pode contribuir pelo Saweria ou pelo PayPal.
-kicker: Apoie
 ---
 
 O typeSirkel é gratuito, sem plano pago e sem anúncios, e vai continuar assim. Eu o construo nas horas que sobram do meu outro trabalho.

@@ -1,7 +1,6 @@
 ---
 title: Sobre o typeSirkel
 description: Por que o typeSirkel existe. Tudo o que lemos, assistimos e usamos começa como escrita. Um bilhete curto de quem o criou, Hafidz Nc.
-kicker: Sobre
 ---
 
 > Eu sei, ler é importante. Mas nada é lido até que alguém escreva.

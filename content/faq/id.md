@@ -1,7 +1,6 @@
 ---
 title: FAQ typeSirkel
 description: Jawaban seputar typeSirkel, editor markdown gratis: di mana catatan disimpan, AI apa yang bisa dipakai, seberapa privat fitur berbagi, dan cara membantu.
-kicker: FAQ
 ---
 
 ## Apakah typeSirkel gratis? {#free}

@@ -23,7 +23,6 @@ export function Support({ lang }: { lang: Lang }) {
     <div className="landing site">
       <SiteHeader lang={lang} page="support" />
       <main className="site-main support">
-        <p className="kicker">{page.kicker}</p>
         <h1 className="site-title">{page.title}</h1>
         <article className="site-prose" dangerouslySetInnerHTML={{ __html: html }} />
         <div className="support-doors">

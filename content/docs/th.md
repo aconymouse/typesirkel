@@ -1,7 +1,6 @@
 ---
 title: คู่มือการใช้งาน typeSirkel
 description: วิธีใช้ typeSirkel เปิดโฟลเดอร์ เขียน markdown ใช้เมนูสแลชและคีย์ลัด เชื่อม AI ใน Quill แชร์ฉบับร่าง และต่อ MCP
-kicker: เอกสาร
 ---
 
 ## เริ่มต้นใช้งาน {#start}

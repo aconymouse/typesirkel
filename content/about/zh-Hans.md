@@ -1,7 +1,6 @@
 ---
 title: 关于 typeSirkel
 description: 为什么会有 typeSirkel。我们读到、看到、用到的一切，都从写作开始。这是作者 Hafidz Nc 写下的几句话。
-kicker: 关于
 ---
 
 > 我知道，阅读很重要。可是在有人把它写下来之前，什么都读不到。

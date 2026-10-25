@@ -1,7 +1,6 @@
 ---
 title: Support typeSirkel
 description: typeSirkel is free and open source. If it makes your writing easier, you can chip in through Saweria or PayPal and help keep it going.
-kicker: Support
 ---
 
 typeSirkel is free, with no paid plan and no ads, and it will stay that way. I build it in the hours around my other work.

@@ -1,7 +1,6 @@
 ---
 title: typeSirkel 使用文档
 description: typeSirkel 怎么用：打开文件夹、用 markdown 写作、使用斜杠菜单和快捷键、在 Quill 里连接 AI、共享草稿以及接入 MCP。
-kicker: 文档
 ---
 
 ## 快速上手 {#start}

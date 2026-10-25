@@ -63,9 +63,7 @@ export function Landing({ lang }: { lang: Lang }) {
       <main>
         <section className="hero" aria-labelledby="hero-title">
           <h1 id="hero-title">
-            {t.hero.line1}
-            <br />
-            {t.hero.line2}
+            <span>{t.hero.line1}</span> <span>{t.hero.line2}</span>
           </h1>
           <p className="lead">{t.hero.lead}</p>
           <div className="actions">
@@ -92,7 +90,6 @@ export function Landing({ lang }: { lang: Lang }) {
 
         <section className="lookout-demo" aria-labelledby="lookout-title">
           <div className="lookout-copy">
-            <p className="kicker">{t.lookout.kicker}</p>
             <h2 id="lookout-title">{t.lookout.title}</h2>
             <p>{t.lookout.body}</p>
             <p className="fine">{t.lookout.hint}</p>
@@ -104,7 +101,6 @@ export function Landing({ lang }: { lang: Lang }) {
 
         <section className="features" aria-labelledby="features-title">
           <div className="section-head">
-            <p className="kicker">{t.features.kicker}</p>
             <h2 id="features-title">{t.features.title}</h2>
           </div>
           <div className="notes">
@@ -119,7 +115,6 @@ export function Landing({ lang }: { lang: Lang }) {
 
         <section className="source" aria-labelledby="source-title">
           <div>
-            <p className="kicker">{t.source.kicker}</p>
             <h2 id="source-title">{t.source.title}</h2>
             <p>{t.source.body}</p>
             <div className="source-actions">

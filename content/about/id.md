@@ -1,7 +1,6 @@
 ---
 title: Tentang typeSirkel
 description: Kenapa typeSirkel dibuat. Semua yang kita baca, tonton, dan pakai berawal dari tulisan. Cerita singkat dari pembuatnya, Hafidz Nc.
-kicker: Tentang
 ---
 
 > Saya tahu membaca itu penting. Tapi gak ada yang bisa dibaca sebelum ada yang menulisnya.

@@ -1,7 +1,6 @@
 ---
 title: Dokumentasi typeSirkel
 description: Cara pakai typeSirkel: buka folder, menulis markdown, menu slash dan shortcut, hubungkan AI di Quill, berbagi draf, dan memasang MCP.
-kicker: Dokumentasi
 ---
 
 ## Mulai {#start}

@@ -1,7 +1,6 @@
 ---
 title: typeSirkel 소개
 description: typeSirkel을 만든 이유예요. 우리가 읽고, 보고, 사용하는 모든 것은 글에서 시작해요. 만든 사람 Hafidz Nc의 짧은 글이에요.
-kicker: 소개
 ---
 
 > 알아요, 읽는 건 중요하죠. 하지만 누군가 쓰지 않으면 읽을 것도 없어요.

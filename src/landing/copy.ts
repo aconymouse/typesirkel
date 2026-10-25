@@ -5,10 +5,10 @@ export type Copy = {
   nav: { openEditor: string; star: string; toLight: string; toDark: string; language: string; docs: string; faq: string; about: string; contents: string; maker: string; support: string; menu: string; close: string; light: string; dark: string }
   give: { saweria: string; paypal: string }
   hero: { line1: string; line2: string; lead: string; mac: string; windows: string; browser: string; fine: string }
-  lookout: { kicker: string; title: string; body: string; hint: string; stops: string[] }
-  features: { kicker: string; title: string; notes: { title: string; body: string }[] }
-  agents: { kicker: string; title: string; p1: string; p2: string; folder: string; label: string; created: string; updated: string; done: string; prompts: string[] }
-  source: { kicker: string; title: string; body: string; button: string }
+  lookout: { title: string; body: string; hint: string; stops: string[] }
+  features: { title: string; notes: { title: string; body: string }[] }
+  agents: { title: string; p1: string; p2: string; folder: string; label: string; created: string; updated: string; done: string; prompts: string[] }
+  source: { title: string; body: string; button: string }
 }
 
 const en: Copy = {
@@ -28,14 +28,12 @@ const en: Copy = {
     fine: 'macOS 11 or newer, Windows 10 or newer, or any Chromium browser. MIT licensed.',
   },
   lookout: {
-    kicker: 'The lookout',
     title: 'Always know where you are in a long draft.',
     body: 'Your headings become stops on a trail. As you write or scroll, the marker walks to the section you are in. The road behind you is drawn in, the road ahead is still dotted. Click any stop to jump there.',
     hint: 'Go on, click a heading.',
     stops: ['Chapter one', 'Arrival', 'The harbour', 'The market', 'Nightfall', 'A letter home', 'Morning'],
   },
   features: {
-    kicker: 'What it does',
     title: 'Small on purpose.',
     notes: [
       { title: 'Plain files', body: 'Point it at a folder. Every note stays a .md file you can open in anything, back up anywhere, and keep forever.' },
@@ -47,7 +45,6 @@ const en: Copy = {
     ],
   },
   agents: {
-    kicker: 'MCP',
     title: 'Let your AI work in your folder.',
     p1: 'typeSirkel ships a small MCP server. Point Claude, Cursor or any other MCP client at your notes folder and it can search, read, outline and write markdown there, while you keep writing in the same files.',
     p2: 'Ask it to summarize a week of meetings, keep a changelog, or pull scattered notes into one outline. The desktop app picks up its edits as they land, so you never copy and paste between windows.',
@@ -59,7 +56,6 @@ const en: Copy = {
     prompts: ["Turn this week's meeting notes into one summary.", 'Add what I shipped today to the changelog.', 'Find everything I wrote about Lisbon and outline a guide.'],
   },
   source: {
-    kicker: 'Open source',
     title: 'Read the code. Change it. Make it yours.',
     body: 'typeSirkel is MIT licensed and small enough to understand in an afternoon. The editor is CodeMirror, the desktop shell is Tauri, and everything else is a handful of small React files named after things on a writing desk, like Desk, Sheet and Shelf.',
     button: 'View on GitHub',
@@ -83,14 +79,12 @@ const id: Copy = {
     fine: 'macOS 11 ke atas, Windows 10 ke atas, atau browser berbasis Chromium. Lisensi MIT.',
   },
   lookout: {
-    kicker: 'Penunjuk arah',
     title: 'Selalu tahu posisimu di draf yang panjang.',
     body: 'Heading jadi pemberhentian di sepanjang jalur. Saat kamu menulis atau scroll, penanda berjalan ke bagian yang sedang kamu baca. Jalur di belakang sudah terisi, jalur di depan masih putus-putus. Klik pemberhentian mana saja untuk melompat ke sana.',
     hint: 'Ayo, klik salah satu heading.',
     stops: ['Bab satu', 'Tiba', 'Pelabuhan', 'Pasar', 'Malam tiba', 'Surat untuk rumah', 'Pagi'],
   },
   features: {
-    kicker: 'Fiturnya',
     title: 'Sengaja dibuat ringkas.',
     notes: [
       { title: 'File biasa', body: 'Arahkan ke sebuah folder. Setiap catatan tetap file .md yang bisa dibuka di aplikasi apa pun, dicadangkan di mana saja, dan disimpan selamanya.' },
@@ -102,7 +96,6 @@ const id: Copy = {
     ],
   },
   agents: {
-    kicker: 'MCP',
     title: 'Biarkan AI bekerja di foldermu.',
     p1: 'typeSirkel menyertakan server MCP kecil. Arahkan Claude, Cursor, atau klien MCP lain ke folder catatanmu, dan dia bisa mencari, membaca, membuat outline, dan menulis markdown di sana, sementara kamu tetap menulis di file yang sama.',
     p2: 'Minta dia merangkum rapat seminggu, mengisi changelog, atau mengumpulkan catatan yang tercecer jadi satu outline. Aplikasi desktop langsung menampilkan perubahannya, jadi tidak perlu salin tempel antarjendela.',
@@ -114,7 +107,6 @@ const id: Copy = {
     prompts: ['Rangkum catatan rapat minggu ini jadi satu.', 'Tambahkan yang aku rilis hari ini ke changelog.', 'Cari semua tulisanku soal Lisbon dan buat outline panduannya.'],
   },
   source: {
-    kicker: 'Open source',
     title: 'Baca kodenya. Ubah. Jadikan milikmu.',
     body: 'typeSirkel berlisensi MIT dan cukup kecil buat dipahami dalam satu sore. Editornya pakai CodeMirror, aplikasi desktopnya Tauri, sisanya cuma segelintir file React kecil yang namanya diambil dari barang-barang di meja kerja, kayak Desk, Sheet, dan Shelf.',
     button: 'Lihat di GitHub',
@@ -138,14 +130,12 @@ const ptBR: Copy = {
     fine: 'macOS 11 ou mais recente, Windows 10 ou mais recente, ou qualquer navegador Chromium. Licença MIT.',
   },
   lookout: {
-    kicker: 'O mirante',
     title: 'Saiba sempre onde você está num texto longo.',
     body: 'Seus títulos viram paradas de uma trilha. Enquanto você escreve ou rola a página, o marcador caminha até a seção em que você está. O caminho percorrido fica preenchido, o que falta continua pontilhado. Clique em qualquer parada para ir até lá.',
     hint: 'Vá em frente, clique num título.',
     stops: ['Capítulo um', 'Chegada', 'O porto', 'O mercado', 'Anoitecer', 'Uma carta para casa', 'Manhã'],
   },
   features: {
-    kicker: 'O que ele faz',
     title: 'Pequeno de propósito.',
     notes: [
       { title: 'Arquivos simples', body: 'Aponte para uma pasta. Cada nota continua sendo um arquivo .md que abre em qualquer lugar, faz backup em qualquer serviço e dura para sempre.' },
@@ -157,7 +147,6 @@ const ptBR: Copy = {
     ],
   },
   agents: {
-    kicker: 'MCP',
     title: 'Deixe a sua IA trabalhar na sua pasta.',
     p1: 'O typeSirkel vem com um pequeno servidor MCP. Aponte o Claude, o Cursor ou outro cliente MCP para a sua pasta de notas e ele pode buscar, ler, montar sumários e escrever markdown ali, enquanto você continua escrevendo nos mesmos arquivos.',
     p2: 'Peça para resumir uma semana de reuniões, manter um changelog ou juntar anotações espalhadas num só roteiro. O app de desktop mostra as mudanças na hora, sem copiar e colar entre janelas.',
@@ -169,7 +158,6 @@ const ptBR: Copy = {
     prompts: ['Transforme as notas das reuniões desta semana num resumo.', 'Adicione ao changelog o que entreguei hoje.', 'Encontre tudo o que escrevi sobre Lisboa e monte um roteiro de guia.'],
   },
   source: {
-    kicker: 'Código aberto',
     title: 'Leia o código. Mude. Faça do seu jeito.',
     body: 'O typeSirkel tem licença MIT e é pequeno o bastante para entender numa tarde. O editor é CodeMirror, o app de desktop é Tauri, e o resto são alguns arquivos React pequenos com nomes de coisas de uma escrivaninha, como Desk, Sheet e Shelf.',
     button: 'Ver no GitHub',
@@ -193,14 +181,12 @@ const ko: Copy = {
     fine: 'macOS 11 이상, Windows 10 이상, 또는 Chromium 기반 브라우저. MIT 라이선스.',
   },
   lookout: {
-    kicker: '전망대',
     title: '긴 글에서도 지금 어디쯤인지 늘 알 수 있어요.',
     body: '제목은 길 위의 정류장이 됩니다. 글을 쓰거나 스크롤하면 표시가 지금 있는 부분으로 걸어갑니다. 지나온 길은 채워지고 남은 길은 점선으로 남습니다. 정류장을 누르면 바로 이동합니다.',
     hint: '제목을 하나 눌러 보세요.',
     stops: ['1장', '도착', '항구', '시장', '해 질 녘', '집으로 보내는 편지', '아침'],
   },
   features: {
-    kicker: '하는 일',
     title: '일부러 작게 만들었습니다.',
     notes: [
       { title: '평범한 파일', body: '폴더를 지정하세요. 모든 노트는 어디서나 열 수 있고, 어디에나 백업할 수 있고, 영원히 남는 .md 파일로 남습니다.' },
@@ -212,7 +198,6 @@ const ko: Copy = {
     ],
   },
   agents: {
-    kicker: 'MCP',
     title: 'AI가 내 폴더에서 일하게 하세요.',
     p1: 'typeSirkel에는 작은 MCP 서버가 들어 있습니다. Claude, Cursor 같은 MCP 클라이언트를 노트 폴더에 연결하면 검색하고, 읽고, 목차를 만들고, 마크다운을 씁니다. 그동안 나는 같은 파일에서 계속 쓰면 됩니다.',
     p2: '일주일 치 회의 요약, 변경 기록 정리, 흩어진 메모를 하나의 개요로 묶는 일을 맡겨 보세요. 데스크톱 앱이 변경 사항을 바로 보여 주니 창 사이에서 복사해 붙일 필요가 없습니다.',
@@ -224,7 +209,6 @@ const ko: Copy = {
     prompts: ['이번 주 회의 노트를 하나로 요약해 줘.', '오늘 배포한 내용을 변경 기록에 추가해 줘.', '리스본에 대해 쓴 글을 모두 찾아 가이드 개요를 만들어 줘.'],
   },
   source: {
-    kicker: '오픈소스',
     title: '코드를 읽고, 바꾸고, 내 것으로.',
     body: 'typeSirkel은 MIT 라이선스이며 오후 한나절이면 이해할 만큼 작습니다. 에디터는 CodeMirror, 데스크톱 셸은 Tauri, 나머지는 Desk, Sheet, Shelf처럼 책상 위 물건 이름을 딴 작은 React 파일 몇 개뿐입니다.',
     button: 'GitHub에서 보기',
@@ -248,14 +232,12 @@ const th: Copy = {
     fine: 'macOS 11 ขึ้นไป, Windows 10 ขึ้นไป หรือเบราว์เซอร์ที่ใช้ Chromium สัญญาอนุญาต MIT',
   },
   lookout: {
-    kicker: 'จุดชมวิว',
     title: 'รู้เสมอว่ากำลังอยู่ตรงไหนของงานเขียนยาว ๆ',
     body: 'หัวข้อของคุณกลายเป็นป้ายจอดบนเส้นทาง ขณะที่คุณเขียนหรือเลื่อนหน้า เครื่องหมายจะเดินไปยังส่วนที่คุณอยู่ ทางที่ผ่านมาจะถูกเติมเต็ม ส่วนทางข้างหน้ายังเป็นเส้นประ คลิกป้ายไหนก็ได้เพื่อกระโดดไปที่นั่น',
     hint: 'ลองคลิกหัวข้อสักอันดูสิ',
     stops: ['บทที่หนึ่ง', 'มาถึง', 'ท่าเรือ', 'ตลาด', 'พลบค่ำ', 'จดหมายถึงบ้าน', 'รุ่งเช้า'],
   },
   features: {
-    kicker: 'ทำอะไรได้บ้าง',
     title: 'ตั้งใจทำให้เล็ก',
     notes: [
       { title: 'ไฟล์ธรรมดา', body: 'เลือกโฟลเดอร์ แล้วโน้ตทุกอันจะเป็นไฟล์ .md ที่เปิดได้ทุกที่ สำรองไว้ที่ไหนก็ได้ และอยู่กับคุณตลอดไป' },
@@ -267,7 +249,6 @@ const th: Copy = {
     ],
   },
   agents: {
-    kicker: 'MCP',
     title: 'ให้ AI ทำงานในโฟลเดอร์ของคุณ',
     p1: 'typeSirkel มาพร้อมเซิร์ฟเวอร์ MCP ตัวเล็ก ชี้ Claude, Cursor หรือไคลเอนต์ MCP อื่นไปที่โฟลเดอร์โน้ตของคุณ มันจะค้นหา อ่าน ทำสารบัญ และเขียนมาร์กดาวน์ในนั้น ขณะที่คุณยังเขียนในไฟล์เดียวกันได้ตามปกติ',
     p2: 'ให้สรุปการประชุมทั้งสัปดาห์ จดบันทึกการเปลี่ยนแปลง หรือรวมโน้ตที่กระจัดกระจายเป็นโครงเรื่องเดียว แอปเดสก์ท็อปแสดงการแก้ไขทันที ไม่ต้องคัดลอกวางข้ามหน้าต่าง',
@@ -279,7 +260,6 @@ const th: Copy = {
     prompts: ['สรุปโน้ตการประชุมสัปดาห์นี้รวมเป็นอันเดียว', 'เพิ่มสิ่งที่ปล่อยวันนี้ลงในบันทึกการเปลี่ยนแปลง', 'หาทุกอย่างที่เคยเขียนเรื่องลิสบอน แล้วทำโครงคู่มือ'],
   },
   source: {
-    kicker: 'โอเพนซอร์ส',
     title: 'อ่านโค้ด แก้ไข แล้วทำให้เป็นของคุณ',
     body: 'typeSirkel ใช้สัญญาอนุญาต MIT และเล็กพอจะเข้าใจได้ในบ่ายเดียว ตัวเขียนคือ CodeMirror แอปเดสก์ท็อปคือ Tauri ที่เหลือคือไฟล์ React เล็ก ๆ ไม่กี่ไฟล์ ตั้งชื่อตามของบนโต๊ะทำงาน อย่าง Desk, Sheet และ Shelf',
     button: 'ดูบน GitHub',
@@ -303,14 +283,12 @@ const zh: Copy = {
     fine: '支持 macOS 11 及以上、Windows 10 及以上，或任意 Chromium 浏览器。MIT 许可。',
   },
   lookout: {
-    kicker: '瞭望',
     title: '在长稿里，永远知道自己在哪儿。',
     body: '标题变成一条小路上的站点。你写作或滚动时，标记会走到你所在的章节。走过的路是实线，前面的路还是虚线。点击任意站点即可跳过去。',
     hint: '来，点一个标题试试。',
     stops: ['第一章', '抵达', '港口', '集市', '入夜', '一封家书', '清晨'],
   },
   features: {
-    kicker: '它能做什么',
     title: '刻意保持小巧。',
     notes: [
       { title: '普通文件', body: '指向一个文件夹即可。每条笔记都是 .md 文件，任何软件都能打开，随处备份，永久保存。' },
@@ -322,7 +300,6 @@ const zh: Copy = {
     ],
   },
   agents: {
-    kicker: 'MCP',
     title: '让 AI 在你的文件夹里工作。',
     p1: 'typeSirkel 自带一个小型 MCP 服务器。把 Claude、Cursor 或其他 MCP 客户端指向你的笔记文件夹，它就能在里面搜索、阅读、生成大纲和写 Markdown，而你照样在同一批文件里写作。',
     p2: '让它总结一周的会议、维护更新日志，或把零散的笔记整理成一份大纲。桌面应用会即时显示它的修改，不用在窗口之间来回复制粘贴。',
@@ -334,7 +311,6 @@ const zh: Copy = {
     prompts: ['把这周的会议记录整理成一份总结。', '把我今天发布的内容加到更新日志里。', '找出我写过的所有关于里斯本的内容，列一份指南大纲。'],
   },
   source: {
-    kicker: '开源',
     title: '读代码，改代码，让它成为你的。',
     body: 'typeSirkel 采用 MIT 许可，小到一个下午就能读懂。编辑器是 CodeMirror，桌面外壳是 Tauri，其余只是几个小小的 React 文件，名字取自书桌上的东西，比如 Desk、Sheet 和 Shelf。',
     button: '在 GitHub 上查看',

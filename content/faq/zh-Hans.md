@@ -1,7 +1,6 @@
 ---
 title: typeSirkel 常见问题
 description: 关于免费 markdown 编辑器 typeSirkel 的解答：笔记存在哪里、能用哪些 AI、共享如何保持私密，以及怎样参与帮忙。
-kicker: 常见问题
 ---
 
 ## typeSirkel 免费吗？ {#free}

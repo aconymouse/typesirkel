@@ -384,16 +384,19 @@ html {
 
 .hero {
   padding: 96px 0 56px;
-  max-width: 760px;
 }
 
 .hero h1 {
   margin: 0;
-  font-size: clamp(34px, 9.4vw, 84px);
+  font-size: clamp(26px, 8.2vw, 84px);
   line-height: 1.02;
   letter-spacing: -0.045em;
   font-weight: 750;
-  text-wrap: balance;
+}
+
+.hero h1 span {
+  display: block;
+  white-space: nowrap;
 }
 
 .lead {

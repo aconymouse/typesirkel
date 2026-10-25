@@ -49,7 +49,6 @@ export function About({ lang }: { lang: Lang }) {
       <SiteHeader lang={lang} page="about" />
       <main className="site-main about" id="top">
         <div className="about-words">
-          <p className="kicker">{page.kicker}</p>
           <h1 className="site-title">{page.title}</h1>
           <article className="site-prose about-prose" ref={article} dangerouslySetInnerHTML={{ __html: html }} />
           <hr className="about-rule" />

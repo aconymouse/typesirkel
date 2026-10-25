@@ -1,7 +1,6 @@
 ---
 title: typeSirkel FAQ
 description: Answers about typeSirkel, the free markdown editor: where notes are stored, which AI you can use, how sharing stays private, and how to help.
-kicker: FAQ
 ---
 
 ## Is typeSirkel free? {#free}

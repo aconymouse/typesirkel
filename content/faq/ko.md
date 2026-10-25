@@ -1,7 +1,6 @@
 ---
 title: typeSirkel 자주 묻는 질문
 description: 무료 마크다운 편집기 typeSirkel에 대한 답이에요. 노트 저장 위치, 쓸 수 있는 AI, 비공개 공유, 돕는 방법을 담았어요.
-kicker: 자주 묻는 질문
 ---
 
 ## typeSirkel은 무료인가요? {#free}

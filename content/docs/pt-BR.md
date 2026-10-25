@@ -1,7 +1,6 @@
 ---
 title: Documentação do typeSirkel
 description: Como usar o typeSirkel: abrir uma pasta, escrever em markdown, usar o menu de barra e atalhos, conectar sua IA no Quill, compartilhar e usar MCP.
-kicker: Documentação
 ---
 
 ## Primeiros passos {#start}

@@ -1,7 +1,6 @@
 ---
 title: 支持 typeSirkel
 description: typeSirkel 免费且开源。如果它让你的写作轻松了一些，可以通过 Saweria 或 PayPal 支持它继续走下去。
-kicker: 支持
 ---
 
 typeSirkel 是免费的，没有付费套餐，也没有广告，以后也会一直这样。我是在其他工作之余做它的。

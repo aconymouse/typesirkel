@@ -1,7 +1,6 @@
 ---
 title: typeSirkel 문서
 description: typeSirkel 사용법이에요. 폴더 열기, 마크다운 쓰기, 슬래시 메뉴와 단축키, Quill에 AI 연결, 초안 공유, MCP 연결까지 담았어요.
-kicker: 문서
 ---
 
 ## 시작하기 {#start}

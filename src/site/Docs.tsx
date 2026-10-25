@@ -57,7 +57,6 @@ export function Docs({ lang }: { lang: Lang }) {
           <Lookout headings={trail} active={active} onPick={pick} bare />
         </aside>
         <div className="docs-body">
-          <p className="kicker">{page.kicker}</p>
           <h1 className="site-title">{page.title}</h1>
           <article className="site-prose" ref={body} dangerouslySetInnerHTML={{ __html: html }} />
         </div>

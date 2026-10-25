@@ -1,7 +1,6 @@
 ---
 title: typeSirkel documentation
 description: How to use typeSirkel: open a folder, write in markdown, use the slash menu and shortcuts, connect your AI in Quill, share a draft and plug in MCP.
-kicker: Docs
 ---
 
 ## Getting started {#start}
