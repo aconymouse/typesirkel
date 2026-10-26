@@ -6,8 +6,33 @@ import { defineConfig } from 'vite'
 // the dev server to stay quiet about the terminal it shares with cargo.
 const host = process.env.TAURI_DEV_HOST
 
-export default defineConfig(({ isSsrBuild }) => ({
+// The download buttons point straight at the installers of the latest published
+// release. If GitHub can't be reached, they fall back to the release page.
+const releases = 'https://github.com/aconymouse/typesirkel/releases/latest'
+const installers = { mac: /\.dmg$/, windows: /-setup\.exe$/, linux: /\.AppImage$/ }
+
+const latestInstallers = async (live: boolean) => {
+  const fallback = Object.fromEntries(Object.keys(installers).map((system) => [system, releases]))
+  if (!live) return fallback
+  try {
+    const token = process.env.GITHUB_TOKEN
+    const response = await fetch('https://api.github.com/repos/aconymouse/typesirkel/releases/latest', {
+      headers: { accept: 'application/vnd.github+json', ...(token && { authorization: `Bearer ${token}` }) },
+      signal: AbortSignal.timeout(8000),
+    })
+    if (!response.ok) return fallback
+    const { assets } = (await response.json()) as { assets: { name: string; browser_download_url: string }[] }
+    return Object.fromEntries(
+      Object.entries(installers).map(([system, pattern]) => [system, assets.find((asset) => pattern.test(asset.name))?.browser_download_url ?? releases]),
+    )
+  } catch {
+    return fallback
+  }
+}
+
+export default defineConfig(async ({ command, isSsrBuild }) => ({
   plugins: [react()],
+  define: { __DOWNLOADS__: JSON.stringify(await latestInstallers(command === 'build')) },
   clearScreen: false,
   server: {
     port: 1420,

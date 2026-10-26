@@ -4,13 +4,13 @@ import type { Lang } from '../lang'
 import { Lookout } from '../Lookout'
 import { Agents } from './Agents'
 import { copies } from './copy'
+import { downloads, type System, systems } from './downloads'
 import { repo, SiteFooter, SiteHeader, useHead } from '../site/Chrome'
+import { editorFrom } from '../site/pages'
 import { Star } from './Star'
 
 // The real editor, loaded after the page has painted so the hero never waits on CodeMirror.
 const LiveDemo = lazy(() => import('./LiveDemo'))
-
-const releases = `${repo}/releases/latest`
 
 // Where each stop sits in a pretend document, just enough for the marker to walk.
 const trail = [
@@ -23,17 +23,15 @@ const trail = [
   { level: 2, line: 35 },
 ]
 
-type System = 'mac' | 'windows' | 'other'
-
 const guessSystem = (): System => {
   const agent = navigator.userAgent
-  if (/Mac|iPhone|iPad/.test(agent)) return 'mac'
   if (/Windows/.test(agent)) return 'windows'
-  return 'other'
+  if (/Linux/.test(agent) && !/Android/.test(agent)) return 'linux'
+  return 'mac'
 }
 
 export function Landing({ lang }: { lang: Lang }) {
-  const [system, setSystem] = useState<System>('other')
+  const [system, setSystem] = useState<System>('mac')
   const [stop, setStop] = useState(0)
   const [held, setHeld] = useState(false)
   const t = copies[lang]
@@ -67,13 +65,12 @@ export function Landing({ lang }: { lang: Lang }) {
           </h1>
           <p className="lead">{t.hero.lead}</p>
           <div className="actions">
-            <a href={releases} className={system === 'windows' ? 'button' : 'button solid'}>
-              {t.hero.mac}
-            </a>
-            <a href={releases} className={system === 'windows' ? 'button solid' : 'button'}>
-              {t.hero.windows}
-            </a>
-            <a href={`/write/?lang=${lang}`} className="button bare">
+            {systems.map((each) => (
+              <a key={each} href={downloads[each]} className={each === system ? 'button solid' : 'button'}>
+                {t.hero[each]}
+              </a>
+            ))}
+            <a href={editorFrom(lang, 'home', 'hero_browser')} className="button bare">
               {t.hero.browser}
             </a>
           </div>

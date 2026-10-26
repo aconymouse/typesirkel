@@ -3,7 +3,7 @@ import { recall, remember } from '../keep'
 import { chooseLang, type Lang, langOf, langs } from '../lang'
 import { copies } from '../landing/copy'
 import { Star } from '../landing/Star'
-import { type Page, pathFor } from './pages'
+import { editorFrom, type Page, pathFor } from './pages'
 
 export const repo = 'https://github.com/aconymouse/typesirkel'
 
@@ -125,7 +125,7 @@ export function SiteHeader({ lang, page }: { lang: Lang; page: Page }) {
             </button>
             <LangPick lang={lang} page={page} />
             <Star label={t.star} />
-            <a href={`/write/?lang=${lang}`} className="top-cta">
+            <a href={editorFrom(lang, page, 'header_cta')} className="top-cta">
               {t.openEditor}
             </a>
             <button type="button" className={`burger${open ? ' is-open' : ''}`} aria-expanded={open} aria-controls="site-menu" onClick={toggle}>
@@ -170,7 +170,7 @@ export function SiteHeader({ lang, page }: { lang: Lang; page: Page }) {
         </div>
         <div className="site-menu-foot">
           <Star label={t.star} />
-          <a href={`/write/?lang=${lang}`} className="top-cta">
+          <a href={editorFrom(lang, page, 'menu_cta')} className="top-cta">
             {t.openEditor}
           </a>
         </div>

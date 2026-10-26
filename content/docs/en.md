@@ -7,7 +7,7 @@ description: How to use typeSirkel: open a folder, write in markdown, use the sl
 
 typeSirkel runs in two places, and both are the same app.
 
-- **In the browser** at [sirkel.asia/write](/write/). Nothing to install.
+- **In the browser** at [sirkel.asia/write](/write/?lang=en&utm_source=typesirkel&utm_medium=site&utm_campaign=docs_link&utm_content=docs). Nothing to install.
 - **On your desktop** for macOS 11 or newer, Windows 10 or newer and Linux (AppImage or .deb), from the [releases page](https://github.com/aconymouse/typesirkel/releases).
 
 The first time you open it, you land in **Scratch**, a small notebook kept in your browser. It's fine for quick notes. For real work, press **Open folder** at the bottom of the sidebar and pick a folder on your disk. Every note in it becomes a plain `.md` file that any other app can read.

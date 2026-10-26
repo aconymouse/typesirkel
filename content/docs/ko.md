@@ -7,7 +7,7 @@ description: typeSirkel 사용법이에요. 폴더 열기, 마크다운 쓰기, 
 
 typeSirkel은 두 곳에서 실행되고, 둘 다 같은 앱이에요.
 
-- **브라우저에서** [sirkel.asia/write](/write/)로 바로 쓸 수 있어요. 설치할 건 없어요.
+- **브라우저에서** [sirkel.asia/write](/write/?lang=ko&utm_source=typesirkel&utm_medium=site&utm_campaign=docs_link&utm_content=docs)로 바로 쓸 수 있어요. 설치할 건 없어요.
 - **데스크톱에서** macOS 11 이상, Windows 10 이상, Linux(AppImage 또는 .deb)를 지원하고, [릴리스 페이지](https://github.com/aconymouse/typesirkel/releases)에서 받을 수 있어요.
 
 처음 열면 **Scratch**에서 시작해요. 브라우저 안에 보관되는 작은 메모장이에요. 간단한 메모에는 이걸로 충분해요. 제대로 작업하려면 사이드바 아래쪽의 **Open folder**를 눌러 디스크에 있는 폴더를 고르세요. 그 안의 모든 노트는 다른 어떤 앱에서도 읽을 수 있는 평범한 `.md` 파일이 돼요.

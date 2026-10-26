@@ -4,7 +4,7 @@ export type Copy = {
   meta: { title: string; description: string }
   nav: { openEditor: string; star: string; toLight: string; toDark: string; language: string; docs: string; faq: string; about: string; contents: string; maker: string; support: string; menu: string; close: string; light: string; dark: string }
   give: { saweria: string; paypal: string }
-  hero: { line1: string; line2: string; lead: string; mac: string; windows: string; browser: string; fine: string }
+  hero: { line1: string; line2: string; lead: string; mac: string; windows: string; linux: string; browser: string; fine: string }
   lookout: { title: string; body: string; hint: string; stops: string[] }
   features: { title: string; notes: { title: string; body: string }[] }
   agents: { title: string; p1: string; p2: string; folder: string; label: string; created: string; updated: string; done: string; prompts: string[] }
@@ -24,6 +24,7 @@ const en: Copy = {
     lead: 'Pour everything into your writing. typeSirkel is easy to use, and it connects to your own AI agents.',
     mac: 'Download for Mac',
     windows: 'Download for Windows',
+    linux: 'Download for Linux',
     browser: 'Try it in your browser →',
     fine: 'macOS 11 or newer, Windows 10 or newer, Linux, or any Chromium browser. MIT licensed.',
   },
@@ -75,6 +76,7 @@ const id: Copy = {
     lead: 'Tumpahkan semua yang ada di kepalamu ke dalam tulisan. typeSirkel gampang dipakai, dan bisa langsung tersambung ke AI agent milikmu.',
     mac: 'Unduh untuk Mac',
     windows: 'Unduh untuk Windows',
+    linux: 'Unduh untuk Linux',
     browser: 'Coba langsung di browser →',
     fine: 'macOS 11 ke atas, Windows 10 ke atas, Linux, atau browser berbasis Chromium. Lisensi MIT.',
   },
@@ -126,6 +128,7 @@ const ptBR: Copy = {
     lead: 'Coloque tudo para fora na escrita. O typeSirkel é fácil de usar e se conecta aos seus próprios agentes de IA.',
     mac: 'Baixar para Mac',
     windows: 'Baixar para Windows',
+    linux: 'Baixar para Linux',
     browser: 'Experimente no navegador →',
     fine: 'macOS 11 ou mais recente, Windows 10 ou mais recente, Linux ou qualquer navegador Chromium. Licença MIT.',
   },
@@ -177,6 +180,7 @@ const ko: Copy = {
     lead: '머릿속의 모든 것을 글로 쏟아내세요. typeSirkel은 쓰기 쉽고, 내가 쓰는 AI 에이전트와 바로 연결됩니다.',
     mac: 'Mac용 다운로드',
     windows: 'Windows용 다운로드',
+    linux: 'Linux용 다운로드',
     browser: '브라우저에서 바로 써 보기 →',
     fine: 'macOS 11 이상, Windows 10 이상, Linux, 또는 Chromium 기반 브라우저. MIT 라이선스.',
   },
@@ -228,6 +232,7 @@ const th: Copy = {
     lead: 'เทความคิดทั้งหมดลงในงานเขียนของคุณ typeSirkel ใช้ง่าย และเชื่อมต่อกับ AI agent ของคุณเองได้ทันที',
     mac: 'ดาวน์โหลดสำหรับ Mac',
     windows: 'ดาวน์โหลดสำหรับ Windows',
+    linux: 'ดาวน์โหลดสำหรับ Linux',
     browser: 'ลองใช้ในเบราว์เซอร์ →',
     fine: 'macOS 11 ขึ้นไป, Windows 10 ขึ้นไป, Linux หรือเบราว์เซอร์ที่ใช้ Chromium สัญญาอนุญาต MIT',
   },
@@ -279,6 +284,7 @@ const zh: Copy = {
     lead: '把脑海里的一切都倾注到文字里。typeSirkel 简单好用，还能直接连接你自己的 AI 智能体。',
     mac: '下载 Mac 版',
     windows: '下载 Windows 版',
+    linux: '下载 Linux 版',
     browser: '在浏览器中试用 →',
     fine: '支持 macOS 11 及以上、Windows 10 及以上、Linux，或任意 Chromium 浏览器。MIT 许可。',
   },

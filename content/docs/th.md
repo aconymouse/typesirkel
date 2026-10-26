@@ -7,7 +7,7 @@ description: วิธีใช้ typeSirkel เปิดโฟลเดอร�
 
 typeSirkel ใช้ได้สองที่ และทั้งสองที่ก็คือแอปเดียวกัน
 
-- **บนเบราว์เซอร์** ที่ [sirkel.asia/write](/write/) ไม่ต้องติดตั้งอะไรเลย
+- **บนเบราว์เซอร์** ที่ [sirkel.asia/write](/write/?lang=th&utm_source=typesirkel&utm_medium=site&utm_campaign=docs_link&utm_content=docs) ไม่ต้องติดตั้งอะไรเลย
 - **บนเดสก์ท็อป** สำหรับ macOS 11 ขึ้นไป, Windows 10 ขึ้นไป และ Linux (AppImage หรือ .deb) ดาวน์โหลดได้จาก[หน้ารีลีส](https://github.com/aconymouse/typesirkel/releases)
 
 ครั้งแรกที่เปิด คุณจะเข้ามาที่ **Scratch** ซึ่งเป็นสมุดโน้ตเล็กๆ ที่เก็บไว้ในเบราว์เซอร์ของคุณ เหมาะกับการจดอะไรสั้นๆ ถ้าจะทำงานจริงจัง ให้กด **Open folder** ที่ด้านล่างของแถบด้านข้าง แล้วเลือกโฟลเดอร์บนดิสก์ของคุณ โน้ตทุกอันในนั้นจะเป็นไฟล์ `.md` ธรรมดาที่แอปอื่นก็อ่านได้
