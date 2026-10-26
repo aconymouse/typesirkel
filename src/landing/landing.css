@@ -429,6 +429,12 @@ html {
   border-color: var(--ink);
 }
 
+.os-mark {
+  flex: none;
+  margin-right: 10px;
+  fill: currentColor;
+}
+
 .button.solid {
   background: var(--ink);
   border-color: var(--ink);

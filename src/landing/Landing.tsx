@@ -4,7 +4,7 @@ import type { Lang } from '../lang'
 import { Lookout } from '../Lookout'
 import { Agents } from './Agents'
 import { copies } from './copy'
-import { downloads, type System, systems } from './downloads'
+import { downloads, marks, type System, systems } from './downloads'
 import { repo, SiteFooter, SiteHeader, useHead } from '../site/Chrome'
 import { editorFrom } from '../site/pages'
 import { Star } from './Star'
@@ -67,6 +67,9 @@ export function Landing({ lang }: { lang: Lang }) {
           <div className="actions">
             {systems.map((each) => (
               <a key={each} href={downloads[each]} className={each === system ? 'button solid' : 'button'}>
+                <svg className="os-mark" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+                  <path d={marks[each]} />
+                </svg>
                 {t.hero[each]}
               </a>
             ))}
