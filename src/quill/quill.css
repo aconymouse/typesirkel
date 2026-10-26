@@ -119,19 +119,29 @@
 .quill-asks {
   display: flex;
   flex-wrap: wrap;
-  gap: 4px 16px;
-  padding: 12px 16px;
+  align-items: center;
+  row-gap: 4px;
+  padding: 10px 16px;
   border-bottom: 1px solid var(--line);
+  font-size: 12px;
 }
 
 .quill-asks button {
   padding: 2px 0;
   color: var(--muted);
-  font-size: 13px;
+  white-space: nowrap;
+  transition: color 0.15s ease;
+}
+
+.quill-asks button:not(:last-child)::after {
+  content: '/';
+  margin: 0 6px;
+  color: var(--faint);
+  pointer-events: none;
 }
 
 .quill-asks button:not(:disabled):hover {
-  color: var(--accent);
+  color: var(--ink);
 }
 
 .quill-reply {
@@ -225,7 +235,6 @@
 }
 
 .quill-asks .quill-brief-tab {
-  margin-left: auto;
   color: var(--ink);
 }
 

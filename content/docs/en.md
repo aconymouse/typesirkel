@@ -14,7 +14,19 @@ The first time you open it, you land in **Scratch**, a small notebook kept in yo
 
 Opening a whole folder in the browser needs a Chromium-based browser such as Chrome, Edge, Brave or Arc. Safari and Firefox open one file at a time.
 
-The desktop apps aren't signed yet. On a Mac, open the app once, then go to **System Settings → Privacy & Security** and choose **Open Anyway**. On Windows, when SmartScreen appears, choose **More info**, then **Run anyway**.
+### Opening the desktop app {#first-open}
+
+typeSirkel is a one-person open source project, and it isn't signed with a paid Apple Developer certificate yet. So the first time you open it on a Mac, macOS says it was "Not Opened" because Apple couldn't verify it. That's expected, and the full source code is on [GitHub](https://github.com/aconymouse/typesirkel) if you want to check it.
+
+1. Open the `.dmg` and drag typeSirkel into Applications.
+2. Open typeSirkel. When the warning appears, click **Done**.
+3. Go to **System Settings → Privacy & Security** and scroll down to Security.
+4. Next to "typeSirkel was blocked to protect your Mac", click **Open Anyway**.
+5. Click **Open Anyway** again and confirm with Touch ID or your password.
+
+You only do this once. After that it opens like any other app.
+
+On Windows, if SmartScreen shows "Windows protected your PC", click **More info**, then **Run anyway**.
 
 ## Writing {#writing}
 

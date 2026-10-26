@@ -14,7 +14,19 @@ typeSirkel 可以在两个地方运行，两者是同一个应用。
 
 在浏览器里打开整个文件夹，需要基于 Chromium 的浏览器，比如 Chrome、Edge、Brave 或 Arc。Safari 和 Firefox 一次只能打开一个文件。
 
-桌面应用暂时还没有签名。在 Mac 上，先打开一次应用，然后前往 **System Settings → Privacy & Security**，选择 **Open Anyway**。在 Windows 上，如果出现 SmartScreen，请点 **More info**，再点 **Run anyway**。
+### 首次打开桌面应用 {#first-open}
+
+typeSirkel 是一个人做的开源项目，暂时还没有用付费的 Apple Developer 证书签名。所以第一次在 Mac 上打开时，macOS 会提示 "Not Opened"，因为 Apple 无法验证它。这是正常的，完整源代码都在 [GitHub](https://github.com/aconymouse/typesirkel) 上，你可以自己查看。
+
+1. 打开 `.dmg`，把 typeSirkel 拖进 Applications。
+2. 打开 typeSirkel。出现警告时，点 **Done**。
+3. 前往 **System Settings → Privacy & Security**，向下滚动到 Security。
+4. 在 "typeSirkel was blocked to protect your Mac" 旁边，点 **Open Anyway**。
+5. 再点一次 **Open Anyway**，然后用 Touch ID 或密码确认。
+
+只需要做一次，之后它就像其他应用一样打开。
+
+在 Windows 上，如果 SmartScreen 显示 "Windows protected your PC"，请点 **More info**，再点 **Run anyway**。
 
 ## 写作 {#writing}
 

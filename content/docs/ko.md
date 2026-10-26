@@ -14,7 +14,19 @@ typeSirkel은 두 곳에서 실행되고, 둘 다 같은 앱이에요.
 
 브라우저에서 폴더 전체를 열려면 Chrome, Edge, Brave, Arc 같은 Chromium 기반 브라우저가 필요해요. Safari와 Firefox에서는 한 번에 파일 하나씩 열려요.
 
-데스크톱 앱은 아직 서명되지 않았어요. Mac에서는 앱을 한 번 연 다음 **System Settings → Privacy & Security**에서 **Open Anyway**를 선택하세요. Windows에서 SmartScreen이 뜨면 **More info**, 그다음 **Run anyway**를 누르세요.
+### 데스크톱 앱 처음 열기 {#first-open}
+
+typeSirkel은 한 사람이 만드는 오픈 소스 프로젝트이고, 아직 유료 Apple Developer 인증서로 서명되지 않았어요. 그래서 Mac에서 처음 열면 Apple이 확인하지 못했다며 "Not Opened"라고 표시돼요. 예상된 동작이고, 전체 소스 코드는 [GitHub](https://github.com/aconymouse/typesirkel)에서 직접 확인할 수 있어요.
+
+1. `.dmg`를 열고 typeSirkel을 Applications로 끌어다 놓으세요.
+2. typeSirkel을 여세요. 경고가 뜨면 **Done**을 누르세요.
+3. **System Settings → Privacy & Security**로 가서 Security까지 스크롤하세요.
+4. "typeSirkel was blocked to protect your Mac" 옆의 **Open Anyway**를 누르세요.
+5. **Open Anyway**를 한 번 더 누르고 Touch ID나 암호로 확인하세요.
+
+이 과정은 한 번만 하면 돼요. 그다음부터는 다른 앱처럼 열려요.
+
+Windows에서 SmartScreen이 "Windows protected your PC"를 보여 주면 **More info**, 그다음 **Run anyway**를 누르세요.
 
 ## 쓰기 {#writing}
 

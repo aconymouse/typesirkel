@@ -288,11 +288,17 @@ export function Quill({ take, onLand, onClose, canFile, onFile, onOpenFolder, on
         <div className="quill-work">
           <div className="quill-asks">
             {asks.map((a) => (
-              <button key={a.id} type="button" onClick={() => ask(a.id)} disabled={Boolean(reply && !reply.done) || view === 'brief'}>
+              <button key={a.id} type="button" title={a.hint} onClick={() => ask(a.id)} disabled={Boolean(reply && !reply.done) || view === 'brief'}>
                 {a.label}
               </button>
             ))}
-            <button type="button" className="quill-brief-tab" aria-pressed={view === 'brief'} onClick={() => setView((v) => (v === 'brief' ? 'ask' : 'brief'))}>
+            <button
+              type="button"
+              className="quill-brief-tab"
+              title="Write several files into your folder from one brief"
+              aria-pressed={view === 'brief'}
+              onClick={() => setView((v) => (v === 'brief' ? 'ask' : 'brief'))}
+            >
               Brief
             </button>
           </div>

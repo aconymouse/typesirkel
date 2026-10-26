@@ -28,6 +28,7 @@ export type Passage = {
 type Ask = {
   id: AskId
   label: string
+  hint: string
   // Whether the answer replaces the passage or goes after it.
   lands: Landing
   turns: (p: Passage) => Turn[]
@@ -48,6 +49,7 @@ export const asks: Ask[] = [
   {
     id: 'continue',
     label: 'Continue',
+    hint: 'Write the next paragraph for you',
     lands: 'after',
     turns: (p) => [
       {
@@ -56,12 +58,13 @@ export const asks: Ask[] = [
       },
     ],
   },
-  { id: 'tighten', label: 'Tighten', lands: 'replace', turns: (p) => around(p, 'Rewrite the passage so it reads clearer and tighter. Keep its meaning, voice and markdown.') },
-  { id: 'fix', label: 'Fix', lands: 'replace', turns: (p) => around(p, 'Fix spelling, grammar and punctuation in the passage. Change nothing else.') },
-  { id: 'summarize', label: 'Summarize', lands: 'after', turns: (p) => around(p, 'Summarize the passage in two or three sentences.') },
+  { id: 'tighten', label: 'Tighten', hint: 'Make the passage clearer and shorter', lands: 'replace', turns: (p) => around(p, 'Rewrite the passage so it reads clearer and tighter. Keep its meaning, voice and markdown.') },
+  { id: 'fix', label: 'Fix', hint: 'Fix spelling, grammar and punctuation', lands: 'replace', turns: (p) => around(p, 'Fix spelling, grammar and punctuation in the passage. Change nothing else.') },
+  { id: 'summarize', label: 'Summarize', hint: 'Add a short summary below the passage', lands: 'after', turns: (p) => around(p, 'Summarize the passage in two or three sentences.') },
   {
     id: 'translate',
     label: 'Translate',
+    hint: 'Swap the passage between English and Indonesian',
     lands: 'replace',
     turns: (p) => around(p, 'Translate the passage into English. If it is already English, translate it into Indonesian. Keep the markdown.'),
   },

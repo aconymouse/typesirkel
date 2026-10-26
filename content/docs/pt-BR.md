@@ -14,7 +14,19 @@ Na primeira vez que você abre, cai no **Scratch**, um caderninho guardado no se
 
 Para abrir uma pasta inteira no navegador, você precisa de um navegador baseado em Chromium, como Chrome, Edge, Brave ou Arc. Safari e Firefox abrem um arquivo por vez.
 
-Os apps de desktop ainda não são assinados. No Mac, abra o app uma vez, depois vá em **System Settings → Privacy & Security** e escolha **Open Anyway**. No Windows, quando o SmartScreen aparecer, escolha **More info** e depois **Run anyway**.
+### Abrindo o app de desktop {#first-open}
+
+O typeSirkel é um projeto de código aberto feito por uma pessoa só, e ainda não é assinado com um certificado pago de Apple Developer. Por isso, na primeira vez que você abre no Mac, o macOS diz que ele foi "Not Opened", porque a Apple não conseguiu verificá-lo. Isso é esperado, e todo o código está no [GitHub](https://github.com/aconymouse/typesirkel) se você quiser conferir.
+
+1. Abra o `.dmg` e arraste o typeSirkel para Applications.
+2. Abra o typeSirkel. Quando o aviso aparecer, clique em **Done**.
+3. Vá em **System Settings → Privacy & Security** e role até Security.
+4. Ao lado de "typeSirkel was blocked to protect your Mac", clique em **Open Anyway**.
+5. Clique em **Open Anyway** de novo e confirme com Touch ID ou sua senha.
+
+Você só faz isso uma vez. Depois ele abre como qualquer outro app.
+
+No Windows, se o SmartScreen mostrar "Windows protected your PC", clique em **More info** e depois em **Run anyway**.
 
 ## Escrevendo {#writing}
 

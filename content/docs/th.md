@@ -14,7 +14,19 @@ typeSirkel ใช้ได้สองที่ และทั้งสอง�
 
 การเปิดทั้งโฟลเดอร์บนเบราว์เซอร์ต้องใช้เบราว์เซอร์ที่สร้างบน Chromium เช่น Chrome, Edge, Brave หรือ Arc ส่วน Safari และ Firefox เปิดได้ทีละไฟล์
 
-แอปเดสก์ท็อปยังไม่ได้ลงนาม บน Mac ให้เปิดแอปหนึ่งครั้ง แล้วไปที่ **System Settings → Privacy & Security** แล้วเลือก **Open Anyway** บน Windows ถ้า SmartScreen ขึ้นมา ให้เลือก **More info** แล้ว **Run anyway**
+### เปิดแอปเดสก์ท็อปครั้งแรก {#first-open}
+
+typeSirkel เป็นโปรเจกต์โอเพนซอร์สที่ทำโดยคนคนเดียว และยังไม่ได้ลงนามด้วยใบรับรอง Apple Developer แบบเสียเงิน ครั้งแรกที่เปิดบน Mac ระบบ macOS จึงจะแจ้งว่า "Not Opened" เพราะ Apple ยังตรวจสอบไม่ได้ ซึ่งเป็นเรื่องปกติ และคุณดูซอร์สโค้ดทั้งหมดได้เองบน [GitHub](https://github.com/aconymouse/typesirkel)
+
+1. เปิดไฟล์ `.dmg` แล้วลาก typeSirkel ไปไว้ใน Applications
+2. เปิด typeSirkel เมื่อมีคำเตือนขึ้นมา ให้คลิก **Done**
+3. ไปที่ **System Settings → Privacy & Security** แล้วเลื่อนลงไปที่ส่วน Security
+4. ข้างข้อความ "typeSirkel was blocked to protect your Mac" ให้คลิก **Open Anyway**
+5. คลิก **Open Anyway** อีกครั้ง แล้วยืนยันด้วย Touch ID หรือรหัสผ่าน
+
+ทำแค่ครั้งเดียว หลังจากนั้นแอปจะเปิดได้เหมือนแอปทั่วไป
+
+บน Windows ถ้า SmartScreen แสดง "Windows protected your PC" ให้คลิก **More info** แล้ว **Run anyway**
 
 ## การเขียน {#writing}
 

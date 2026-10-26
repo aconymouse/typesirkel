@@ -14,7 +14,19 @@ Saat pertama dibuka, kamu masuk ke **Scratch**, buku catatan kecil yang tersimpa
 
 Membuka satu folder utuh di browser butuh browser berbasis Chromium seperti Chrome, Edge, Brave, atau Arc. Safari dan Firefox membuka satu file sekaligus.
 
-Aplikasi desktopnya belum ditandatangani. Di Mac, buka aplikasinya sekali, lalu ke **System Settings → Privacy & Security** dan pilih **Open Anyway**. Di Windows, kalau muncul SmartScreen, pilih **More info** lalu **Run anyway**.
+### Membuka aplikasi desktop {#first-open}
+
+typeSirkel dibuat satu orang dan open source, dan belum ditandatangani sertifikat Apple Developer yang berbayar. Karena itu, saat pertama dibuka di Mac, macOS bakal bilang aplikasinya "Not Opened" karena Apple belum bisa memverifikasinya. Ini wajar, dan seluruh kodenya bisa kamu cek sendiri di [GitHub](https://github.com/aconymouse/typesirkel).
+
+1. Buka file `.dmg`, lalu seret typeSirkel ke folder Applications.
+2. Buka typeSirkel. Saat peringatan muncul, klik **Done**.
+3. Buka **System Settings → Privacy & Security**, lalu scroll ke bagian Security.
+4. Di samping tulisan "typeSirkel was blocked to protect your Mac", klik **Open Anyway**.
+5. Klik **Open Anyway** sekali lagi, lalu konfirmasi pakai Touch ID atau password.
+
+Cukup sekali ini saja. Setelahnya typeSirkel kebuka seperti aplikasi biasa.
+
+Di Windows, kalau SmartScreen menampilkan "Windows protected your PC", klik **More info** lalu **Run anyway**.
 
 ## Menulis {#writing}
 
